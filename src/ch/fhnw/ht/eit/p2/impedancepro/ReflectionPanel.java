@@ -26,6 +26,9 @@ public class ReflectionPanel extends JPanel {
 		cbReflection = new JComboBox<String>(reflectionStrings);
 		lbAmplitude = new JLabel("Amplitude:");
 		cbAmplitude = new JComboBox<String>(amplitudeStrings);
+		
+		cbReflection.setFocusable(false);
+		cbAmplitude.setFocusable(false);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		

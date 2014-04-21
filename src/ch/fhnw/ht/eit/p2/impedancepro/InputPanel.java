@@ -22,14 +22,24 @@ import ch.fhnw.ht.eit.p2.impedancepro.util.ImageUtil;
 
 public class InputPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
+	
 	private JPanel valuePanels;
-	private int type;
+	private WebToggleButton[] topologyChooseButtons;
+	
 	public static final byte SOURCE = 0;
 	public static final byte LOAD = 1;
 	public static final byte NUMBER_OF_SOURCE_LOAD_TOPOLOGIES = 6;
 
-	public InputPanel (int type) {	
+	private int type;
+	private int topology;
+	private ElectricalComponent electricalComponents[];
+	
+	public InputPanel () {	
 		super();
+	}
+	
+	public InputPanel (int type) {	
+		this();
 		
 		this.type = type;
 		
@@ -38,18 +48,18 @@ public class InputPanel extends JPanel implements ActionListener {
         valuePanels = new JPanel();
         valuePanels.setLayout(new CardLayout());
 		
-        WebToggleButton[] topologyChooseButtons = new WebToggleButton[NUMBER_OF_SOURCE_LOAD_TOPOLOGIES];
+        topologyChooseButtons = new WebToggleButton[NUMBER_OF_SOURCE_LOAD_TOPOLOGIES];
 		for(int i=0;i<NUMBER_OF_SOURCE_LOAD_TOPOLOGIES;i++) {
 			WebToggleButton btn = new WebToggleButton();
 			if(this.type == SOURCE) {
-				btn.setName("source_"+i+"_40.png");
+				btn.setName(String.valueOf(i));
 		        try {
 		            btn.setIcon(new ImageIcon(ImageUtil.loadResourceImage("source_"+i+"_30.png")));
 		        } catch(NullPointerException ex) {
 		        	System.out.println("Could not load Source-Image: source_"+i+"_30.png");
 		        }
 			} else {
-				btn.setName("load_"+i+"_40.png");
+				btn.setName(String.valueOf(i));
 		        try {
 		            btn.setIcon(new ImageIcon(ImageUtil.loadResourceImage("load_"+i+"_30.png")));
 		        } catch(NullPointerException ex) {
@@ -63,28 +73,27 @@ public class InputPanel extends JPanel implements ActionListener {
 			switch (i) {
 			default:
 			case 0:
-				TooltipManager.setTooltip ( btn, "R", TooltipWay.down, 0 );
-				btn.setSelected(true);
+				TooltipManager.setTooltip (btn, "R", TooltipWay.down, 0);
 				valuePanels.add(new ValuePanel(new ElectricalComponent[]{new Resistor()}), btn.getName());
 				break;
 			case 1:
-				TooltipManager.setTooltip ( btn, "R+C", TooltipWay.down, 0 );
+				TooltipManager.setTooltip (btn, "R+C", TooltipWay.down, 0);
 		        valuePanels.add(new ValuePanel(new ElectricalComponent[]{new Resistor(), new Capacitor()}), btn.getName());
 				break;			
 			case 2:
-				TooltipManager.setTooltip ( btn, "R//C", TooltipWay.down, 0 );
+				TooltipManager.setTooltip (btn, "R//C", TooltipWay.down, 0);
 		        valuePanels.add(new ValuePanel(new ElectricalComponent[]{new Resistor(), new Capacitor()}), btn.getName());
 				break;
 			case 3:
-				TooltipManager.setTooltip ( btn, "R+L", TooltipWay.down, 0 );
+				TooltipManager.setTooltip (btn, "R+L", TooltipWay.down, 0);
 		        valuePanels.add(new ValuePanel(new ElectricalComponent[]{new Resistor(), new Inductor()}), btn.getName());
 				break;
 			case 4:
-				TooltipManager.setTooltip ( btn, "R//L", TooltipWay.down, 0 );
+				TooltipManager.setTooltip (btn, "R//L", TooltipWay.down, 0);
 		        valuePanels.add(new ValuePanel(new ElectricalComponent[]{new Resistor(), new Inductor()}), btn.getName());
 				break;
 			case 5:
-				TooltipManager.setTooltip ( btn, "Z", TooltipWay.down, 0 );
+				TooltipManager.setTooltip (btn, "Z", TooltipWay.down, 0);
 		        valuePanels.add(new ValuePanel(new ElectricalComponent[]{new GenericImpedance()}), btn.getName());
 				break;
 			}
@@ -94,6 +103,7 @@ public class InputPanel extends JPanel implements ActionListener {
         
         WebButtonGroup topologyChoose = new WebButtonGroup(true, topologyChooseButtons);
         topologyChoose.setLayout(new GridLayout());
+        setTopology(0);
         add(topologyChoose);
         add(valuePanels);
     }
@@ -101,11 +111,41 @@ public class InputPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof WebToggleButton) {
 			WebToggleButton btn = (WebToggleButton) e.getSource();
-	        CardLayout cl = (CardLayout) valuePanels.getLayout();
-	        cl.show(valuePanels, btn.getName());
+	        setTopology(Integer.parseInt(btn.getName()));
 		}		
 	}
 	
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+	
+	public int getTopology() {
+		return topology;
+	}
+
+	public void setTopology(int topology) {
+		if(topology>=0 && topology<NUMBER_OF_SOURCE_LOAD_TOPOLOGIES) {
+			System.out.println(topology);
+	        CardLayout cl = (CardLayout) valuePanels.getLayout();
+	        cl.show(valuePanels, String.valueOf(topology));
+	        WebToggleButton btn = (WebToggleButton) topologyChooseButtons[topology];
+	        btn.setSelected(true);
+			this.topology = topology;
+		}
+	}
+
+	public ElectricalComponent[] getElectricalComponents() {
+		return electricalComponents;
+	}
+
+	public void setElectricalComponents(ElectricalComponent[] electricalComponents) {
+		this.electricalComponents = electricalComponents;
+	}
+
 	private class ValuePanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 		

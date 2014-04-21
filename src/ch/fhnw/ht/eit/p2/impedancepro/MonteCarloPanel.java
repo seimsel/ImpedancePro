@@ -32,6 +32,7 @@ public class MonteCarloPanel extends JPanel{
         
 		btnMonteCarlo = new WebSwitch ();
 		btnMonteCarlo.setSelected(true, false);
+		btnMonteCarlo.setFocusable(false);
         
 		tfN = new JTextField(4);
 		tfFu = new JTextField(4);
