@@ -30,10 +30,10 @@ public class SolutionPanel extends JPanel {
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createLineBorder(color, 2));
         
-        lbValue1 = new JLabel("100mH");
-        lbValue2 = new JLabel("200uF");
-        lbQ = new JLabel("2");
-        lbB = new JLabel("20");
+        lbValue1 = new JLabel();
+        lbValue2 = new JLabel();
+        lbQ = new JLabel();
+        lbB = new JLabel();
         
         WebImage matchingNetworkImage = new WebImage();
         
@@ -137,6 +137,7 @@ public class SolutionPanel extends JPanel {
 		public JTextField tfValue2;
 		public JTextField tfTolerance1;
 		public JTextField tfTolerance2;
+		public JLabel lbMonteCarlo;
 				
 		public ValuePanel(int topology) {
 			setLayout(new GridBagLayout());
@@ -145,52 +146,81 @@ public class SolutionPanel extends JPanel {
 			tfValue2 = new JTextField("", 5);
 			tfTolerance1 = new JTextField("", 3);
 			tfTolerance2 = new JTextField("", 3);
+			lbMonteCarlo = new JLabel();
+			
+			add(new JLabel("Erfüllt: "), new GridBagConstraints(
+					GridBagConstraints.RELATIVE,	//gridx
+	                0,								//gridy
+	                2,								//gridwidth
+	                1,								//gridheigth
+	                0.0,							//weightx
+	                0.0,							//weighty
+	                GridBagConstraints.EAST,		//anchor
+	                GridBagConstraints.NONE,		//fill
+	                new Insets(0, 0, 0, 0),			//insets
+	                0,								//ipadx
+	                0								//ipady
+	        ));
+			
+			add(lbMonteCarlo, new GridBagConstraints(
+					GridBagConstraints.RELATIVE,	//gridx
+	                0,								//gridy
+	                3,								//gridwidth
+	                1,								//gridheigth
+	                0.0,							//weightx
+	                0.0,							//weighty
+	                GridBagConstraints.WEST,		//anchor
+	                GridBagConstraints.NONE,		//fill
+	                new Insets(0, 0, 0, 0),			//insets
+	                0,								//ipadx
+	                0								//ipady
+	        ));
 			
 			switch (topology) {
 			default:
 				
 			case 0:
 			case 4:
-				addToRow(new JLabel("C1:"), 0);
-				addToRow(tfValue1, 0);
-				addToRow(new JLabel("F"), 0);
-				addToRow(tfTolerance1, 0);
-				addToRow(new JLabel("%"), 0);
-				addToRow(new JLabel("C2:"), 1);
-				addToRow(tfValue2, 1);
+				addToRow(new JLabel("C1:"), 1);
+				addToRow(tfValue1, 1);
 				addToRow(new JLabel("F"), 1);
-				addToRow(tfTolerance2, 1);
+				addToRow(tfTolerance1, 1);
 				addToRow(new JLabel("%"), 1);
+				addToRow(new JLabel("C2:"), 2);
+				addToRow(tfValue2, 2);
+				addToRow(new JLabel("F"), 2);
+				addToRow(tfTolerance2, 2);
+				addToRow(new JLabel("%"), 2);
 				break;
 				
 			case 1:
 			case 2:
 			case 5:
 			case 6:
-				addToRow(new JLabel("C1:"), 0);
-				addToRow(tfValue1, 0);
-				addToRow(new JLabel("F"), 0);
-				addToRow(tfTolerance1, 0);
-				addToRow(new JLabel("%"), 0);
-				addToRow(new JLabel("L1:"), 1);
-				addToRow(tfValue2, 1);
-				addToRow(new JLabel("H"), 1);
-				addToRow(tfTolerance2, 1);
+				addToRow(new JLabel("C1:"), 1);
+				addToRow(tfValue1, 1);
+				addToRow(new JLabel("F"), 1);
+				addToRow(tfTolerance1, 1);
 				addToRow(new JLabel("%"), 1);
+				addToRow(new JLabel("L1:"), 2);
+				addToRow(tfValue2, 2);
+				addToRow(new JLabel("H"), 2);
+				addToRow(tfTolerance2, 2);
+				addToRow(new JLabel("%"), 2);
 				break;
 				
 			case 3:
 			case 7:
-				addToRow(new JLabel("L1:"), 0);
-				addToRow(tfValue1, 0);
-				addToRow(new JLabel("H"), 0);
-				addToRow(tfTolerance1, 0);
-				addToRow(new JLabel("%"), 0);
-				addToRow(new JLabel("L2:"), 1);
-				addToRow(tfValue2, 1);
+				addToRow(new JLabel("L1:"), 1);
+				addToRow(tfValue1, 1);
 				addToRow(new JLabel("H"), 1);
-				addToRow(tfTolerance2, 1);
+				addToRow(tfTolerance1, 1);
 				addToRow(new JLabel("%"), 1);
+				addToRow(new JLabel("L2:"), 2);
+				addToRow(tfValue2, 2);
+				addToRow(new JLabel("H"), 2);
+				addToRow(tfTolerance2, 2);
+				addToRow(new JLabel("%"), 2);
 				break;
 			}
 		}
