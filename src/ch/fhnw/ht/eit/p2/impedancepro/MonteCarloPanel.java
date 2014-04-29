@@ -17,9 +17,9 @@ import com.alee.extended.image.WebImage;
 public class MonteCarloPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
-	private JTextField tfN,tfFu,tfFo,tfH;
+	public JTextField tfN,tfFu,tfFo,tfH;
 	private JLabel lbN,lbFu,lbFo,lbH;
-	private WebSwitch btnMonteCarlo; 
+	public WebSwitch btnMonteCarlo; 
 	
 	
 	public MonteCarloPanel(){

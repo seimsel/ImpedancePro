@@ -62,10 +62,12 @@ public class ImpedanceProView extends JFrame implements Observer {
 		gbc.weighty = 0.0;
 		getContentPane().add(inputView, gbc);
 
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weightx = 1.0;
+		gbc.weighty = 0.1;
 		getContentPane().add(solutionView, gbc);
 		
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.weighty = 1.0;
+		gbc.weighty = 0.9;
 		getContentPane().add(graphView, gbc);
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;

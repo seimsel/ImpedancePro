@@ -16,7 +16,7 @@ public class ReflectionPanel extends JPanel {
 	String[] reflectionStrings = { "SWR", "R" };
 	String[] amplitudeStrings = { "dB", "Abs" };
 
-	private JComboBox<String> cbReflection, cbAmplitude;
+	public JComboBox<String> cbReflection, cbAmplitude;
 	private JLabel lbReflection, lbAmplitude;
 
 	public ReflectionPanel() {

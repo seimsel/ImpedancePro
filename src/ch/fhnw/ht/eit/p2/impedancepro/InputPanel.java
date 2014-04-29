@@ -4,6 +4,7 @@ import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,40 +18,35 @@ import com.alee.laf.button.WebToggleButton;
 import com.alee.managers.tooltip.TooltipManager;
 import com.alee.managers.tooltip.TooltipWay;
 
-import ch.fhnw.ht.eit.p2.impedancepro.electrical.*;
 import ch.fhnw.ht.eit.p2.impedancepro.util.ImageUtil;
 
 public class InputPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
-	private JPanel valuePanels;
-	private WebToggleButton[] topologyChooseButtons;
-	
 	public static final byte SOURCE = 0;
 	public static final byte LOAD = 1;
-	public static final byte NUMBER_OF_SOURCE_LOAD_TOPOLOGIES = 6;
-
+	
 	private int type;
 	private int topology;
-	private ElectricalComponent electricalComponents[];
+	private ValuePanel[] valuePanels;
+	private JPanel valuePanel;
+	public FrequencyPanel frequencyPanel;
 	
-	public InputPanel () {	
+	private WebToggleButton[] topologyChooseButtons = new WebToggleButton[6];
+	
+	public InputPanel(int type) {
 		super();
-	}
-	
-	public InputPanel (int type) {	
-		this();
-		
 		this.type = type;
 		
-		setLayout(new GridLayout(0, 1));
+		setLayout(new GridBagLayout());
 		
-        valuePanels = new JPanel();
-        valuePanels.setLayout(new CardLayout());
+		valuePanels = new ValuePanel[6];
+		valuePanel = new JPanel(new CardLayout());
 		
-        topologyChooseButtons = new WebToggleButton[NUMBER_OF_SOURCE_LOAD_TOPOLOGIES];
-		for(int i=0;i<NUMBER_OF_SOURCE_LOAD_TOPOLOGIES;i++) {
+		for(int i=0;i<topologyChooseButtons.length;i++) {
 			WebToggleButton btn = new WebToggleButton();
+			btn.setFocusable(false);
+			btn.addActionListener(this);
 			if(this.type == SOURCE) {
 				btn.setName(String.valueOf(i));
 		        try {
@@ -63,58 +59,81 @@ public class InputPanel extends JPanel implements ActionListener {
 		        try {
 		            btn.setIcon(new ImageIcon(ImageUtil.loadResourceImage("load_"+i+"_30.png")));
 		        } catch(NullPointerException ex) {
-		        	System.out.println("Could not load Source-Image: load_"+i+"_30.png");
+		        	System.out.println("Could not load Load-Image: load"+i+"_30.png");
 		        }
 			}
 			
-			btn.addActionListener(this);	
-			btn.setFocusable(false);
-			
-			switch (i) {
-			default:
-			case 0:
-				TooltipManager.setTooltip (btn, "R", TooltipWay.down, 0);
-				valuePanels.add(new ValuePanel(new ElectricalComponent[]{new Resistor()}), btn.getName());
-				break;
-			case 1:
-				TooltipManager.setTooltip (btn, "R+C", TooltipWay.down, 0);
-		        valuePanels.add(new ValuePanel(new ElectricalComponent[]{new Resistor(), new Capacitor()}), btn.getName());
-				break;			
-			case 2:
-				TooltipManager.setTooltip (btn, "R//C", TooltipWay.down, 0);
-		        valuePanels.add(new ValuePanel(new ElectricalComponent[]{new Resistor(), new Capacitor()}), btn.getName());
-				break;
-			case 3:
-				TooltipManager.setTooltip (btn, "R+L", TooltipWay.down, 0);
-		        valuePanels.add(new ValuePanel(new ElectricalComponent[]{new Resistor(), new Inductor()}), btn.getName());
-				break;
-			case 4:
-				TooltipManager.setTooltip (btn, "R//L", TooltipWay.down, 0);
-		        valuePanels.add(new ValuePanel(new ElectricalComponent[]{new Resistor(), new Inductor()}), btn.getName());
-				break;
-			case 5:
-				TooltipManager.setTooltip (btn, "Z", TooltipWay.down, 0);
-		        valuePanels.add(new ValuePanel(new ElectricalComponent[]{new GenericImpedance()}), btn.getName());
-				break;
-			}
-			
 			topologyChooseButtons[i] = btn;
+			valuePanels[i] = new ValuePanel(i);
+			valuePanel.add(valuePanels[i], String.valueOf(i));
 		}
-        
-        WebButtonGroup topologyChoose = new WebButtonGroup(true, topologyChooseButtons);
-        topologyChoose.setLayout(new GridLayout());
-        setTopology(0);
-        add(topologyChoose);
-        add(valuePanels);
-    }
-	
+		
+		TooltipManager.setTooltip (topologyChooseButtons[0], "R", TooltipWay.down, 0);
+		TooltipManager.setTooltip (topologyChooseButtons[1], "R+C", TooltipWay.down, 0);
+		TooltipManager.setTooltip (topologyChooseButtons[2], "R+L", TooltipWay.down, 0);
+		TooltipManager.setTooltip (topologyChooseButtons[3], "R//C", TooltipWay.down, 0);
+		TooltipManager.setTooltip (topologyChooseButtons[4], "R//L", TooltipWay.down, 0);
+		TooltipManager.setTooltip (topologyChooseButtons[5], "Z", TooltipWay.down, 0);
+				
+		WebButtonGroup topologyChoose = new WebButtonGroup(true, topologyChooseButtons);
+		topologyChoose.setLayout(new GridLayout());
+				
+		setTopology(0);
+				
+		add(topologyChoose, new GridBagConstraints(
+				GridBagConstraints.RELATIVE,	//gridx
+                0,								//gridy
+                1,								//gridwidth
+                1,								//gridheigth
+                0.0,							//weightx
+                0.0,							//weighty
+                GridBagConstraints.WEST,		//anchor
+                GridBagConstraints.NONE,		//fill
+                new Insets(0, 0, 0, 0),			//insets
+                0,								//ipadx
+                0								//ipady
+        ));
+		
+
+		if(type == SOURCE) {
+			frequencyPanel = new FrequencyPanel();
+			add(frequencyPanel, new GridBagConstraints(
+					GridBagConstraints.RELATIVE,	//gridx
+	                0,								//gridy
+	                1,								//gridwidth
+	                1,								//gridheigth
+	                0.0,							//weightx
+	                0.0,							//weighty
+	                GridBagConstraints.WEST,		//anchor
+	                GridBagConstraints.NONE,		//fill
+	                new Insets(0, 0, 0, 0),			//insets
+	                0,								//ipadx
+	                0								//ipady
+	        ));
+		}
+
+		add(valuePanel, new GridBagConstraints(
+				GridBagConstraints.RELATIVE,	//gridx
+                1,								//gridy
+                2,								//gridwidth
+                1,								//gridheigth
+                0.0,							//weightx
+                0.0,							//weighty
+                GridBagConstraints.WEST,		//anchor
+                GridBagConstraints.NONE,		//fill
+                new Insets(0, 0, 0, 0),			//insets
+                0,								//ipadx
+                0								//ipady
+        ));
+	}
+
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof WebToggleButton) {
 			WebToggleButton btn = (WebToggleButton) e.getSource();
 	        setTopology(Integer.parseInt(btn.getName()));
-		}		
+		}
 	}
-	
+
 	public int getType() {
 		return type;
 	}
@@ -122,73 +141,101 @@ public class InputPanel extends JPanel implements ActionListener {
 	public void setType(int type) {
 		this.type = type;
 	}
-	
+
 	public int getTopology() {
 		return topology;
 	}
 
 	public void setTopology(int topology) {
-		if(topology>=0 && topology<NUMBER_OF_SOURCE_LOAD_TOPOLOGIES) {
-			System.out.println(topology);
-	        CardLayout cl = (CardLayout) valuePanels.getLayout();
-	        cl.show(valuePanels, String.valueOf(topology));
-	        WebToggleButton btn = (WebToggleButton) topologyChooseButtons[topology];
-	        btn.setSelected(true);
-			this.topology = topology;
-		}
+        CardLayout cl = (CardLayout) valuePanel.getLayout();
+        cl.show(valuePanel, String.valueOf(topology));
+        
+        WebToggleButton btn = (WebToggleButton) topologyChooseButtons[topology];
+        btn.setSelected(true);
+
+        this.topology = topology;
 	}
 
-	public ElectricalComponent[] getElectricalComponents() {
-		return electricalComponents;
+	public JPanel getValuePanel() {
+		return valuePanels[topology];
 	}
-
-	public void setElectricalComponents(ElectricalComponent[] electricalComponents) {
-		this.electricalComponents = electricalComponents;
-	}
-
+	
 	private class ValuePanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 		
-		private ValuePanel() {
-			super();
-			setLayout(new GridBagLayout());
-		}
-		
-		public ValuePanel(ElectricalComponent[] components) {
-			this();
+		public JTextField tfValue1;
+		public JTextField tfValue2;
+		public JTextField tfTolerance1;
+		public JTextField tfTolerance2;
+				
+		public ValuePanel(int topology) {
+			tfValue1 = new JTextField("",5);
+			tfValue2 = new JTextField("",5);
+			tfTolerance1 = new JTextField("",3);
+			tfTolerance2 = new JTextField("",3);
 			
-			for (int i = 0; i < components.length; i++) {
-				GridBagConstraints gbc = new GridBagConstraints();
-				gbc.weightx = 1.0;
-				gbc.gridy = 0;
+			switch (topology) {
+			default:
 				
-				JLabel lbDesignator = new JLabel(components[i].getDesignator()+":");
-				JTextField tfValue = new JTextField(components[i].getValueString(), 4);
-				JLabel lbUnit = new JLabel(components[i].getUnit()+"  ");
-				JTextField tfTolerance = new JTextField(String.valueOf(components[i].getTolerance()*100), 2);
-				JLabel lbPercent = new JLabel("%    ");
+			case 0:
+				add(new JLabel("R:"));
+				add(tfValue1);
+				add(new JLabel("Ohm"));
+				add(tfTolerance1);
+				add(new JLabel("%"));
+				break;
 				
-				gbc.anchor = GridBagConstraints.EAST;
-				gbc.fill = GridBagConstraints.NONE;
-				add(lbDesignator, gbc);
+			case 1:
+			case 3:
+				add(new JLabel("R:"));
+				add(tfValue1);
+				add(new JLabel("Ohm"));
+				add(tfTolerance1);
+				add(new JLabel("%"));
+				add(new JLabel("C:"));
+				add(tfValue2);
+				add(new JLabel("F"));
+				add(tfTolerance2);
+				add(new JLabel("%"));
+				break;
 				
-				gbc.anchor = GridBagConstraints.CENTER;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				add(tfValue, gbc);
-				
-				gbc.anchor = GridBagConstraints.WEST;
-				gbc.fill = GridBagConstraints.NONE;
-				add(lbUnit, gbc);
-				
-				gbc.anchor = GridBagConstraints.CENTER;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				add(tfTolerance, gbc);
-				
-				gbc.anchor = GridBagConstraints.WEST;
-				gbc.fill = GridBagConstraints.NONE;
-				add(lbPercent, gbc);
+			case 2:
+			case 4:
+				add(new JLabel("R:"));
+				add(tfValue1);
+				add(new JLabel("Ohm"));
+				add(tfTolerance1);
+				add(new JLabel("%"));
+				add(new JLabel("L:"));
+				add(tfValue2);
+				add(new JLabel("H"));
+				add(tfTolerance2);
+				add(new JLabel("%"));
+				break;
+			
+			case 5:
+				add(new JLabel("Re:"));
+				add(tfValue1);
+				add(new JLabel("Im:"));
+				add(tfValue2);
+				add(new JLabel("Ohm"));
+				add(tfTolerance1);
+				add(new JLabel("%"));
+				break;
 			}
-			
+		}
+	}
+	
+	private class FrequencyPanel extends JPanel {
+		private static final long serialVersionUID = 1L;
+		
+		public JTextField tfFrequency;
+				
+		public FrequencyPanel() {
+			tfFrequency = new JTextField("",5);
+			add(new JLabel("f:"));
+			add(tfFrequency);
+			add(new JLabel("Hz"));
 		}
 		
 	}
