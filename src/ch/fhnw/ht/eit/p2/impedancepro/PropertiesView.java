@@ -10,14 +10,14 @@ import javax.swing.JPanel;
 public class PropertiesView extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	public ReflectionPanel reflectionPanel = new ReflectionPanel();
-	public MonteCarloPanel monteCarloPanel = new MonteCarloPanel();
+	public ReflectionPanel reflectionPanel;
+	public MonteCarloPanel monteCarloPanel;
 	
-	public PropertiesView() {
+	public PropertiesView(ImpedanceProController controller) {
 		setLayout(new GridBagLayout());
 		
-		reflectionPanel = new ReflectionPanel();
-		monteCarloPanel = new MonteCarloPanel();
+		reflectionPanel = new ReflectionPanel(controller);
+		monteCarloPanel = new MonteCarloPanel(controller);
 		
 		JPanel reflectionBorderPanel = new JPanel(new BorderLayout());
 		JPanel monteCarloBorderPanel = new JPanel(new BorderLayout());

@@ -8,18 +8,16 @@ import javax.swing.JPanel;
 
 public class GraphView extends JPanel {
 	private static final long serialVersionUID = 1L;
-
+	
+	public GraphPanel amplitudeGraph;
+	public GraphPanel reflectionGraph;
+	
 	public GraphView() {
 		super();
 		setLayout(new GridLayout(1, 0));
-		
-		Double[] amplitudeXValues = new Double[]{0.0, 1.0, 2.0, 3.0};
-		Double[] amplitudeYValues = new Double[]{0.0, 1.0, 2.0, 3.0};
-		Double[] reflectionXValues = new Double[]{0.0, 1.0, 2.0, 3.0};
-		Double[] reflectilYValues = new Double[]{0.0, 1.0, 2.0, 3.0};
-		
-		GraphPanel amplitudeGraph = new GraphPanel(amplitudeXValues, amplitudeYValues, "Frequenz", "Amplitude");
-		GraphPanel reflectionGraph = new GraphPanel(reflectionXValues, reflectilYValues, "Frequenz", "Reflexion");
+				
+		amplitudeGraph = new GraphPanel("Frequenz", "Amplitude");
+		reflectionGraph = new GraphPanel("Frequenz", "Reflexion");
 		
 		JPanel amplitudeGraphBorderPanel = new JPanel(new BorderLayout());
 		JPanel reflectionGraphBorderPanel = new JPanel(new BorderLayout());
@@ -33,5 +31,4 @@ public class GraphView extends JPanel {
 		add(amplitudeGraphBorderPanel);
 		add(reflectionGraphBorderPanel);
 	}
-	
 }

@@ -17,9 +17,10 @@ public class ReflectionPanel extends JPanel {
 	String[] amplitudeStrings = { "dB", "Abs" };
 
 	public JComboBox<String> cbReflection, cbAmplitude;
+	
 	private JLabel lbReflection, lbAmplitude;
 
-	public ReflectionPanel() {
+	public ReflectionPanel(ImpedanceProController controller) {
 		setLayout(new GridBagLayout());
 		
 		lbReflection = new JLabel("Reflexion:");
@@ -33,12 +34,13 @@ public class ReflectionPanel extends JPanel {
 		GridBagConstraints gbc = new GridBagConstraints();
 		
 		gbc.gridy = 0;
+		add(lbAmplitude, gbc);
+		add(cbAmplitude, gbc);
+		
+		gbc.gridy = 1;
 		add(lbReflection, gbc);
 		add(cbReflection, gbc);
 
-		gbc.gridy = 1;
-		add(lbAmplitude, gbc);
-		add(cbAmplitude, gbc);
 	}
 
 	public void actionPerformed(ActionEvent e) {

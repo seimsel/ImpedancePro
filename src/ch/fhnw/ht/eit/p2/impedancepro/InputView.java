@@ -9,10 +9,9 @@ import javax.swing.JPanel;
 public class InputView extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	public InputPanel sourceInput;
-	public InputPanel loadInput;
+	public InputPanel sourceInput, loadInput;
 
-	public InputView () {
+	public InputView (ImpedanceProController controller) {
 		super();
 		
 		setLayout(new GridLayout(1, 0));

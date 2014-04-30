@@ -19,10 +19,8 @@ import com.alee.extended.image.WebImage;
 public class SolutionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	public JLabel lbValue1;
-	public JLabel lbValue2;
-	public JLabel lbQ;
-	public JLabel lbB;
+	public JLabel lbValue1, lbValue2, lbQ, lbB;
+	public ValuePanel valuePanel;
 	
 	public SolutionPanel(Color color, int topology) {
 		super();
@@ -96,7 +94,7 @@ public class SolutionPanel extends JPanel {
         
         addToRow(new JLabel("  "), 3, GridBagConstraints.EAST);
         
-        ValuePanel valuePanel = new ValuePanel(topology);
+        valuePanel = new ValuePanel(topology);
         valuePanel.setBorder(BorderFactory.createTitledBorder("Monte-Carlo"));
         
         add(valuePanel, new GridBagConstraints(
@@ -130,7 +128,7 @@ public class SolutionPanel extends JPanel {
         ));
 	}
 	
-	private class ValuePanel extends JPanel {
+	public class ValuePanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 		
 		public JTextField tfValue1;

@@ -2,6 +2,10 @@ package ch.fhnw.ht.eit.p2.impedancepro;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,16 +18,20 @@ import com.alee.extended.image.DisplayType;
 import com.alee.extended.image.WebImage;
 
 
-public class MonteCarloPanel extends JPanel{
+public class MonteCarloPanel extends JPanel implements ActionListener, FocusListener {
 	private static final long serialVersionUID = 1L;
 	
 	public JTextField tfN,tfFu,tfFo,tfH;
-	private JLabel lbN,lbFu,lbFo,lbH;
 	public WebSwitch btnMonteCarlo; 
 	
+	private JLabel lbN,lbFu,lbFo,lbH;
 	
-	public MonteCarloPanel(){
+	private ImpedanceProController controller;
+	
+	public MonteCarloPanel(ImpedanceProController controller){
 		setLayout(new GridBagLayout());
+		
+		this.controller = controller;
 		
 		lbN = new JLabel("Anzahl:");
 		lbFu = new JLabel("<html>fg<sub>u</sub>: </html>");
@@ -33,11 +41,17 @@ public class MonteCarloPanel extends JPanel{
 		btnMonteCarlo = new WebSwitch ();
 		btnMonteCarlo.setSelected(true, false);
 		btnMonteCarlo.setFocusable(false);
+		btnMonteCarlo.addActionListener(this);
         
 		tfN = new JTextField(4);
 		tfFu = new JTextField(4);
 		tfFo = new JTextField(4);
 		tfH = new JTextField(4);
+		
+		tfN.addFocusListener(this);
+		tfFu.addFocusListener(this);
+		tfFo.addFocusListener(this);
+		tfH.addFocusListener(this);
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 				
@@ -97,6 +111,20 @@ public class MonteCarloPanel extends JPanel{
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		add(tfH, gbc);
+	}
+
+	public void actionPerformed(ActionEvent ae) {
+		controller.viewHasChanged();
+	}
+
+	public void focusGained(FocusEvent fe) {
+		
+	}
+
+	public void focusLost(FocusEvent fe) {
+		ActionEvent ae = new ActionEvent(this, 0, "focus_action");
+		actionPerformed(ae);
+		
 	}
 	
 

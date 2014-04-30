@@ -26,14 +26,14 @@ public class InputPanel extends JPanel implements ActionListener {
 	public static final byte SOURCE = 0;
 	public static final byte LOAD = 1;
 	
+	public FrequencyPanel frequencyPanel;
+	
 	private int type;
 	private int topology;
 	private ValuePanel[] valuePanels;
 	private JPanel valuePanel;
-	public FrequencyPanel frequencyPanel;
-	
 	private WebToggleButton[] topologyChooseButtons = new WebToggleButton[6];
-	
+			
 	public InputPanel(int type) {
 		super();
 		this.type = type;
@@ -156,17 +156,14 @@ public class InputPanel extends JPanel implements ActionListener {
         this.topology = topology;
 	}
 
-	public JPanel getValuePanel() {
+	public ValuePanel getActiveValuePanel() {
 		return valuePanels[topology];
 	}
-	
-	private class ValuePanel extends JPanel {
+
+	public class ValuePanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 		
-		public JTextField tfValue1;
-		public JTextField tfValue2;
-		public JTextField tfTolerance1;
-		public JTextField tfTolerance2;
+		public JTextField tfValue1, tfValue2, tfTolerance1, tfTolerance2;
 				
 		public ValuePanel(int topology) {
 			tfValue1 = new JTextField("",5);
@@ -225,8 +222,8 @@ public class InputPanel extends JPanel implements ActionListener {
 			}
 		}
 	}
-	
-	private class FrequencyPanel extends JPanel {
+
+	public class FrequencyPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 		
 		public JTextField tfFrequency;

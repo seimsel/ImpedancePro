@@ -16,10 +16,15 @@ import javax.swing.UIManager;
 public class ImpedanceProView extends JFrame implements Observer {
 	private static final long serialVersionUID = 1L;
 
-	public static final Color BLUE = new Color(150, 150, 255);
-	public static final Color GREEN = new Color(150, 220, 150);
-	public static final Color RED = new Color(255, 150, 150);
-	public static final Color YELLOW = new Color(255, 220, 150);
+	public static final Color LIGHT_BLUE = new Color(100, 100, 255, 100);
+	public static final Color LIGHT_GREEN = new Color(100, 170, 100, 100);
+	public static final Color LIGHT_RED = new Color(255, 100, 100, 100);
+	public static final Color LIGHT_YELLOW = new Color(255, 200, 100, 100);
+	
+	public static final Color BLUE = new Color(100, 100, 255);
+	public static final Color GREEN = new Color(100, 170, 100);
+	public static final Color RED = new Color(255, 100, 100);
+	public static final Color YELLOW = new Color(255, 200, 100);
 		
 	public static final Dimension PREF_WINDOW_SIZE = new Dimension(800, 600);
 	public static final Dimension MIN_WINDOW_SIZE = new Dimension(800, 600);
@@ -31,7 +36,7 @@ public class ImpedanceProView extends JFrame implements Observer {
 	public GraphView graphView;
 	public PropertiesView propertiesView;
 	
-	public ImpedanceProView() {
+	public ImpedanceProView(ImpedanceProController controller) {
 		super();
 		
 		try {
@@ -42,10 +47,12 @@ public class ImpedanceProView extends JFrame implements Observer {
 		
 		UIManager.getLookAndFeelDefaults().put("Panel.background", Color.WHITE);
 		
-		inputView = new InputView();
-		solutionView = new SolutionView();
+		setController(controller);
+		
+		inputView = new InputView(controller);
+		solutionView = new SolutionView(controller);
 		graphView = new GraphView();
-		propertiesView = new PropertiesView();
+		propertiesView = new PropertiesView(controller);
 				
 		setTitle("Impedance Pro");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -76,12 +83,29 @@ public class ImpedanceProView extends JFrame implements Observer {
 		getContentPane().add(propertiesView, gbc);
 		
 		setVisible(true);
-	}
-	
-	public ImpedanceProView(ImpedanceProController controller) {
-		this();
 		
-		setController(controller);
+		for(int i=0; i<6; i++){
+			inputView.sourceInput.setTopology(i);
+			inputView.sourceInput.frequencyPanel.tfFrequency.setText("100M");
+			inputView.sourceInput.getActiveValuePanel().tfValue1.setText("100");
+			inputView.sourceInput.getActiveValuePanel().tfValue2.setText("100u");
+			inputView.sourceInput.getActiveValuePanel().tfTolerance1.setText("5");
+			inputView.sourceInput.getActiveValuePanel().tfTolerance2.setText("5");
+			
+			inputView.loadInput.setTopology(i);
+			inputView.loadInput.getActiveValuePanel().tfValue1.setText("50");
+			inputView.loadInput.getActiveValuePanel().tfValue2.setText("10m");
+			inputView.loadInput.getActiveValuePanel().tfTolerance1.setText("5");
+			inputView.loadInput.getActiveValuePanel().tfTolerance2.setText("5");
+		}
+		
+		inputView.sourceInput.setTopology(1);
+		inputView.loadInput.setTopology(2);
+		
+		propertiesView.monteCarloPanel.tfFu.setText("80M");
+		propertiesView.monteCarloPanel.tfFo.setText("120M");
+		propertiesView.monteCarloPanel.tfH.setText("0.2");
+		propertiesView.monteCarloPanel.tfN.setText("1000");
 	}
 	
 	public ImpedanceProController getController() {
