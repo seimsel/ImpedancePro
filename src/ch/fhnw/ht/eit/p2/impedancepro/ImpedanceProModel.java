@@ -7,4 +7,13 @@ import java.util.Observable;
  */
 public class ImpedanceProModel extends Observable {
 
+	private Network network;
+
+	public Network getNetwork() {
+		return network;
+	}
+
+	public void setNetwork(Network network) {
+		this.network = network;
+	}
 }

@@ -12,47 +12,52 @@ import ch.fhnw.ht.eit.p2.impedancepro.util.EngineeringUtil;
  */
 public abstract class ElectricalComponent {
 
-	private double value;
-	private float tolerance;
-	private ComplexNumber impedance;
+	private String designator, unit, valueString;
+	private double value, tolerance;
 	
 	public String getDesignator() {
-		return null;
+		return designator;
+	}
+
+	public void setDesignator(String designator) {
+		this.designator = designator;
 	}
 	
 	public String getUnit() {
-		return null;
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 	
 	public double getValue() {
 		return value;
 	}
-	
+
 	public void setValue(double value) {
 		this.value = value;
+		this.valueString = EngineeringUtil.convert(value, 2);
 	}
 	
 	public String getValueString() {
-		return EngineeringUtil.convertToString(value);
+		return valueString;
 	}
-
+	
 	public void setValueString(String valueString) {
-		value = EngineeringUtil.convertToDouble(valueString);
+		this.value = EngineeringUtil.parse(valueString);
+		this.valueString = EngineeringUtil.convert(value, 2);
 	}
 
-	public float getTolerance() {
+	public double getTolerance() {
 		return tolerance;
 	}
 
-	public void setTolerance(float tolerance) {
+	public void setTolerance(double tolerance) {
 		this.tolerance = tolerance;
 	}
-
-	public ComplexNumber getImpedance() {
-		return impedance;
-	}
-
-	public void setImpedance(ComplexNumber impedance) {
-		this.impedance = impedance;
+	
+	public ComplexNumber getImpedanceAtFrequency(Double frequency) {
+		return null;
 	}
 }

@@ -53,6 +53,11 @@ public class MonteCarloPanel extends JPanel implements ActionListener, FocusList
 		tfFo.addFocusListener(this);
 		tfH.addFocusListener(this);
 		
+		tfN.addActionListener(this);
+		tfFu.addActionListener(this);
+		tfFo.addActionListener(this);
+		tfH.addActionListener(this);
+		
 		GridBagConstraints gbc = new GridBagConstraints();
 				
 		gbc.anchor = GridBagConstraints.WEST;

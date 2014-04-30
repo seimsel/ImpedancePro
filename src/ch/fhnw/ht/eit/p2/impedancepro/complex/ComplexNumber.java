@@ -100,12 +100,4 @@ public class ComplexNumber {
 	public static String toString(ComplexNumber z) {
 		return "Realteil: " + z.re + " Imaginaerteil: " + z.im;
 	}
-
-	public static void main(String[] args) {
-		ComplexNumber a = new ComplexNumber();
-		ComplexNumber b = new ComplexNumber(1.0, 1.0);
-		ComplexNumber c = new ComplexNumber(1.0, 1.0);
-		a = b.add(c);
-		System.out.println(ComplexNumber.toString(a));
-	}
 }
