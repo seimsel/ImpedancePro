@@ -3,13 +3,17 @@ package ch.fhnw.ht.eit.p2.impedancepro;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-
 import java.util.Observable;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * The <code>ReflectionPanel</code> class contains the settings for the graphs.
+ * 
+ * @author Simon Zumbrunnen
+ */
 public class ReflectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -17,26 +21,26 @@ public class ReflectionPanel extends JPanel {
 	String[] amplitudeStrings = { "dB", "Abs" };
 
 	public JComboBox<String> cbReflection, cbAmplitude;
-	
+
 	private JLabel lbReflection, lbAmplitude;
 
 	public ReflectionPanel(ImpedanceProController controller) {
 		setLayout(new GridBagLayout());
-		
+
 		lbReflection = new JLabel("Reflexion:");
 		cbReflection = new JComboBox<String>(reflectionStrings);
 		lbAmplitude = new JLabel("Amplitude:");
 		cbAmplitude = new JComboBox<String>(amplitudeStrings);
-		
+
 		cbReflection.setFocusable(false);
 		cbAmplitude.setFocusable(false);
 
 		GridBagConstraints gbc = new GridBagConstraints();
-		
+
 		gbc.gridy = 0;
 		add(lbAmplitude, gbc);
 		add(cbAmplitude, gbc);
-		
+
 		gbc.gridy = 1;
 		add(lbReflection, gbc);
 		add(cbReflection, gbc);

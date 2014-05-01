@@ -1,6 +1,10 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
 /**
+ * The <code>ImpedanceProController</code> class triggers the models
+ * calculations, as soon as there are changes in the view. It also changes
+ * settings
+ * 
  * @author Simon Zumbrunnen
  */
 public class ImpedanceProController {
@@ -10,11 +14,11 @@ public class ImpedanceProController {
 	public ImpedanceProController(ImpedanceProModel model) {
 		setModel(model);
 	}
-	
+
 	public ImpedanceProView getView() {
 		return view;
 	}
-	
+
 	public void setView(ImpedanceProView view) {
 		this.view = view;
 	}
@@ -26,55 +30,61 @@ public class ImpedanceProController {
 	public void setModel(ImpedanceProModel model) {
 		this.model = model;
 	}
-	
-	public void viewHasChanged() {		
-		
-		int sourceTopology = getView().inputView.sourceInput.getTopology();
-		int loadTopology = getView().inputView.loadInput.getTopology();
 
-		if(getView().propertiesView.monteCarloPanel.btnMonteCarlo.isSelected()) {
-			for (int i = 0; i < getView().solutionView.solutionPanels.length; i++) {
-				getView().solutionView.solutionPanels[i].valuePanel.setVisible(true);
-			}
-			
-			for(int i=0; i<6; i++){
-				getView().inputView.sourceInput.setTopology(i);
-				getView().inputView.sourceInput.getActiveValuePanel().tfTolerance1.setEnabled(true);
-				getView().inputView.sourceInput.getActiveValuePanel().tfTolerance2.setEnabled(true);
-				
-				getView().inputView.loadInput.setTopology(i);
-				getView().inputView.loadInput.getActiveValuePanel().tfTolerance1.setEnabled(true);
-				getView().inputView.loadInput.getActiveValuePanel().tfTolerance2.setEnabled(true);
-			}
-			
-			getView().propertiesView.monteCarloPanel.tfFo.setEnabled(true);
-			getView().propertiesView.monteCarloPanel.tfFu.setEnabled(true);
-			getView().propertiesView.monteCarloPanel.tfH.setEnabled(true);
-			getView().propertiesView.monteCarloPanel.tfN.setEnabled(true);
+	/**
+	 * Is triggered by the view, as soon as an action occurs.
+	 */
+	public void viewHasChanged() {
+		ImpedanceProView view = getView();
+		InputPanel sourceInput = view.inputView.sourceInput;
+		InputPanel loadInput = view.inputView.loadInput;
+
+		int sourceTopology = sourceInput.getTopology();
+		int loadTopology = loadInput.getTopology();
+
+		if (getView().propertiesView.monteCarloPanel.btnMonteCarlo.isSelected()) {
+			displayMonteCarlo(true);
 		} else {
-			for (int i = 0; i < getView().solutionView.solutionPanels.length; i++) {
-				getView().solutionView.solutionPanels[i].valuePanel.setVisible(false);
-			}
-			
-			for(int i=0; i<6; i++){
-				getView().inputView.sourceInput.setTopology(i);
-				getView().inputView.sourceInput.getActiveValuePanel().tfTolerance1.setEnabled(false);
-				getView().inputView.sourceInput.getActiveValuePanel().tfTolerance2.setEnabled(false);
-				
-				getView().inputView.loadInput.setTopology(i);
-				getView().inputView.loadInput.getActiveValuePanel().tfTolerance1.setEnabled(false);
-				getView().inputView.loadInput.getActiveValuePanel().tfTolerance2.setEnabled(false);
-			}
-			
-			getView().propertiesView.monteCarloPanel.tfFo.setEnabled(false);
-			getView().propertiesView.monteCarloPanel.tfFu.setEnabled(false);
-			getView().propertiesView.monteCarloPanel.tfH.setEnabled(false);
-			getView().propertiesView.monteCarloPanel.tfN.setEnabled(false);
+			displayMonteCarlo(false);
 		}
-		
-		getView().inputView.sourceInput.setTopology(sourceTopology);
-		getView().inputView.loadInput.setTopology(loadTopology);
-		
+
+		sourceInput.setTopology(sourceTopology);
+		loadInput.setTopology(loadTopology);
+
 		System.out.println("View has changed");
+	}
+
+	/**
+	 * Enables or disables all the components, that are used for the monte-carlo
+	 * simulation.
+	 * 
+	 * @param display
+	 *            Whether the monte-carlo components should be enabled or not
+	 */
+	private void displayMonteCarlo(boolean display) {
+		ImpedanceProView view = getView();
+		SolutionView solutionView = view.solutionView;
+		InputPanel sourceInput = view.inputView.sourceInput;
+		InputPanel loadInput = view.inputView.loadInput;
+		MonteCarloPanel monteCarloPanel = view.propertiesView.monteCarloPanel;
+
+		for (int i = 0; i < solutionView.solutionPanels.length; i++) {
+			solutionView.solutionPanels[i].valuePanel.setVisible(display);
+		}
+
+		for (int i = 0; i < 6; i++) {
+			sourceInput.setTopology(i);
+			sourceInput.getActiveValuePanel().tfTolerance1.setEnabled(display);
+			sourceInput.getActiveValuePanel().tfTolerance2.setEnabled(display);
+
+			loadInput.setTopology(i);
+			loadInput.getActiveValuePanel().tfTolerance1.setEnabled(display);
+			loadInput.getActiveValuePanel().tfTolerance2.setEnabled(display);
+		}
+
+		monteCarloPanel.tfFo.setEnabled(display);
+		monteCarloPanel.tfFu.setEnabled(display);
+		monteCarloPanel.tfH.setEnabled(display);
+		monteCarloPanel.tfN.setEnabled(display);
 	}
 }

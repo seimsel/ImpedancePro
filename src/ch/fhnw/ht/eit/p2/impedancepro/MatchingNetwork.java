@@ -1,5 +1,10 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
+import ch.fhnw.ht.eit.p2.impedancepro.electrical.ElectricalComponent;
+
+/**
+ * @author Stephan Fahrni
+ */
 public class MatchingNetwork {
 	
 	private int topology;

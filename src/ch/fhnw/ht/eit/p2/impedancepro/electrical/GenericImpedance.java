@@ -1,11 +1,7 @@
-/**
- * 
- */
 package ch.fhnw.ht.eit.p2.impedancepro.electrical;
 
 /**
  * @author Simon Zumbrunnen
- *
  */
 public class GenericImpedance extends ElectricalComponent {
 	private static final String unit="Ohm";

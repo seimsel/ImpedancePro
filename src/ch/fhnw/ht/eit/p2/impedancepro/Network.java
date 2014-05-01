@@ -2,7 +2,20 @@ package ch.fhnw.ht.eit.p2.impedancepro;
 
 import org.jfree.data.xy.XYDataset;
 
+/**
+ * @author Stephan Fahrni
+ */
 public class Network {
+	
+	public static final byte PAR_C_SER_C = 0;
+	public static final byte PAR_C_SER_L = 1;
+	public static final byte PAR_L_SER_C = 2;
+	public static final byte PAR_L_SER_L = 3;
+	public static final byte SER_C_PAR_C = 4;
+	public static final byte SER_C_PAR_L = 5;
+	public static final byte SER_L_PAR_C = 6;
+	public static final byte SER_L_PAR_L = 7;
+	
 	private double frequency;
 	private XYDataset swrData, reflectanceData, amplitudeData, amplitudeDBData;
 	private double monteCarloResult;

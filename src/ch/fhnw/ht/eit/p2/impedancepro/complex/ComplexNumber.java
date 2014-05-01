@@ -1,11 +1,7 @@
-/**
- * 
- */
 package ch.fhnw.ht.eit.p2.impedancepro.complex;
 
 /**
  * @author Richard Gut
- *
  */
 public class ComplexNumber {
 	private double re;
@@ -99,5 +95,9 @@ public class ComplexNumber {
 
 	public static String toString(ComplexNumber z) {
 		return "Realteil: " + z.re + " Imaginaerteil: " + z.im;
+	}
+	
+	public static ComplexNumber parallel(ComplexNumber[] complexNumbers) {
+		return null;
 	}
 }
