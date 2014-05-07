@@ -82,6 +82,8 @@ public class Network {
 
 	public void calculateMatchingNetworks() {
 
+		byte[] topology = new byte[4];
+		
 		double w = 0;
 
 		// double re,a,b,c,X11,X21,X12,X22,X32,X42,X31,X41;
@@ -143,18 +145,20 @@ public class Network {
 				if (X11 > 0) {
 
 					LSG1BT1 = X11 / w;
-					solution1.electricalComponents[0]
-							.setType(ElectricalComponent.INDUCTOR);
 					solution1.electricalComponents[0].setValue(LSG1BT1);
 					solution1.setTopology(0);
 
+					topology[0] = MatchingNetwork.PAR;
+					topology[1] = MatchingNetwork.L;
+					
 				} else {
 
 					LSG1BT1 = -1 / (w * X11);
-					solution1.electricalComponents[0]
-							.setType(ElectricalComponent.CAPACITOR);
 					solution1.electricalComponents[0].setValue(LSG1BT1);
 					solution1.setTopology(0);
+					
+					topology[0] = MatchingNetwork.PAR;
+					topology[1] = MatchingNetwork.C;
 				}
 
 				// determine C or L of solution 1
@@ -163,6 +167,9 @@ public class Network {
 
 					// only wire
 
+					topology[2] = MatchingNetwork.EMPTY;
+					topology[3] = MatchingNetwork.EMPTY;
+					
 					solution1.setTopology(0);
 
 				} else {
@@ -171,20 +178,21 @@ public class Network {
 
 						LSG1BT2 = X12 / w;
 
-						solution1.electricalComponents[1]
-								.setType(ElectricalComponent.INDUCTOR);
 						solution1.electricalComponents[1].setValue(LSG1BT2);
 						solution1.setTopology(0);
+						
+						topology[2] = MatchingNetwork.SER;
+						topology[3] = MatchingNetwork.C;
 
 					} else {
 
 						LSG1BT2 = -1 / (w * X12);
 
-						solution1.electricalComponents[1]
-								.setType(ElectricalComponent.CAPACITOR);
 						solution1.electricalComponents[1].setValue(LSG1BT2);
 						solution1.setTopology(0);
 
+						topology[2] = MatchingNetwork.SER;
+						topology[3] = MatchingNetwork.L;
 					}
 
 				}
@@ -215,19 +223,21 @@ public class Network {
 
 					LSG2BT1 = X21 / w;
 
-					solution1.electricalComponents[0]
-							.setType(ElectricalComponent.INDUCTOR);
 					solution2.electricalComponents[0].setValue(LSG2BT1);
 					solution2.setTopology(0);
+					
+					topology[0] = MatchingNetwork.PAR;
+					topology[1] = MatchingNetwork.L;
 
 				} else {
 
 					LSG2BT1 = -1 / (w * X21);
 
-					solution1.electricalComponents[0]
-							.setType(ElectricalComponent.CAPACITOR);
 					solution2.electricalComponents[0].setValue(LSG2BT1);
 					solution2.setTopology(0);
+					
+					topology[0] = MatchingNetwork.PAR;
+					topology[1] = MatchingNetwork.C;
 				}
 
 				// determine C or L of solution 2
@@ -236,6 +246,9 @@ public class Network {
 
 					// short circuit
 
+					topology[0] = MatchingNetwork.EMPTY;
+					topology[1] = MatchingNetwork.EMPTY;
+					
 					solution2.setTopology(0);
 
 				} else {
@@ -244,19 +257,21 @@ public class Network {
 
 						LSG2BT2 = X22 / w;
 
-						solution1.electricalComponents[1]
-								.setType(ElectricalComponent.INDUCTOR);
 						solution2.electricalComponents[1].setValue(LSG2BT2);
 						solution2.setTopology(0);
+						
+						topology[2] = MatchingNetwork.SER;
+						topology[3] = MatchingNetwork.L;
 
 					} else {
 
 						LSG2BT2 = -1 / (w * X22);
 
-						solution1.electricalComponents[1]
-								.setType(ElectricalComponent.CAPACITOR);
 						solution2.electricalComponents[1].setValue(LSG2BT2);
 						solution2.setTopology(0);
+						
+						topology[2] = MatchingNetwork.SER;
+						topology[3] = MatchingNetwork.C;
 					}
 				}
 
@@ -294,6 +309,9 @@ public class Network {
 
 					// short circuit
 
+					topology[0] = MatchingNetwork.EMPTY;
+					topology[1] = MatchingNetwork.EMPTY;
+					
 					solution3.setTopology(0);
 
 				} else {
@@ -302,19 +320,21 @@ public class Network {
 
 						LSG3BT1 = X31 / w;
 
-						solution1.electricalComponents[0]
-								.setType(ElectricalComponent.INDUCTOR);
 						solution3.electricalComponents[0].setValue(LSG3BT1);
 						solution3.setTopology(0);
+						
+						topology[0] = MatchingNetwork.SER;
+						topology[1] = MatchingNetwork.L;
 
 					} else {
 
 						LSG3BT1 = -1 / (w * X31);
 
-						solution1.electricalComponents[0]
-								.setType(ElectricalComponent.CAPACITOR);
 						solution3.electricalComponents[0].setValue(LSG3BT1);
 						solution3.setTopology(0);
+						
+						topology[0] = MatchingNetwork.SER;
+						topology[1] = MatchingNetwork.C;
 					}
 				}
 
@@ -324,19 +344,21 @@ public class Network {
 
 					LSG3BT2 = X32 / w;
 
-					solution1.electricalComponents[1]
-							.setType(ElectricalComponent.INDUCTOR);
 					solution3.electricalComponents[1].setValue(LSG3BT2);
 					solution3.setTopology(0);
+					
+					topology[2] = MatchingNetwork.PAR;
+					topology[3] = MatchingNetwork.C;
 
 				} else {
 
 					LSG3BT2 = -1 / (w * X32);
 
-					solution1.electricalComponents[1]
-							.setType(ElectricalComponent.CAPACITOR);
 					solution3.electricalComponents[1].setValue(LSG3BT2);
 					solution3.setTopology(0);
+					
+					topology[2] = MatchingNetwork.PAR;
+					topology[3] = MatchingNetwork.L;
 				}
 
 			} else {
@@ -364,7 +386,9 @@ public class Network {
 				if (X41 == 0) {
 
 					// short circuit
-
+					topology[0] = MatchingNetwork.EMPTY;
+					topology[1] = MatchingNetwork.EMPTY;
+					
 					solution4.setTopology(0);
 
 				} else {
@@ -373,19 +397,21 @@ public class Network {
 
 						LSG4BT1 = X41 / w;
 
-						solution1.electricalComponents[0]
-								.setType(ElectricalComponent.INDUCTOR);
 						solution4.electricalComponents[0].setValue(LSG4BT1);
 						solution4.setTopology(0);
+						
+						topology[0] = MatchingNetwork.SER;
+						topology[1] = MatchingNetwork.L;
 
 					} else {
 
 						LSG4BT1 = -1 / (w * X41);
 
-						solution1.electricalComponents[0]
-								.setType(ElectricalComponent.CAPACITOR);
 						solution4.electricalComponents[0].setValue(LSG3BT1);
 						solution4.setTopology(0);
+						
+						topology[0] = MatchingNetwork.SER;
+						topology[1] = MatchingNetwork.C;
 					}
 				}
 
@@ -395,19 +421,21 @@ public class Network {
 
 					LSG4BT2 = X42 / w;
 
-					solution1.electricalComponents[1]
-							.setType(ElectricalComponent.INDUCTOR);
 					solution4.electricalComponents[1].setValue(LSG4BT2);
 					solution4.setTopology(0);
+					
+					topology[2] = MatchingNetwork.PAR;
+					topology[3] = MatchingNetwork.L;
 
 				} else {
 
 					LSG4BT2 = -1 / (w * X42);
 
-					solution1.electricalComponents[1]
-							.setType(ElectricalComponent.CAPACITOR);
 					solution4.electricalComponents[1].setValue(LSG4BT2);
 					solution4.setTopology(0);
+					
+					topology[2] = MatchingNetwork.PAR;
+					topology[3] = MatchingNetwork.C;
 				}
 
 			} else {
