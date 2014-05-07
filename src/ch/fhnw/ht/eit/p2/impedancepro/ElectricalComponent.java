@@ -1,35 +1,20 @@
-/**
- * 
- */
-package ch.fhnw.ht.eit.p2.impedancepro.electrical;
+package ch.fhnw.ht.eit.p2.impedancepro;
 
 import ch.fhnw.ht.eit.p2.impedancepro.complex.ComplexNumber;
 import ch.fhnw.ht.eit.p2.impedancepro.util.EngineeringUtil;
 
 /**
- * @author Simon Zumbrunnen
- *
+ * @author Stephan Fahrni
  */
 public class ElectricalComponent {
 
-	private String designator, unit, valueString;
+	public static final int GENERIC = 0;
+	public static final int CAPACITOR = 1;
+	public static final int INDUCTOR = 2;
+	
+	private String valueString;
 	private double value, tolerance;
-	
-	public String getDesignator() {
-		return designator;
-	}
-
-	public void setDesignator(String designator) {
-		this.designator = designator;
-	}
-	
-	public String getUnit() {
-		return unit;
-	}
-
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
+	private int type;
 	
 	public double getValue() {
 		return value;
@@ -59,5 +44,13 @@ public class ElectricalComponent {
 	
 	public ComplexNumber getImpedanceAtFrequency(Double frequency) {
 		return null;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 }

@@ -1,13 +1,21 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
 import ch.fhnw.ht.eit.p2.impedancepro.complex.ComplexNumber;
-import ch.fhnw.ht.eit.p2.impedancepro.electrical.ElectricalComponent;
 
 public class SourceLoadNetwork {
-
+	
+	public static final byte R = 0;
+	public static final byte R_SER_C = 1;
+	public static final byte R_SER_L = 2;
+	public static final byte R_PAR_C = 3;
+	public static final byte R_PAR_L = 4;
+	public static final byte Z = 5;
+	
 	private int topology;
 	private ComplexNumber impedance;
 	private ElectricalComponent[] electricalComponents;
+	
+
 	
 	public int getTopology() {
 		return topology;

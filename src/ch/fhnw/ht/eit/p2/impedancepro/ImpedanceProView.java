@@ -168,8 +168,8 @@ public class ImpedanceProView extends JFrame implements Observer {
 			loadInput.getActiveValuePanel().tfTolerance2.setText("5");
 		}
 		
-		sourceInput.setTopology(SourceLoadNetwork.R_PAR_C);
-		loadInput.setTopology(SourceLoadNetwork.R_PAR_L);
+		sourceInput.setTopology(2);
+		loadInput.setTopology(3);
 
 		monteCarloPanel.tfFu.setText("80M");
 		monteCarloPanel.tfFo.setText("120M");
