@@ -47,7 +47,7 @@ public class ImpedanceProController {
 
 	public void setView(ImpedanceProView view) {
 		this.view = view;
-		view.solutionView.setSolutionPanels(new SolutionPanel[]{new SolutionPanel(ImpedanceProView.BLUE, 2, this)});
+		view.solutionView.setSolutionPanels(new SolutionPanel[]{new SolutionPanel(ImpedanceProView.BLUE, 1200, this)});
 	}
 
 	public ImpedanceProModel getModel() {
