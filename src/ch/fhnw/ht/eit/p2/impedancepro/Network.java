@@ -146,10 +146,10 @@ public class Network {
 
 					LSG1BT1 = X11 / w;
 					solution1.electricalComponents[0].setValue(LSG1BT1);
-					solution1.setTopology(0);
-
+					
 					topology[0] = MatchingNetwork.PAR;
 					topology[1] = MatchingNetwork.L;
+
 					
 				} else {
 
@@ -159,7 +159,11 @@ public class Network {
 					
 					topology[0] = MatchingNetwork.PAR;
 					topology[1] = MatchingNetwork.C;
+					
+
 				}
+				
+				solution1.setTopology(byteArrayToInt(topology));
 
 				// determine C or L of solution 1
 
@@ -170,7 +174,7 @@ public class Network {
 					topology[2] = MatchingNetwork.EMPTY;
 					topology[3] = MatchingNetwork.EMPTY;
 					
-					solution1.setTopology(0);
+					solution1.setTopology(byteArrayToInt(topology));
 
 				} else {
 
@@ -178,11 +182,11 @@ public class Network {
 
 						LSG1BT2 = X12 / w;
 
-						solution1.electricalComponents[1].setValue(LSG1BT2);
-						solution1.setTopology(0);
+					
 						
 						topology[2] = MatchingNetwork.SER;
 						topology[3] = MatchingNetwork.C;
+						
 
 					} else {
 
@@ -193,9 +197,13 @@ public class Network {
 
 						topology[2] = MatchingNetwork.SER;
 						topology[3] = MatchingNetwork.L;
+						
+						
 					}
 
 				}
+				
+				solution1.setTopology(byteArrayToInt(topology));
 
 			} else {
 
@@ -224,21 +232,24 @@ public class Network {
 					LSG2BT1 = X21 / w;
 
 					solution2.electricalComponents[0].setValue(LSG2BT1);
-					solution2.setTopology(0);
 					
 					topology[0] = MatchingNetwork.PAR;
 					topology[1] = MatchingNetwork.L;
+					
 
 				} else {
 
 					LSG2BT1 = -1 / (w * X21);
 
 					solution2.electricalComponents[0].setValue(LSG2BT1);
-					solution2.setTopology(0);
+
 					
 					topology[0] = MatchingNetwork.PAR;
 					topology[1] = MatchingNetwork.C;
+					
 				}
+				
+				solution2.setTopology(byteArrayToInt(topology));
 
 				// determine C or L of solution 2
 
@@ -249,7 +260,7 @@ public class Network {
 					topology[0] = MatchingNetwork.EMPTY;
 					topology[1] = MatchingNetwork.EMPTY;
 					
-					solution2.setTopology(0);
+					solution2.setTopology(byteArrayToInt(topology));
 
 				} else {
 
@@ -258,22 +269,26 @@ public class Network {
 						LSG2BT2 = X22 / w;
 
 						solution2.electricalComponents[1].setValue(LSG2BT2);
-						solution2.setTopology(0);
+						
 						
 						topology[2] = MatchingNetwork.SER;
 						topology[3] = MatchingNetwork.L;
+						
 
 					} else {
 
 						LSG2BT2 = -1 / (w * X22);
 
 						solution2.electricalComponents[1].setValue(LSG2BT2);
-						solution2.setTopology(0);
+						
 						
 						topology[2] = MatchingNetwork.SER;
 						topology[3] = MatchingNetwork.C;
+						
 					}
 				}
+				
+				solution2.setTopology(byteArrayToInt(topology));
 
 			} else {
 
@@ -312,7 +327,7 @@ public class Network {
 					topology[0] = MatchingNetwork.EMPTY;
 					topology[1] = MatchingNetwork.EMPTY;
 					
-					solution3.setTopology(0);
+					solution3.setTopology(byteArrayToInt(topology));
 
 				} else {
 
@@ -337,6 +352,8 @@ public class Network {
 						topology[1] = MatchingNetwork.C;
 					}
 				}
+				
+				solution3.setTopology(byteArrayToInt(topology));
 
 				// determine C or L of solution 3
 
@@ -345,7 +362,7 @@ public class Network {
 					LSG3BT2 = X32 / w;
 
 					solution3.electricalComponents[1].setValue(LSG3BT2);
-					solution3.setTopology(0);
+
 					
 					topology[2] = MatchingNetwork.PAR;
 					topology[3] = MatchingNetwork.C;
@@ -355,11 +372,13 @@ public class Network {
 					LSG3BT2 = -1 / (w * X32);
 
 					solution3.electricalComponents[1].setValue(LSG3BT2);
-					solution3.setTopology(0);
+
 					
 					topology[2] = MatchingNetwork.PAR;
 					topology[3] = MatchingNetwork.L;
 				}
+				
+				solution3.setTopology(byteArrayToInt(topology));
 
 			} else {
 
@@ -389,7 +408,7 @@ public class Network {
 					topology[0] = MatchingNetwork.EMPTY;
 					topology[1] = MatchingNetwork.EMPTY;
 					
-					solution4.setTopology(0);
+					solution4.setTopology(byteArrayToInt(topology));
 
 				} else {
 
@@ -414,6 +433,8 @@ public class Network {
 						topology[1] = MatchingNetwork.C;
 					}
 				}
+				
+				solution4.setTopology(byteArrayToInt(topology));
 
 				// determine C or L of solution 4
 
@@ -422,7 +443,6 @@ public class Network {
 					LSG4BT2 = X42 / w;
 
 					solution4.electricalComponents[1].setValue(LSG4BT2);
-					solution4.setTopology(0);
 					
 					topology[2] = MatchingNetwork.PAR;
 					topology[3] = MatchingNetwork.L;
@@ -432,11 +452,12 @@ public class Network {
 					LSG4BT2 = -1 / (w * X42);
 
 					solution4.electricalComponents[1].setValue(LSG4BT2);
-					solution4.setTopology(0);
 					
 					topology[2] = MatchingNetwork.PAR;
 					topology[3] = MatchingNetwork.C;
 				}
+				
+				solution4.setTopology(byteArrayToInt(topology));
 
 			} else {
 
@@ -475,5 +496,14 @@ public class Network {
 
 	public void setLoadNetwork(SourceLoadNetwork loadNetwork) {
 		this.loadNetwork = loadNetwork;
+	}
+	
+	private int byteArrayToInt(byte[] encodedValue) {
+	    int index = 0;
+	    int value = encodedValue[index++] << Byte.SIZE * 3;
+	    value ^= (encodedValue[index++] & 0xFF) << Byte.SIZE * 2;
+	    value ^= (encodedValue[index++] & 0xFF) << Byte.SIZE * 1;
+	    value ^= (encodedValue[index++] & 0xFF);
+	    return value;
 	}
 }
