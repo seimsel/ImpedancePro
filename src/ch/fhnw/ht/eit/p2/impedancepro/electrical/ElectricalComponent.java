@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package ch.fhnw.ht.eit.p2.impedancepro.electrical;
 
 import ch.fhnw.ht.eit.p2.impedancepro.complex.ComplexNumber;
@@ -5,8 +8,9 @@ import ch.fhnw.ht.eit.p2.impedancepro.util.EngineeringUtil;
 
 /**
  * @author Simon Zumbrunnen
+ *
  */
-public abstract class ElectricalComponent {
+public class ElectricalComponent {
 
 	private String designator, unit, valueString;
 	private double value, tolerance;

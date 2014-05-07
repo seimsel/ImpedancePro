@@ -1,7 +1,11 @@
+/**
+ * 
+ */
 package ch.fhnw.ht.eit.p2.impedancepro.electrical;
 
 /**
  * @author Simon Zumbrunnen
+ *
  */
 public class Inductor extends ElectricalComponent {
 	private static final String unit="H";

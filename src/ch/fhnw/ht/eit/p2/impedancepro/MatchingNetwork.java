@@ -5,10 +5,20 @@ import ch.fhnw.ht.eit.p2.impedancepro.electrical.ElectricalComponent;
 /**
  * @author Stephan Fahrni
  */
+
 public class MatchingNetwork {
 	
 	private int topology;
-	private ElectricalComponent[] electricalComponents;
+	public ElectricalComponent[] electricalComponents;
+	
+	
+	public MatchingNetwork() {
+		
+		electricalComponents = new ElectricalComponent[2];
+		
+		electricalComponents[0] = new ElectricalComponent();
+		electricalComponents[1] = new ElectricalComponent();
+	}
 
 	public int getTopology() {
 		return topology;
