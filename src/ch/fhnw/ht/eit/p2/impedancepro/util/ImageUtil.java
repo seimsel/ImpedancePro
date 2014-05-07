@@ -3,6 +3,7 @@ package ch.fhnw.ht.eit.p2.impedancepro.util;
 import java.awt.Container;
 import java.awt.Image;
 import java.awt.MediaTracker;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 
@@ -43,7 +44,7 @@ public class ImageUtil {
 	 */
 	public static Image loadResourceImage(String imageName) {
 		MediaTracker tracker = new MediaTracker(p);
-		Image img = (new ImageIcon(ImageUtil.class.getResource("..//images//"
+		Image img = (new ImageIcon(ImageUtil.class.getResource(".." + File.separator + "images/"
 				+ imageName))).getImage();
 		tracker.addImage(img, 0);
 		try {

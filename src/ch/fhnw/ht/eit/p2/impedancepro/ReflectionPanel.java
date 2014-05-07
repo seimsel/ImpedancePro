@@ -2,7 +2,9 @@ package ch.fhnw.ht.eit.p2.impedancepro;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 
 import javax.swing.JComboBox;
@@ -14,7 +16,7 @@ import javax.swing.JPanel;
  * 
  * @author Simon Zumbrunnen
  */
-public class ReflectionPanel extends JPanel {
+public class ReflectionPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	String[] reflectionStrings = { "SWR", "R" };
@@ -23,8 +25,13 @@ public class ReflectionPanel extends JPanel {
 	public JComboBox<String> cbReflection, cbAmplitude;
 
 	private JLabel lbReflection, lbAmplitude;
+	private ImpedanceProController controller;
 
 	public ReflectionPanel(ImpedanceProController controller) {
+		super();
+		
+		this.controller = controller;
+		
 		setLayout(new GridBagLayout());
 
 		lbReflection = new JLabel("Reflexion:");
@@ -33,21 +40,66 @@ public class ReflectionPanel extends JPanel {
 		cbAmplitude = new JComboBox<String>(amplitudeStrings);
 
 		cbReflection.setFocusable(false);
+		cbReflection.addActionListener(this);
+		
 		cbAmplitude.setFocusable(false);
+		cbAmplitude.addActionListener(this);
 
-		GridBagConstraints gbc = new GridBagConstraints();
+		add(lbAmplitude, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				0, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
+		
+		add(cbAmplitude, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				0, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
 
-		gbc.gridy = 0;
-		add(lbAmplitude, gbc);
-		add(cbAmplitude, gbc);
-
-		gbc.gridy = 1;
-		add(lbReflection, gbc);
-		add(cbReflection, gbc);
-
+		add(lbReflection, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				1, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
+		
+		add(cbReflection, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				1, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		controller.viewAction();
 	}
 
 	public void update(Observable obs, Object obj) {

@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.p2.impedancepro;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -40,8 +41,8 @@ public class MonteCarloPanel extends JPanel implements ActionListener,
 		this.controller = controller;
 
 		lbN = new JLabel("Anzahl:");
-		lbFu = new JLabel("<html>fg<sub>u</sub>: </html>");
-		lbFo = new JLabel("<html>fg<sub>o</sub>: </html>");
+		lbFu = new JLabel("<html>f<sub>u</sub>: </html>");
+		lbFo = new JLabel("<html>f<sub>o</sub>: </html>");
 		lbH = new JLabel("h:");
 
 		btnMonteCarlo = new WebSwitch();
@@ -64,44 +65,96 @@ public class MonteCarloPanel extends JPanel implements ActionListener,
 		tfFo.addActionListener(this);
 		tfH.addActionListener(this);
 
-		GridBagConstraints gbc = new GridBagConstraints();
+		add(btnMonteCarlo, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				0, // gridy
+				2, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.WEST, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
 
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.gridwidth = 2;
-		gbc.ipadx = 10;
-		gbc.weightx = 0.0;
-		gbc.weighty = 0.0;
-		add(btnMonteCarlo, gbc);
+		add(lbFo, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				0, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.EAST, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				10, // ipadx
+				0 // ipady
+				));
 
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.NONE;
-		gbc.gridwidth = 1;
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
-		add(lbFo, gbc);
+		add(tfFo, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				0, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.EAST, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				tfFo.getPreferredSize().width, // ipadx
+				0 // ipady
+				));
 
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		add(tfFo, gbc);
+		add(lbN, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				1, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.WEST, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
 
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.NONE;
-		gbc.gridy = 1;
-		gbc.weightx = 0.0;
-		gbc.weighty = 0.0;
-		add(lbN, gbc);
+		add(tfN, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				1, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.WEST, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				tfN.getPreferredSize().width, // ipadx
+				0 // ipady
+				));
 
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
-		add(tfN, gbc);
+		add(lbFu, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				1, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.EAST, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				10, // ipadx
+				0 // ipady
+				));
 
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.NONE;
-		add(lbFu, gbc);
-
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		add(tfFu, gbc);
-
+		add(tfFu, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				1, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.EAST, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				tfFu.getPreferredSize().width, // ipadx
+				0 // ipady
+				));
 		WebImage imgYieldGoal = new WebImage();
 
 		try {
@@ -113,20 +166,48 @@ public class MonteCarloPanel extends JPanel implements ActionListener,
 
 		imgYieldGoal.setDisplayType(DisplayType.fitComponent);
 
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.gridy = 0;
-		gbc.gridheight = 2;
-		add(imgYieldGoal, gbc);
+		add(imgYieldGoal, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				0, // gridy
+				1, // gridwidth
+				2, // gridheigth
+				0.0, // weightx
+				1.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.VERTICAL, // fill
+				new Insets(0, 0, 0, 0), // insets
+				60, // ipadx
+				0 // ipady
+				));
 
-		gbc.fill = GridBagConstraints.NONE;
-		add(lbH, gbc);
+		add(lbH, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				0, // gridy
+				1, // gridwidth
+				2, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.WEST, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
 
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		add(tfH, gbc);
+		add(tfH, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				0, // gridy
+				1, // gridwidth
+				2, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.WEST, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				tfH.getPreferredSize().width, // ipadx
+				0 // ipady
+				));
 	}
 
 	public void actionPerformed(ActionEvent ae) {
-		controller.viewHasChanged();
+		controller.viewAction();
 	}
 
 	public void focusGained(FocusEvent fe) {

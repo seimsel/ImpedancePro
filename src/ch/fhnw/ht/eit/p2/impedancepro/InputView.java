@@ -21,8 +21,8 @@ public class InputView extends JPanel {
 
 		setLayout(new GridLayout(1, 0));
 
-		sourceInput = new InputPanel(InputPanel.SOURCE);
-		loadInput = new InputPanel(InputPanel.LOAD);
+		sourceInput = new InputPanel(InputPanel.SOURCE, controller);
+		loadInput = new InputPanel(InputPanel.LOAD, controller);
 
 		JPanel sourceInputBorderPanel = new JPanel(new BorderLayout());
 		JPanel loadInputBorderPanel = new JPanel(new BorderLayout());

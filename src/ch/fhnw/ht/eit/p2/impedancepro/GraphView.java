@@ -32,8 +32,8 @@ public class GraphView extends JPanel {
 		reflectionGraphBorderPanel.setBorder(BorderFactory
 				.createTitledBorder("Reflexion"));
 
-		amplitudeGraphBorderPanel.add(amplitudeGraph, BorderLayout.CENTER);
-		reflectionGraphBorderPanel.add(reflectionGraph, BorderLayout.CENTER);
+		amplitudeGraphBorderPanel.add(amplitudeGraph);
+		reflectionGraphBorderPanel.add(reflectionGraph);
 
 		add(amplitudeGraphBorderPanel);
 		add(reflectionGraphBorderPanel);

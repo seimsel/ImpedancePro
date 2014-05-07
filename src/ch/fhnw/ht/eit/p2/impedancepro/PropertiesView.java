@@ -3,6 +3,7 @@ package ch.fhnw.ht.eit.p2.impedancepro;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -28,22 +29,39 @@ public class PropertiesView extends JPanel {
 		JPanel reflectionBorderPanel = new JPanel(new BorderLayout());
 		JPanel monteCarloBorderPanel = new JPanel(new BorderLayout());
 
-		reflectionBorderPanel.add(reflectionPanel, BorderLayout.CENTER);
-		monteCarloBorderPanel.add(monteCarloPanel, BorderLayout.CENTER);
+		reflectionBorderPanel.add(reflectionPanel);
+		monteCarloBorderPanel.add(monteCarloPanel);
 
 		reflectionBorderPanel.setBorder(BorderFactory
 				.createTitledBorder("Plot"));
 		monteCarloBorderPanel.setBorder(BorderFactory
 				.createTitledBorder("Monte-Carlo"));
 
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.weightx = 0.2;
-		gbc.weighty = 1.0;
-		add(reflectionBorderPanel, gbc);
+		add(reflectionBorderPanel, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				GridBagConstraints.RELATIVE, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.2, // weightx
+				1.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.BOTH, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
 
-		gbc.weightx = 0.8;
-		add(monteCarloBorderPanel, gbc);
+		add(monteCarloBorderPanel, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				GridBagConstraints.RELATIVE, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.8, // weightx
+				1.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.BOTH, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
 	}
 
 }

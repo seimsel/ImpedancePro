@@ -5,6 +5,10 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -22,15 +26,20 @@ import com.alee.extended.image.WebImage;
  * 
  * @author Simon Zumbrunnen
  */
-public class SolutionPanel extends JPanel {
+public class SolutionPanel extends JPanel implements ActionListener, FocusListener {
 	private static final long serialVersionUID = 1L;
 
 	public JLabel lbValue1, lbValue2, lbQ, lbB;
 	public ValuePanel valuePanel;
+	
+	private ImpedanceProController controller;
 
-	public SolutionPanel(Color color, int topology) {
+	public SolutionPanel(Color color, int topology,
+			ImpedanceProController controller) {
 		super();
 
+		this.controller = controller;
+		
 		setLayout(new GridBagLayout());
 		setBorder(BorderFactory.createLineBorder(color, 2));
 
@@ -102,6 +111,16 @@ public class SolutionPanel extends JPanel {
 		addToRow(new JLabel("  "), 3, GridBagConstraints.EAST);
 
 		valuePanel = new ValuePanel(topology);
+		valuePanel.tfValue1.addFocusListener(this);
+		valuePanel.tfValue2.addFocusListener(this);
+		valuePanel.tfTolerance1.addFocusListener(this);
+		valuePanel.tfTolerance2.addFocusListener(this);
+		
+		valuePanel.tfValue1.addActionListener(this);
+		valuePanel.tfValue2.addActionListener(this);
+		valuePanel.tfTolerance1.addActionListener(this);
+		valuePanel.tfTolerance2.addActionListener(this);
+		
 		valuePanel.setBorder(BorderFactory.createTitledBorder("Monte-Carlo"));
 
 		add(valuePanel, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
@@ -142,6 +161,24 @@ public class SolutionPanel extends JPanel {
 				0, // ipadx
 				0 // ipady
 				));
+	}
+	
+	public void actionPerformed(ActionEvent ae) {
+		controller.viewAction();
+	}
+
+	public void focusGained(FocusEvent fe) {
+
+	}
+
+	/**
+	 * Part of the <code>FocusListener</code> interface. Is used to fire an
+	 * action as soon as a textfield loses focus.
+	 */
+	public void focusLost(FocusEvent fe) {
+		ActionEvent ae = new ActionEvent(this, 0, "focus_action");
+		actionPerformed(ae);
+
 	}
 
 	/**

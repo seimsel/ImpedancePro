@@ -7,6 +7,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -25,7 +27,7 @@ import com.alee.managers.tooltip.TooltipWay;
  * 
  * @author Simon Zumbrunnen
  */
-public class InputPanel extends JPanel implements ActionListener {
+public class InputPanel extends JPanel implements ActionListener, FocusListener {
 	private static final long serialVersionUID = 1L;
 
 	public static final byte SOURCE = 0;
@@ -38,6 +40,7 @@ public class InputPanel extends JPanel implements ActionListener {
 	private ValuePanel[] valuePanels;
 	private JPanel valuePanel;
 	private WebToggleButton[] topologyChooseButtons = new WebToggleButton[6];
+	private ImpedanceProController controller;
 
 	/**
 	 * Creates an <code>InputPanel</code>
@@ -45,9 +48,10 @@ public class InputPanel extends JPanel implements ActionListener {
 	 * @param type
 	 *            Can either be "SOURCE" or "LOAD"
 	 */
-	public InputPanel(int type) {
+	public InputPanel(int type, ImpedanceProController controller) {
 		super();
 		this.type = type;
+		this.controller = controller;
 
 		setLayout(new GridBagLayout());
 
@@ -80,6 +84,17 @@ public class InputPanel extends JPanel implements ActionListener {
 
 			topologyChooseButtons[i] = btn;
 			valuePanels[i] = new ValuePanel(i);
+			
+			valuePanels[i].tfValue1.addFocusListener(this);
+			valuePanels[i].tfValue2.addFocusListener(this);
+			valuePanels[i].tfTolerance1.addFocusListener(this);
+			valuePanels[i].tfTolerance2.addFocusListener(this);
+			
+			valuePanels[i].tfValue1.addActionListener(this);
+			valuePanels[i].tfValue2.addActionListener(this);
+			valuePanels[i].tfTolerance1.addActionListener(this);
+			valuePanels[i].tfTolerance2.addActionListener(this);
+			
 			valuePanel.add(valuePanels[i], String.valueOf(i));
 		}
 
@@ -117,6 +132,8 @@ public class InputPanel extends JPanel implements ActionListener {
 
 		if (type == SOURCE) {
 			frequencyPanel = new FrequencyPanel();
+			frequencyPanel.tfFrequency.addFocusListener(this);
+			frequencyPanel.tfFrequency.addActionListener(this);
 			add(frequencyPanel, new GridBagConstraints(
 					GridBagConstraints.RELATIVE, // gridx
 					0, // gridy
@@ -146,13 +163,6 @@ public class InputPanel extends JPanel implements ActionListener {
 				));
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() instanceof WebToggleButton) {
-			WebToggleButton btn = (WebToggleButton) e.getSource();
-			setTopology(Integer.parseInt(btn.getName()));
-		}
-	}
-
 	public int getType() {
 		return type;
 	}
@@ -177,6 +187,28 @@ public class InputPanel extends JPanel implements ActionListener {
 
 	public ValuePanel getActiveValuePanel() {
 		return valuePanels[topology];
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() instanceof WebToggleButton) {
+			WebToggleButton btn = (WebToggleButton) e.getSource();
+			setTopology(Integer.parseInt(btn.getName()));
+		}
+		
+		controller.viewAction();
+	}
+	
+	public void focusGained(FocusEvent e) {
+		
+	}
+
+	/**
+	 * Part of the <code>FocusListener</code> interface. Is used to fire an
+	 * action as soon as a textfield loses focus.
+	 */
+	public void focusLost(FocusEvent e) {
+		ActionEvent ae = new ActionEvent(this, 0, "focus_action");
+		actionPerformed(ae);
 	}
 
 	/**
