@@ -11,6 +11,15 @@ public class ElectricalComponent {
 	private String valueString;
 	private double value, tolerance;
 	
+	ElectricalComponent() {
+		
+	}
+	
+	ElectricalComponent(String valueString) {
+		this();
+		setValueString(valueString);
+	}
+	
 	public double getValue() {
 		return value;
 	}

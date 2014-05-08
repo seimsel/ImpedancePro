@@ -3,6 +3,7 @@ package ch.fhnw.ht.eit.p2.impedancepro;
 import org.jfree.data.xy.XYDataset;
 
 import ch.fhnw.ht.eit.p2.impedancepro.complex.ComplexNumber;
+import ch.fhnw.ht.eit.p2.impedancepro.util.EngineeringUtil;
 
 /**
  * @author Stephan Fahrni
@@ -10,6 +11,7 @@ import ch.fhnw.ht.eit.p2.impedancepro.complex.ComplexNumber;
 
 public class Network {
 	private double frequency;
+	private String frequencyString;
 	private XYDataset swrData, reflectanceData, amplitudeData, amplitudeDBData;
 	private double monteCarloResult;
 
@@ -20,14 +22,16 @@ public class Network {
 	private ComplexNumber Zq;
 	private ComplexNumber Zl;
 
-	private double LSG1BT1, LSG1BT2, LSG2BT1, LSG2BT2, LSG3BT1, LSG3BT2, LSG4BT1,
-			LSG4BT2;
+	private ImpedanceProModel model;
+
+	private double LSG1BT1, LSG1BT2, LSG2BT1, LSG2BT2, LSG3BT1, LSG3BT2,
+			LSG4BT1, LSG4BT2;
 	private int LSG1X11Error, LSG2X21Error, LSG3X32Error, LSG4X42Error;
 
 	private MatchingNetwork solution1, solution2, solution3, solution4;
 
-	public Network() {
-
+	public Network(ImpedanceProModel model) {
+		this.model = model;
 		sourceNetwork = new SourceLoadNetwork();
 		loadNetwork = new SourceLoadNetwork();
 	}
@@ -38,6 +42,16 @@ public class Network {
 
 	public void setFrequency(double frequency) {
 		this.frequency = frequency;
+		this.frequencyString = EngineeringUtil.convert(frequency, 2);
+	}
+
+	public String getFrequencyString() {
+		return frequencyString;
+	}
+
+	public void setFrequencyString(String frequencyString) {
+		this.frequency = EngineeringUtil.parse(frequencyString);
+		this.frequencyString = EngineeringUtil.convert(frequency, 2);
 	}
 
 	public XYDataset getSwrData() {
@@ -83,34 +97,31 @@ public class Network {
 	public void calculateMatchingNetworks() {
 
 		byte[] topology = new byte[4];
-		
-		double w = 0;
 
-		// double re,a,b,c,X11,X21,X12,X22,X32,X42,X31,X41;
+		double w = 0;
 
 		// Initialize varbiable with zero
 
 		double re = 0, a = 0, b = 0, c = 0;
 		double X11 = 0, X12 = 0, X21 = 0, X22 = 0, X31 = 0, X32 = 0, X41 = 0, X42 = 0;
-		double RQ = 0, XQ = 0, RL = 0, XL = 0;
+		double RS = 0, XS = 0, RL = 0, XL = 0;
 
 		// Get load and source network
 
 		Zq = new ComplexNumber();
-		Zq = sourceNetwork.getImpedance();
+		Zq = sourceNetwork.getImpedanceAtFrequency(frequency);
 
 		Zl = new ComplexNumber();
-		Zl = loadNetwork.getImpedance();
+		Zl = loadNetwork.getImpedanceAtFrequency(frequency);
 
-		RQ = Zq.getRe();
-		XQ = Zq.getIm();
+		RS = Zq.getRe();
+		XS = Zq.getIm();
 
 		RL = Zl.getRe();
 		XL = Zl.getIm();
 
-		if (RQ == RL) {
-
-			System.out.println("No Impedance Matching Network needed");
+		if (RS == RL) {
+			solution1.setTopology(0000);
 		}
 
 		else {
@@ -120,10 +131,10 @@ public class Network {
 			// In this part, solution 1 and 2 is calculated
 
 			re = Zl.getRe();
-			a = 1 - RQ / re;
+			a = 1 - RS / re;
 
-			b = XQ;
-			c = (Math.pow(RQ, 2)) + (Math.pow(XQ, 2));
+			b = XS;
+			c = (Math.pow(RS, 2)) + (Math.pow(XS, 2));
 
 			// Check, if there a imaginary part of solution 1
 			// If there a imaginary part, component is not applicable to the
@@ -133,9 +144,9 @@ public class Network {
 
 				X11 = (-b + Math.sqrt((Math.pow(b, 2)) - a * c)) / (a);
 
-				X12 = -((Math.pow(XQ, 2) * X11 + XQ * Math.pow(X11, 2) + Math
-						.pow(RQ, 2) * X11)
-						/ (Math.pow(RQ, 2) + Math.pow(XQ, 2) + 2 * X11 * XQ + Math
+				X12 = -((Math.pow(XS, 2) * X11 + XS * Math.pow(X11, 2) + Math
+						.pow(RS, 2) * X11)
+						/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X11 * XS + Math
 								.pow(X11, 2)) + Zl.getIm());
 
 				// determine C or L of solution 1
@@ -145,25 +156,18 @@ public class Network {
 				if (X11 > 0) {
 
 					LSG1BT1 = X11 / w;
-					solution1.electricalComponents[0].setValue(LSG1BT1);
-					
+
 					topology[0] = MatchingNetwork.PAR;
 					topology[1] = MatchingNetwork.L;
 
-					
 				} else {
 
 					LSG1BT1 = -1 / (w * X11);
-					solution1.electricalComponents[0].setValue(LSG1BT1);
-					solution1.setTopology(0);
-					
+
 					topology[0] = MatchingNetwork.PAR;
 					topology[1] = MatchingNetwork.C;
-					
 
 				}
-				
-				solution1.setTopology(byteArrayToInt(topology));
 
 				// determine C or L of solution 1
 
@@ -173,8 +177,6 @@ public class Network {
 
 					topology[2] = MatchingNetwork.EMPTY;
 					topology[3] = MatchingNetwork.EMPTY;
-					
-					solution1.setTopology(byteArrayToInt(topology));
 
 				} else {
 
@@ -182,27 +184,22 @@ public class Network {
 
 						LSG1BT2 = X12 / w;
 
-					
-						
 						topology[2] = MatchingNetwork.SER;
-						topology[3] = MatchingNetwork.C;
-						
+						topology[3] = MatchingNetwork.L;
 
 					} else {
 
 						LSG1BT2 = -1 / (w * X12);
 
-						solution1.electricalComponents[1].setValue(LSG1BT2);
-						solution1.setTopology(0);
-
 						topology[2] = MatchingNetwork.SER;
-						topology[3] = MatchingNetwork.L;
-						
-						
+						topology[3] = MatchingNetwork.C;
+
 					}
 
 				}
-				
+
+				solution1.electricalComponents[0].setValue(LSG1BT1);
+				solution1.electricalComponents[1].setValue(LSG1BT2);
 				solution1.setTopology(byteArrayToInt(topology));
 
 			} else {
@@ -218,9 +215,9 @@ public class Network {
 
 				X21 = (-b - Math.sqrt((Math.pow(b, 2)) - a * c)) / (a);
 
-				X22 = -((Math.pow(XQ, 2) * X21 + XQ * Math.pow(X21, 2) + Math
-						.pow(RQ, 2) * X21)
-						/ (Math.pow(RQ, 2) + Math.pow(XQ, 2) + 2 * X21 * XQ + Math
+				X22 = -((Math.pow(XS, 2) * X21 + XS * Math.pow(X21, 2) + Math
+						.pow(RS, 2) * X21)
+						/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X21 * XS + Math
 								.pow(X21, 2)) + Zl.getIm());
 
 				solution2 = new MatchingNetwork();
@@ -231,25 +228,17 @@ public class Network {
 
 					LSG2BT1 = X21 / w;
 
-					solution2.electricalComponents[0].setValue(LSG2BT1);
-					
 					topology[0] = MatchingNetwork.PAR;
 					topology[1] = MatchingNetwork.L;
-					
 
 				} else {
 
 					LSG2BT1 = -1 / (w * X21);
 
-					solution2.electricalComponents[0].setValue(LSG2BT1);
-
-					
 					topology[0] = MatchingNetwork.PAR;
 					topology[1] = MatchingNetwork.C;
-					
+
 				}
-				
-				solution2.setTopology(byteArrayToInt(topology));
 
 				// determine C or L of solution 2
 
@@ -257,10 +246,8 @@ public class Network {
 
 					// short circuit
 
-					topology[0] = MatchingNetwork.EMPTY;
-					topology[1] = MatchingNetwork.EMPTY;
-					
-					solution2.setTopology(byteArrayToInt(topology));
+					topology[2] = MatchingNetwork.EMPTY;
+					topology[3] = MatchingNetwork.EMPTY;
 
 				} else {
 
@@ -268,26 +255,21 @@ public class Network {
 
 						LSG2BT2 = X22 / w;
 
-						solution2.electricalComponents[1].setValue(LSG2BT2);
-						
-						
 						topology[2] = MatchingNetwork.SER;
 						topology[3] = MatchingNetwork.L;
-						
 
 					} else {
 
 						LSG2BT2 = -1 / (w * X22);
 
-						solution2.electricalComponents[1].setValue(LSG2BT2);
-						
-						
 						topology[2] = MatchingNetwork.SER;
 						topology[3] = MatchingNetwork.C;
-						
+
 					}
 				}
-				
+
+				solution2.electricalComponents[0].setValue(LSG2BT1);
+				solution2.electricalComponents[1].setValue(LSG2BT2);
 				solution2.setTopology(byteArrayToInt(topology));
 
 			} else {
@@ -326,8 +308,6 @@ public class Network {
 
 					topology[0] = MatchingNetwork.EMPTY;
 					topology[1] = MatchingNetwork.EMPTY;
-					
-					solution3.setTopology(byteArrayToInt(topology));
 
 				} else {
 
@@ -335,9 +315,6 @@ public class Network {
 
 						LSG3BT1 = X31 / w;
 
-						solution3.electricalComponents[0].setValue(LSG3BT1);
-						solution3.setTopology(0);
-						
 						topology[0] = MatchingNetwork.SER;
 						topology[1] = MatchingNetwork.L;
 
@@ -345,15 +322,10 @@ public class Network {
 
 						LSG3BT1 = -1 / (w * X31);
 
-						solution3.electricalComponents[0].setValue(LSG3BT1);
-						solution3.setTopology(0);
-						
 						topology[0] = MatchingNetwork.SER;
 						topology[1] = MatchingNetwork.C;
 					}
 				}
-				
-				solution3.setTopology(byteArrayToInt(topology));
 
 				// determine C or L of solution 3
 
@@ -361,9 +333,6 @@ public class Network {
 
 					LSG3BT2 = X32 / w;
 
-					solution3.electricalComponents[1].setValue(LSG3BT2);
-
-					
 					topology[2] = MatchingNetwork.PAR;
 					topology[3] = MatchingNetwork.C;
 
@@ -371,13 +340,12 @@ public class Network {
 
 					LSG3BT2 = -1 / (w * X32);
 
-					solution3.electricalComponents[1].setValue(LSG3BT2);
-
-					
 					topology[2] = MatchingNetwork.PAR;
 					topology[3] = MatchingNetwork.L;
 				}
-				
+
+				solution3.electricalComponents[0].setValue(LSG3BT1);
+				solution3.electricalComponents[1].setValue(LSG3BT2);
 				solution3.setTopology(byteArrayToInt(topology));
 
 			} else {
@@ -407,8 +375,6 @@ public class Network {
 					// short circuit
 					topology[0] = MatchingNetwork.EMPTY;
 					topology[1] = MatchingNetwork.EMPTY;
-					
-					solution4.setTopology(byteArrayToInt(topology));
 
 				} else {
 
@@ -416,9 +382,6 @@ public class Network {
 
 						LSG4BT1 = X41 / w;
 
-						solution4.electricalComponents[0].setValue(LSG4BT1);
-						solution4.setTopology(0);
-						
 						topology[0] = MatchingNetwork.SER;
 						topology[1] = MatchingNetwork.L;
 
@@ -426,15 +389,10 @@ public class Network {
 
 						LSG4BT1 = -1 / (w * X41);
 
-						solution4.electricalComponents[0].setValue(LSG3BT1);
-						solution4.setTopology(0);
-						
 						topology[0] = MatchingNetwork.SER;
 						topology[1] = MatchingNetwork.C;
 					}
 				}
-				
-				solution4.setTopology(byteArrayToInt(topology));
 
 				// determine C or L of solution 4
 
@@ -442,8 +400,6 @@ public class Network {
 
 					LSG4BT2 = X42 / w;
 
-					solution4.electricalComponents[1].setValue(LSG4BT2);
-					
 					topology[2] = MatchingNetwork.PAR;
 					topology[3] = MatchingNetwork.L;
 
@@ -451,30 +407,32 @@ public class Network {
 
 					LSG4BT2 = -1 / (w * X42);
 
-					solution4.electricalComponents[1].setValue(LSG4BT2);
-					
 					topology[2] = MatchingNetwork.PAR;
 					topology[3] = MatchingNetwork.C;
 				}
-				
+
+				solution4.electricalComponents[0].setValue(LSG4BT1);
+				solution4.electricalComponents[1].setValue(LSG4BT2);
 				solution4.setTopology(byteArrayToInt(topology));
 
 			} else {
 
 				LSG4X42Error = 1;
 			}
-
-			// Create component with calculated XQ and XL
-
 		}
 
+		matchingNetworks = new MatchingNetwork[] { solution1, solution2,
+				solution3, solution4 };
+
+		model.setChanged();
+		model.notifyObservers();
 	}
 
 	public void calculateMonteCarlo() {
 
 	}
 
-	public MatchingNetwork[] getMatchingNetwork() {
+	public MatchingNetwork[] getMatchingNetworks() {
 		return matchingNetworks;
 	}
 
@@ -497,13 +455,14 @@ public class Network {
 	public void setLoadNetwork(SourceLoadNetwork loadNetwork) {
 		this.loadNetwork = loadNetwork;
 	}
-	
+
 	private int byteArrayToInt(byte[] encodedValue) {
-	    int index = 0;
-	    int value = encodedValue[index++] << Byte.SIZE * 3;
-	    value ^= (encodedValue[index++] & 0xFF) << Byte.SIZE * 2;
-	    value ^= (encodedValue[index++] & 0xFF) << Byte.SIZE * 1;
-	    value ^= (encodedValue[index++] & 0xFF);
-	    return value;
+		int value = 0;
+		
+		for (int i = 0; i < encodedValue.length; i++) {
+			value += encodedValue[i] * Math.pow(10, i);
+		}
+		
+		return value;
 	}
 }

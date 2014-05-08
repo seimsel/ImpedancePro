@@ -29,7 +29,7 @@ import com.alee.extended.image.WebImage;
 public class SolutionPanel extends JPanel implements ActionListener, FocusListener {
 	private static final long serialVersionUID = 1L;
 
-	public JLabel lbValue1, lbValue2, lbQ, lbB;
+	public JLabel lbValue1, lbValue2;
 	public ValuePanel valuePanel;
 	
 	private ImpedanceProController controller;
@@ -45,8 +45,6 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 
 		lbValue1 = new JLabel();
 		lbValue2 = new JLabel();
-		lbQ = new JLabel();
-		lbB = new JLabel();
 
 		WebImage matchingNetworkImage = new WebImage();
 
@@ -71,44 +69,39 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 				GridBagConstraints.BOTH, // fill
 				new Insets(0, 0, 0, 0), // insets
 				0, // ipadx
-				0 // ipady
+				50 // ipady
 				));
 
 		switch (topology) {
 		default:
 		case 0:
 		case 4:
-			addToRow(new JLabel("C1: "), 0, GridBagConstraints.EAST);
-			addToRow(lbValue1, 0, GridBagConstraints.WEST);
-			addToRow(new JLabel("C2 :"), 1, GridBagConstraints.EAST);
-			addToRow(lbValue2, 1, GridBagConstraints.WEST);
+			addToRow(new JLabel("C1: "), 1, GridBagConstraints.EAST);
+			addToRow(lbValue1, 1, GridBagConstraints.WEST);
+			addToRow(new JLabel("C2 :"), 2, GridBagConstraints.EAST);
+			addToRow(lbValue2, 2, GridBagConstraints.WEST);
 			break;
 
 		case 1:
 		case 2:
 		case 5:
 		case 6:
-			addToRow(new JLabel("C1: "), 0, GridBagConstraints.EAST);
-			addToRow(lbValue1, 0, GridBagConstraints.WEST);
-			addToRow(new JLabel("L1: "), 1, GridBagConstraints.EAST);
-			addToRow(lbValue2, 1, GridBagConstraints.WEST);
+			addToRow(new JLabel("C1: "), 1, GridBagConstraints.EAST);
+			addToRow(lbValue1, 1, GridBagConstraints.WEST);
+			addToRow(new JLabel("L1: "), 2, GridBagConstraints.EAST);
+			addToRow(lbValue2, 2, GridBagConstraints.WEST);
 			break;
 
 		case 3:
 		case 7:
-			addToRow(new JLabel("L1: "), 0, GridBagConstraints.EAST);
-			addToRow(lbValue1, 0, GridBagConstraints.WEST);
-			addToRow(new JLabel("L2: "), 1, GridBagConstraints.EAST);
-			addToRow(lbValue2, 1, GridBagConstraints.WEST);
+			addToRow(new JLabel("L1: "), 1, GridBagConstraints.EAST);
+			addToRow(lbValue1, 1, GridBagConstraints.WEST);
+			addToRow(new JLabel("L2: "), 2, GridBagConstraints.EAST);
+			addToRow(lbValue2, 2, GridBagConstraints.WEST);
 			break;
 		}
 
-		addToRow(new JLabel("Q: "), 2, GridBagConstraints.EAST);
-		addToRow(lbQ, 2, GridBagConstraints.WEST);
-		addToRow(new JLabel("B: "), 3, GridBagConstraints.EAST);
-		addToRow(lbB, 3, GridBagConstraints.WEST);
-
-		addToRow(new JLabel("  "), 3, GridBagConstraints.EAST);
+		addToRow(new JLabel("  "), 1, GridBagConstraints.EAST);
 
 		valuePanel = new ValuePanel(topology);
 		valuePanel.tfValue1.addFocusListener(this);

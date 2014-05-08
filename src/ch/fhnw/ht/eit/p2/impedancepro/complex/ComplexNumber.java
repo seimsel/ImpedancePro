@@ -98,6 +98,13 @@ public class ComplexNumber {
 	}
 	
 	public static ComplexNumber parallel(ComplexNumber[] complexNumbers) {
-		return null;
+		ComplexNumber res = new ComplexNumber(0, 0);
+		ComplexNumber one = new ComplexNumber(1, 0);
+		
+		for (int i = 0; i < complexNumbers.length; i++) {
+			res = res.add(one.div(complexNumbers[i]));
+		}
+
+		return one.div(res);
 	}
 }

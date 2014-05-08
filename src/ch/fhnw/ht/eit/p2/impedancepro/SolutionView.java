@@ -1,5 +1,6 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
@@ -15,9 +16,11 @@ public class SolutionView extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private SolutionPanel[] solutionPanels;
+	private ImpedanceProController controller;
 
 	public SolutionView(ImpedanceProController controller) {
 		super();
+		this.controller = controller;
 
 		setBorder(BorderFactory.createTitledBorder("Anpass-Netzwerke"));
 		setLayout(new GridLayout(1, 0));
@@ -29,7 +32,7 @@ public class SolutionView extends JPanel {
 
 	public void setSolutionPanels(SolutionPanel[] solutionPanels) {
 		this.solutionPanels = solutionPanels;
-		
+
 		for (int i = 0; i < solutionPanels.length; i++) {
 			removeAll();
 			add(solutionPanels[i]);
@@ -37,6 +40,22 @@ public class SolutionView extends JPanel {
 			repaint();
 		}
 	}
-	
-	
+
+	public void update(ImpedanceProModel model) {
+		MatchingNetwork[] matchingNetworks = model.getNetwork()
+				.getMatchingNetworks();
+
+		removeAll();
+		
+		for (int i = 0; i < matchingNetworks.length; i++) {
+			if(matchingNetworks[i] != null) {
+				SolutionPanel sp = new SolutionPanel(Color.BLACK, matchingNetworks[i].getTopology(), controller);
+				add(sp);
+				sp.lbValue1.setText(matchingNetworks[i].getElectricalComponents()[0].getValueString());
+				sp.lbValue2.setText(matchingNetworks[i].getElectricalComponents()[1].getValueString());
+			}
+		}
+		
+		revalidate();
+	}
 }

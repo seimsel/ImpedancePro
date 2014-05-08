@@ -156,20 +156,20 @@ public class ImpedanceProView extends JFrame implements Observer {
 		for(int i=0; i<6; i++){
 			sourceInput.setTopology(i);
 			sourceInput.frequencyPanel.tfFrequency.setText("100M");
-			sourceInput.getActiveValuePanel().tfValue1.setText("100");
-			sourceInput.getActiveValuePanel().tfValue2.setText("100u");
+			sourceInput.getActiveValuePanel().tfValue1.setText("50");
+			sourceInput.getActiveValuePanel().tfValue2.setText("159.2n");
 			sourceInput.getActiveValuePanel().tfTolerance1.setText("5");
 			sourceInput.getActiveValuePanel().tfTolerance2.setText("5");
 			
 			loadInput.setTopology(i);
-			loadInput.getActiveValuePanel().tfValue1.setText("50");
-			loadInput.getActiveValuePanel().tfValue2.setText("10m");
+			loadInput.getActiveValuePanel().tfValue1.setText("60");
+			loadInput.getActiveValuePanel().tfValue2.setText("39.8p");
 			loadInput.getActiveValuePanel().tfTolerance1.setText("5");
 			loadInput.getActiveValuePanel().tfTolerance2.setText("5");
 		}
 		
 		sourceInput.setTopology(2);
-		loadInput.setTopology(3);
+		loadInput.setTopology(1);
 
 		monteCarloPanel.tfFu.setText("80M");
 		monteCarloPanel.tfFo.setText("120M");
@@ -191,5 +191,7 @@ public class ImpedanceProView extends JFrame implements Observer {
 	 */
 	public void update(Observable o, Object arg) {
 		ImpedanceProModel model = (ImpedanceProModel) o;
+		solutionView.update(model);
+		graphView.update(model);
 	}
 }

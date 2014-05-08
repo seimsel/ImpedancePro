@@ -47,7 +47,6 @@ public class ImpedanceProController {
 
 	public void setView(ImpedanceProView view) {
 		this.view = view;
-		view.solutionView.setSolutionPanels(new SolutionPanel[]{new SolutionPanel(ImpedanceProView.BLUE, 1200, this)});
 	}
 
 	public ImpedanceProModel getModel() {
@@ -66,8 +65,12 @@ public class ImpedanceProController {
 		getNewValues();
 
 		if (viewHasChanged()) {
-			displayMonteCarlo(newMonteCarloState);
-			System.out.println("View has changed");
+			model.getNetwork().getSourceNetwork().setTopology(getView().inputView.sourceInput.getTopology());
+			model.getNetwork().getLoadNetwork().setTopology(getView().inputView.loadInput.getTopology());
+			model.getNetwork().getSourceNetwork().setElectricalComponents(new ElectricalComponent[]{new ElectricalComponent(getView().inputView.sourceInput.getActiveValuePanel().tfValue1.getText()), new ElectricalComponent(getView().inputView.sourceInput.getActiveValuePanel().tfValue2.getText())});
+			model.getNetwork().getLoadNetwork().setElectricalComponents(new ElectricalComponent[]{new ElectricalComponent(getView().inputView.loadInput.getActiveValuePanel().tfValue1.getText()), new ElectricalComponent(getView().inputView.loadInput.getActiveValuePanel().tfValue2.getText())});
+			model.getNetwork().setFrequencyString(getView().inputView.sourceInput.frequencyPanel.tfFrequency.getText());
+			model.getNetwork().calculateMatchingNetworks();
 		}
 	}
 
@@ -93,22 +96,24 @@ public class ImpedanceProController {
 				loadInput.getActiveValuePanel().tfTolerance1.getText(),
 				loadInput.getActiveValuePanel().tfTolerance2.getText() };
 
-		int numberOfSolutions = solutionPanels.length;
+		if(solutionPanels != null) {
+			int numberOfSolutions = solutionPanels.length;
 
-		newValue1MonteCarlo = new String[numberOfSolutions];
-		newValue2MonteCarlo = new String[numberOfSolutions];
-		newTolerance1MonteCarlo = new String[numberOfSolutions];
-		newTolerance2MonteCarlo = new String[numberOfSolutions];
+			newValue1MonteCarlo = new String[numberOfSolutions];
+			newValue2MonteCarlo = new String[numberOfSolutions];
+			newTolerance1MonteCarlo = new String[numberOfSolutions];
+			newTolerance2MonteCarlo = new String[numberOfSolutions];
 
-		for (int i = 0; i < numberOfSolutions; i++) {
-			newValue1MonteCarlo[i] = solutionPanels[i].valuePanel.tfValue1
-					.getText();
-			newValue2MonteCarlo[i] = solutionPanels[i].valuePanel.tfValue2
-					.getText();
-			newTolerance1MonteCarlo[i] = solutionPanels[i].valuePanel.tfTolerance1
-					.getText();
-			newTolerance2MonteCarlo[i] = solutionPanels[i].valuePanel.tfTolerance2
-					.getText();
+			for (int i = 0; i < numberOfSolutions; i++) {
+				newValue1MonteCarlo[i] = solutionPanels[i].valuePanel.tfValue1
+						.getText();
+				newValue2MonteCarlo[i] = solutionPanels[i].valuePanel.tfValue2
+						.getText();
+				newTolerance1MonteCarlo[i] = solutionPanels[i].valuePanel.tfTolerance1
+						.getText();
+				newTolerance2MonteCarlo[i] = solutionPanels[i].valuePanel.tfTolerance2
+						.getText();
+			}
 		}
 
 		newMonteCarloValues = new String[] { monteCarloPanel.tfN.getText(),
@@ -172,7 +177,7 @@ public class ImpedanceProController {
 	 * @param display
 	 *            Whether the monte-carlo components should be enabled or not
 	 */
-	private void displayMonteCarlo(boolean display) {
+	public void displayMonteCarlo(boolean display) {
 		ImpedanceProView view = getView();
 		SolutionView solutionView = view.solutionView;
 		InputPanel sourceInput = view.inputView.sourceInput;
@@ -182,8 +187,10 @@ public class ImpedanceProController {
 		int sourceTopology = sourceInput.getTopology();
 		int loadTopology = loadInput.getTopology();
 
-		for (int i = 0; i < solutionView.getSolutionPanels().length; i++) {
-			solutionView.getSolutionPanels()[i].valuePanel.setVisible(display);
+		if(solutionView.getSolutionPanels() != null) {
+			for (int i = 0; i < solutionView.getSolutionPanels().length; i++) {
+				solutionView.getSolutionPanels()[i].valuePanel.setVisible(display);
+			}
 		}
 
 		for (int i = 0; i < 6; i++) {

@@ -38,4 +38,8 @@ public class GraphView extends JPanel {
 		add(amplitudeGraphBorderPanel);
 		add(reflectionGraphBorderPanel);
 	}
+	
+	public void update(ImpedanceProModel model) {
+		
+	}
 }

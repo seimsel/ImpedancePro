@@ -25,7 +25,36 @@ public class SourceLoadNetwork {
 		this.topology = topology;
 	}
 	
-	public ComplexNumber getImpedance() {
+	public ComplexNumber getImpedanceAtFrequency(double f) {
+		
+		double w = 2 * Math.PI * f;
+		
+		ComplexNumber XR = new ComplexNumber(getElectricalComponents()[0].getValue(), 0);
+		ComplexNumber XC = new ComplexNumber(0, -1/(w*getElectricalComponents()[1].getValue()));
+		ComplexNumber XL = new ComplexNumber(0, w*getElectricalComponents()[1].getValue());
+				
+		switch (topology) {
+		default:
+		case R:
+			impedance = XR;
+			break;
+		case R_SER_C:
+			impedance = XR.add(XC);
+			break;
+		case R_SER_L:
+			impedance = XR.add(XL);
+			break;
+		case R_PAR_C:
+			impedance = ComplexNumber.parallel(new ComplexNumber[]{XR, XC});
+			break;
+		case R_PAR_L:
+			impedance = ComplexNumber.parallel(new ComplexNumber[]{XR, XL});
+			break;
+		case Z:
+			impedance = new ComplexNumber(getElectricalComponents()[0].getValue(), getElectricalComponents()[1].getValue());
+			break;
+		}
+				
 		return impedance;
 	}
 	
