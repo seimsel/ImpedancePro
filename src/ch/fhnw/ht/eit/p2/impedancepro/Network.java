@@ -26,9 +26,6 @@ public class Network {
 
 	private double LSG1BT1, LSG1BT2, LSG2BT1, LSG2BT2, LSG3BT1, LSG3BT2,
 			LSG4BT1, LSG4BT2;
-	private int LSG1X11Error, LSG2X21Error, LSG3X32Error, LSG4X42Error;
-
-	private MatchingNetwork solution1, solution2, solution3, solution4;
 
 	public Network(ImpedanceProModel model) {
 		this.model = model;
@@ -106,11 +103,11 @@ public class Network {
 		double X11 = 0, X12 = 0, X21 = 0, X22 = 0, X31 = 0, X32 = 0, X41 = 0, X42 = 0;
 		double RS = 0, XS = 0, RL = 0, XL = 0;
 
-		solution1 = null;
-		solution2 = null;
-		solution3 = null;
-		solution4 = null;
-		
+		MatchingNetwork solution1 = new MatchingNetwork();
+		MatchingNetwork solution2 = new MatchingNetwork();
+		MatchingNetwork solution3 = new MatchingNetwork();
+		MatchingNetwork solution4 = new MatchingNetwork();
+
 		// Get load and source network
 
 		Zq = new ComplexNumber();
@@ -155,8 +152,6 @@ public class Network {
 								.pow(X11, 2)) + Zl.getIm());
 
 				// determine C or L of solution 1
-
-				solution1 = new MatchingNetwork();
 
 				if (X11 > 0) {
 
@@ -208,8 +203,7 @@ public class Network {
 				solution1.setTopology(byteArrayToInt(topology));
 
 			} else {
-
-				LSG1X11Error = 1;
+				solution1 = null;
 			}
 
 			// Check, if there a imaginary part of solution 2
@@ -224,8 +218,6 @@ public class Network {
 						.pow(RS, 2) * X21)
 						/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X21 * XS + Math
 								.pow(X21, 2)) + Zl.getIm());
-
-				solution2 = new MatchingNetwork();
 
 				// determine C or L of solution 2
 
@@ -278,8 +270,7 @@ public class Network {
 				solution2.setTopology(byteArrayToInt(topology));
 
 			} else {
-
-				LSG2X21Error = 1;
+				solution2 = null;
 			}
 
 			// In this part, solution 3 and 4 is calculated
@@ -302,8 +293,6 @@ public class Network {
 						.pow(RL, 2) * X32)
 						/ (Math.pow(RL, 2) + Math.pow(XL, 2) + 2 * X32 * XL + Math
 								.pow(X32, 2)) + Zq.getIm());
-
-				solution3 = new MatchingNetwork();
 
 				// determine C or L of solution 3
 
@@ -339,14 +328,14 @@ public class Network {
 					LSG3BT2 = X32 / w;
 
 					topology[2] = MatchingNetwork.PAR;
-					topology[3] = MatchingNetwork.C;
+					topology[3] = MatchingNetwork.L;
 
 				} else {
 
 					LSG3BT2 = -1 / (w * X32);
 
 					topology[2] = MatchingNetwork.PAR;
-					topology[3] = MatchingNetwork.L;
+					topology[3] = MatchingNetwork.C;
 				}
 
 				solution3.electricalComponents[0].setValue(LSG3BT1);
@@ -354,8 +343,7 @@ public class Network {
 				solution3.setTopology(byteArrayToInt(topology));
 
 			} else {
-
-				LSG3X32Error = 1;
+				solution3 = null;
 			}
 
 			// Check, if there a imaginary part of solution 4
@@ -370,8 +358,6 @@ public class Network {
 						.pow(RL, 2) * X42)
 						/ (Math.pow(RL, 2) + Math.pow(XL, 2) + 2 * X42 * XL + Math
 								.pow(X42, 2)) + Zq.getIm());
-
-				solution4 = new MatchingNetwork();
 
 				// determine C or L of solution 4
 
@@ -421,8 +407,7 @@ public class Network {
 				solution4.setTopology(byteArrayToInt(topology));
 
 			} else {
-
-				LSG4X42Error = 1;
+				solution4 = null;
 			}
 		}
 
@@ -463,11 +448,11 @@ public class Network {
 
 	private int byteArrayToInt(byte[] encodedValue) {
 		int value = 0;
-		
+
 		for (int i = 0; i < encodedValue.length; i++) {
-			value += encodedValue[i] * Math.pow(10, i);
+			value += encodedValue[i] * Math.pow(10, encodedValue.length-1-i);
 		}
-		
+
 		return value;
 	}
 }

@@ -12,7 +12,7 @@ public class MatchingNetwork {
 	public static final byte SER = 2;
 	public static final byte C = 1;
 	public static final byte L = 2;
-	
+
 	public static final int NONE = 0000;
 	public static final int PAR_C_SER_C = 1121;
 	public static final int PAR_C_SER_L = 1122;
@@ -22,8 +22,8 @@ public class MatchingNetwork {
 	public static final int SER_C_PAR_L = 2122;
 	public static final int SER_L_PAR_C = 2211;
 	public static final int SER_L_PAR_L = 2212;
-	public static final int SER_C = 2100;
-	public static final int SER_L = 2200;
+	public static final int SER_C = 0021;
+	public static final int SER_L = 0022;
 	public static final int PAR_C = 1100;
 	public static final int PAR_L = 1200;
 	

@@ -46,16 +46,26 @@ public class SolutionView extends JPanel {
 				.getMatchingNetworks();
 
 		removeAll();
-		
+
+		Color[] colors = new Color[] { ImpedanceProView.LIGHT_BLUE,
+				ImpedanceProView.LIGHT_GREEN, ImpedanceProView.LIGHT_RED,
+				ImpedanceProView.LIGHT_YELLOW };
+
 		for (int i = 0; i < matchingNetworks.length; i++) {
-			if(matchingNetworks[i] != null) {
-				SolutionPanel sp = new SolutionPanel(Color.BLACK, matchingNetworks[i].getTopology(), controller);
+			if (matchingNetworks[i] != null) {
+				SolutionPanel sp = new SolutionPanel(colors[i],
+						matchingNetworks[i].getTopology(), controller);
 				add(sp);
-				sp.lbValue1.setText(matchingNetworks[i].getElectricalComponents()[0].getValueString());
-				sp.lbValue2.setText(matchingNetworks[i].getElectricalComponents()[1].getValueString());
+				sp.lbValue1.setText(matchingNetworks[i]
+						.getElectricalComponents()[0].getValueString());
+				sp.lbValue2.setText(matchingNetworks[i]
+						.getElectricalComponents()[1].getValueString());
+				sp.valuePanel
+						.setVisible(controller.getView().propertiesView.monteCarloPanel.btnMonteCarlo
+								.isSelected());
 			}
 		}
-		
+
 		revalidate();
 	}
 }
