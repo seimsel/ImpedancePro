@@ -91,6 +91,29 @@ public class Network {
 		this.monteCarloResult = monteCarloResult;
 	}
 
+	/**
+	 * <pre>
+	 *  In this part we calculate the matched network
+	 *  There are max. 4 solutions
+	 *  First the impedance of load and source network are initialized
+	 *  Next, check if the real part of source network is the real part of load network -> no matching network needed!
+	 * 	
+	 *	Solution 1&2
+	 *
+	 * X11 = L or C parallel source
+	 * X12 = L or C in series of source
+	 * X21 = L or C parallel source
+	 * X22 = L or C in series of source
+	 * 
+	 * 	 *	Solution 3&4
+	 *
+	 * X31 = L or C in series of load
+	 * X32 = L or C parallel load
+	 * X41 = L or C in series of load
+	 * X42 = L or C parallel load
+	 * </pre>
+	 */
+	
 	public void calculateMatchingNetworks() {
 
 		byte[] topology = new byte[4];
@@ -122,6 +145,8 @@ public class Network {
 		RL = Zl.getRe();
 		XL = Zl.getIm();
 
+		// Check if we need a matching network
+		
 		if (RS == RL) {
 			solution1.setTopology(0000);
 		}
