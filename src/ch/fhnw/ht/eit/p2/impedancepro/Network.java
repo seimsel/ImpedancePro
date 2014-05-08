@@ -106,6 +106,11 @@ public class Network {
 		double X11 = 0, X12 = 0, X21 = 0, X22 = 0, X31 = 0, X32 = 0, X41 = 0, X42 = 0;
 		double RS = 0, XS = 0, RL = 0, XL = 0;
 
+		solution1 = null;
+		solution2 = null;
+		solution3 = null;
+		solution4 = null;
+		
 		// Get load and source network
 
 		Zq = new ComplexNumber();
@@ -302,7 +307,7 @@ public class Network {
 
 				// determine C or L of solution 3
 
-				if (X12 == 0) {
+				if (X31 == 0) {
 
 					// short circuit
 
