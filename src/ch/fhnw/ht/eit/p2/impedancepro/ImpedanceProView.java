@@ -4,12 +4,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+
+import ch.fhnw.ht.eit.p2.impedancepro.util.ImageUtil;
 
 /**
  * The <code>ImpedanceProView</code> class is the main view of ImpedancePro. It
@@ -33,6 +36,9 @@ public class ImpedanceProView extends JFrame implements Observer {
 	public static final Dimension MIN_WINDOW_SIZE = new Dimension(800, 600);
 	
 	private ImpedanceProController controller;
+	
+	private Image icon = ImageUtil.loadResourceImage("icon_512.png");
+
 
 	public InputView inputView;
 	public SolutionView solutionView;
@@ -48,6 +54,7 @@ public class ImpedanceProView extends JFrame implements Observer {
 		addComponents();
 		setDefaultValues();
 		setVisible(true);
+		setIconImage(icon);
 	}
 	
 	/**

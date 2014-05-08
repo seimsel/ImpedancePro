@@ -26,12 +26,12 @@
  ******************************************************************************/
 package ch.fhnw.ht.eit.p2.impedancepro;
 
+
 /**
  * The <code>ImpedancePro</code> class contains the main method.
  * @author Simon Zumbrunnen
  */
 public class ImpedancePro {
-
 	/**
 	 * Creates model, view and controller and connects them.
 	 * 
@@ -47,5 +47,6 @@ public class ImpedancePro {
 		model.addObserver(view);
 		
 		controller.viewAction();
+		
 	}
 }
