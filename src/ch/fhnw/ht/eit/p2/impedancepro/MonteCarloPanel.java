@@ -41,8 +41,8 @@ public class MonteCarloPanel extends JPanel implements ActionListener,
 		this.controller = controller;
 
 		lbN = new JLabel("Anzahl:");
-		lbFu = new JLabel("<html>f<sub>u</sub>: </html>");
-		lbFo = new JLabel("<html>f<sub>o</sub>: </html>");
+		lbFu = new JLabel("<html><i>f</i>g<sub>u</sub>: </html>");
+		lbFo = new JLabel("<html><i>f</i>g<sub>o</sub>: </html>");
 		lbH = new JLabel("h:");
 
 		btnMonteCarlo = new WebSwitch();

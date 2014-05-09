@@ -75,11 +75,11 @@ public class ImpedanceProController {
 							new ElectricalComponent[] {
 									new ElectricalComponent(
 											getView().inputView.sourceInput
-													.getActiveValuePanel().tfValue1
+													.valuePanel.tfValue1
 													.getText()),
 									new ElectricalComponent(
 											getView().inputView.sourceInput
-													.getActiveValuePanel().tfValue2
+													.valuePanel.tfValue2
 													.getText()) });
 			model.getNetwork()
 					.getLoadNetwork()
@@ -87,11 +87,11 @@ public class ImpedanceProController {
 							new ElectricalComponent[] {
 									new ElectricalComponent(
 											getView().inputView.loadInput
-													.getActiveValuePanel().tfValue1
+													.valuePanel.tfValue1
 													.getText()),
 									new ElectricalComponent(
 											getView().inputView.loadInput
-													.getActiveValuePanel().tfValue2
+													.valuePanel.tfValue2
 													.getText()) });
 			model.getNetwork().setFrequencyString(
 					getView().inputView.sourceInput.frequencyPanel.tfFrequency
@@ -99,6 +99,9 @@ public class ImpedanceProController {
 			model.getNetwork().calculateMatchingNetworks();
 			displayMonteCarlo(getView().propertiesView.monteCarloPanel.btnMonteCarlo
 					.isSelected());
+			
+			getView().graphView.setVisible(!(getView().inputView.sourceInput.getTopology() == SourceLoadNetwork.Z || getView().inputView.loadInput.getTopology() == SourceLoadNetwork.Z));
+
 		}
 	}
 
@@ -115,14 +118,14 @@ public class ImpedanceProController {
 
 		newInputValues = new String[] {
 				sourceInput.frequencyPanel.tfFrequency.getText(),
-				sourceInput.getActiveValuePanel().tfValue1.getText(),
-				sourceInput.getActiveValuePanel().tfValue2.getText(),
-				sourceInput.getActiveValuePanel().tfTolerance1.getText(),
-				sourceInput.getActiveValuePanel().tfTolerance2.getText(),
-				loadInput.getActiveValuePanel().tfValue1.getText(),
-				loadInput.getActiveValuePanel().tfValue2.getText(),
-				loadInput.getActiveValuePanel().tfTolerance1.getText(),
-				loadInput.getActiveValuePanel().tfTolerance2.getText() };
+				sourceInput.valuePanel.tfValue1.getText(),
+				sourceInput.valuePanel.tfValue2.getText(),
+				sourceInput.valuePanel.tfTolerance1.getText(),
+				sourceInput.valuePanel.tfTolerance2.getText(),
+				loadInput.valuePanel.tfValue1.getText(),
+				loadInput.valuePanel.tfValue2.getText(),
+				loadInput.valuePanel.tfTolerance1.getText(),
+				loadInput.valuePanel.tfTolerance2.getText() };
 
 		if (solutionPanels != null) {
 			int numberOfSolutions = solutionPanels.length;
@@ -211,25 +214,15 @@ public class ImpedanceProController {
 		InputPanel loadInput = view.inputView.loadInput;
 		MonteCarloPanel monteCarloPanel = view.propertiesView.monteCarloPanel;
 
-		int sourceTopology = sourceInput.getTopology();
-		int loadTopology = loadInput.getTopology();
+		sourceInput.valuePanel.tfTolerance1.setEnabled(display);
+		sourceInput.valuePanel.tfTolerance2.setEnabled(display);
 
-		for (int i = 0; i < 6; i++) {
-			sourceInput.setTopology(i);
-			sourceInput.getActiveValuePanel().tfTolerance1.setEnabled(display);
-			sourceInput.getActiveValuePanel().tfTolerance2.setEnabled(display);
-
-			loadInput.setTopology(i);
-			loadInput.getActiveValuePanel().tfTolerance1.setEnabled(display);
-			loadInput.getActiveValuePanel().tfTolerance2.setEnabled(display);
-		}
+		loadInput.valuePanel.tfTolerance1.setEnabled(display);
+		loadInput.valuePanel.tfTolerance2.setEnabled(display);
 
 		monteCarloPanel.tfFo.setEnabled(display);
 		monteCarloPanel.tfFu.setEnabled(display);
 		monteCarloPanel.tfH.setEnabled(display);
 		monteCarloPanel.tfN.setEnabled(display);
-
-		sourceInput.setTopology(sourceTopology);
-		loadInput.setTopology(loadTopology);
 	}
 }

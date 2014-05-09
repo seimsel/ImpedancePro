@@ -169,16 +169,16 @@ public class ImpedanceProView extends JFrame implements Observer {
 		for(int i=0; i<6; i++){
 			sourceInput.setTopology(i);
 			sourceInput.frequencyPanel.tfFrequency.setText("100M");
-			sourceInput.getActiveValuePanel().tfValue1.setText("50");
-			sourceInput.getActiveValuePanel().tfValue2.setText("159.2n");
-			sourceInput.getActiveValuePanel().tfTolerance1.setText("5");
-			sourceInput.getActiveValuePanel().tfTolerance2.setText("5");
+			sourceInput.valuePanel.tfValue1.setText("50");
+			sourceInput.valuePanel.tfValue2.setText("159.2n");
+			sourceInput.valuePanel.tfTolerance1.setText("5");
+			sourceInput.valuePanel.tfTolerance2.setText("5");
 			
 			loadInput.setTopology(i);
-			loadInput.getActiveValuePanel().tfValue1.setText("60");
-			loadInput.getActiveValuePanel().tfValue2.setText("39.8p");
-			loadInput.getActiveValuePanel().tfTolerance1.setText("5");
-			loadInput.getActiveValuePanel().tfTolerance2.setText("5");
+			loadInput.valuePanel.tfValue1.setText("60");
+			loadInput.valuePanel.tfValue2.setText("39.8p");
+			loadInput.valuePanel.tfTolerance1.setText("5");
+			loadInput.valuePanel.tfTolerance2.setText("5");
 		}
 		
 		sourceInput.setTopology(2);
