@@ -74,29 +74,39 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 
 		switch (topology) {
 		default:
-		case 0:
-		case 4:
+		case 0000:
+			break;
+		case 0021:
+		case 1100:
 			addToRow(new JLabel("C1: "), 1, GridBagConstraints.EAST);
 			addToRow(lbValue1, 1, GridBagConstraints.WEST);
-			addToRow(new JLabel("C2 :"), 2, GridBagConstraints.EAST);
-			addToRow(lbValue2, 2, GridBagConstraints.WEST);
 			break;
-
-		case 1:
-		case 2:
-		case 5:
-		case 6:
+		case 0022:
+		case 1200:
+			addToRow(new JLabel("L1: "), 1, GridBagConstraints.EAST);
+			addToRow(lbValue1, 1, GridBagConstraints.WEST);
+			break;
+		case 1122:
+		case 1221:
+		case 2112:
+		case 2211:
 			addToRow(new JLabel("C1: "), 1, GridBagConstraints.EAST);
 			addToRow(lbValue1, 1, GridBagConstraints.WEST);
 			addToRow(new JLabel("L1: "), 2, GridBagConstraints.EAST);
 			addToRow(lbValue2, 2, GridBagConstraints.WEST);
 			break;
-
-		case 3:
-		case 7:
+		case 1222:
+		case 2212:
 			addToRow(new JLabel("L1: "), 1, GridBagConstraints.EAST);
 			addToRow(lbValue1, 1, GridBagConstraints.WEST);
 			addToRow(new JLabel("L2: "), 2, GridBagConstraints.EAST);
+			addToRow(lbValue2, 2, GridBagConstraints.WEST);
+			break;
+		case 1121:
+		case 2111:
+			addToRow(new JLabel("C1: "), 1, GridBagConstraints.EAST);
+			addToRow(lbValue1, 1, GridBagConstraints.WEST);
+			addToRow(new JLabel("C2: "), 2, GridBagConstraints.EAST);
 			addToRow(lbValue2, 2, GridBagConstraints.WEST);
 			break;
 		}

@@ -37,7 +37,7 @@ public class ImpedanceProView extends JFrame implements Observer {
 	
 	private ImpedanceProController controller;
 	
-	private Image icon = ImageUtil.loadResourceImage("icon_512.png");
+	private Image icon;
 
 
 	public InputView inputView;
@@ -48,6 +48,12 @@ public class ImpedanceProView extends JFrame implements Observer {
 	public ImpedanceProView(ImpedanceProController controller) {
 		super();
 	
+		try {
+			icon = ImageUtil.loadResourceImage("icon_512.png");
+		} catch(Exception e) {
+			System.out.println("Could not load icon_512.png");
+		}
+		
 		setLookAndFeel(); //Has to be first
 		initializeWindow();
 		setController(controller);
