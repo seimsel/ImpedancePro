@@ -21,6 +21,8 @@ public class Network {
 
 	private ComplexNumber Zq;
 	private ComplexNumber Zl;
+	
+	private static final double RANGE = 0.2;
 
 	private ImpedanceProModel model;
 
@@ -61,39 +63,51 @@ public class Network {
 
 	public XYDataset getReflectanceData() {
 
-//		
+		// Initialize variables
+		
+		double RS = 0, XS = 0, RL = 0, XL = 0;
+		double w0 = 0, f0 = 0;
+		double Cq = 0;
+		double[] f;
+		double[] w;
+		double[] XS1;
+		
+		w0=2*Math.PI*f0;
+		
+		f0 = frequency;
+		f=linspace(1-RANGE*f0,1+RANGE*f0,1e4);
+		w = new double[f.length];
+		
+		for (int i = 0; i < f.length; i++) {
+			
+			w[i]=f[i]*2*Math.PI;
+		}
+		
+		  RS = Zq.getRe();
+		  XS = Zq.getIm();
+		  
+		  RL = Zl.getRe();
+		  XL = Zl.getIm();
+		 
+		  if(XS < 0){
+		 
+		  Cq=-1/(w0*XS); 
+		  
+		  XS1 = new double[w.length];
+		  
+		  for (int i = 0; i < w.length; i++) {
+			  
+			  XS1[i] = -1/(w[i]*Cq); 
+			
+		}
+		  }
+		  
+//		  } else {
 //		  
-//		  double RS = 0, XS = 0, RL = 0, XL = 0;
+//		  Lq=Xq/w0; 
+//		  Xq=w*Lq; 
 //		  
-//		  double w0 = 0, w = 0;
-//		  
-//		  Zq = new ComplexNumber(); Zq =
-//		  sourceNetwork.getImpedanceAtFrequency(frequency);
-//		  
-//		  Zl = new ComplexNumber(); Zl =
-//		  loadNetwork.getImpedanceAtFrequency(frequency);
-//		  
-//		  RS = Zq.getRe(); XS = Zq.getIm();
-//		  
-//		  RL = Zl.getRe(); XL = Zl.getIm();
-//		  
-//			public static double[] linspace(double begin, double end, double step) {
-//				int n = (int) Math.floor((end - begin) / step) + 1;
-//				double[] res = new double[n];
-//				for (int i = 0; i < res.length; i++) {
-//					res[i] = begin + i * step;
-//				}
-//				return res;
-//		  
-//		  //f=linspace(0.8*f0,1.2*f0,1e4); w0=2*Math.PI*f0; w=2*pi*f;
-//		 
-//		  if(XS < 0){
-//		 
-//		  Cq=-1/(w0*Xq); Xq=-1./(w*Cq);
-//		  
-//		  } else{
-//		  
-//		  Lq=Xq/w0; Xq=w*Lq; }
+//		  }
 //		  
 //		  if(Xl < 0) Cl=-1/(w0*Xl); Xl=-1./(w*Cl); else Ll=Xl/w0; Xl=w*Ll; end
 //		  
@@ -150,8 +164,8 @@ public class Network {
 //		  
 //		  ZxL=1j*X1+Zq; ZxR=par(Zl,1j*X2);
 //		  
-//		  r4=abs((ZxL-conj(ZxR))./(ZxL+ZxR)); end
-//		 
+//		  r4=abs((ZxL-conj(ZxR))./(ZxL+ZxR)); 
+		 
 		return reflectanceData;
 
 	}
@@ -669,5 +683,14 @@ public class Network {
 		}
 
 		return value;
+	}
+
+	public double[] linspace(double begin, double end, double step) {
+		int n = (int) Math.floor((end - begin) / step) + 1;
+		double[] res = new double[n];
+		for (int i = 0; i < res.length; i++) {
+			res[i] = begin + i * step;
+		}
+		return res;
 	}
 }
