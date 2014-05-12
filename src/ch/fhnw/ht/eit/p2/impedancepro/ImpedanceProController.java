@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import ch.fhnw.ht.eit.p2.impedancepro.util.DocumentUtil;
+import ch.fhnw.ht.eit.p2.impedancepro.util.EngineeringUtil;
 
 /**
  * The <code>ImpedanceProController</code> class triggers the models
@@ -69,42 +70,39 @@ public class ImpedanceProController {
 		getNewValues();
 
 		if (viewHasChanged()) {
-			model.getNetwork().getSourceNetwork()
-					.setTopology(getView().inputView.sourceInput.getTopology());
-			model.getNetwork().getLoadNetwork()
-					.setTopology(getView().inputView.loadInput.getTopology());
-			model.getNetwork()
-					.getSourceNetwork()
-					.setElectricalComponents(
-							new ElectricalComponent[] {
-									new ElectricalComponent(
-											getView().inputView.sourceInput
-													.valuePanel.tfValue1
-													.getText()),
-									new ElectricalComponent(
-											getView().inputView.sourceInput
-													.valuePanel.tfValue2
-													.getText()) });
-			model.getNetwork()
-					.getLoadNetwork()
-					.setElectricalComponents(
-							new ElectricalComponent[] {
-									new ElectricalComponent(
-											getView().inputView.loadInput
-													.valuePanel.tfValue1
-													.getText()),
-									new ElectricalComponent(
-											getView().inputView.loadInput
-													.valuePanel.tfValue2
-													.getText()) });
-			model.getNetwork().setFrequencyString(
-					getView().inputView.sourceInput.frequencyPanel.tfFrequency
-							.getText());
-			model.getNetwork().calculateMatchingNetworks();
+			double frequency = EngineeringUtil.parse(getView().inputView.sourceInput.frequencyPanel.tfFrequency.getText());
+			
+			int sourceTopology = getView().inputView.sourceInput.getTopology();
+			
+			ElectricalComponent[] sourceComponents = new ElectricalComponent[] {
+					new ElectricalComponent(
+							getView().inputView.sourceInput.valuePanel.tfValue1
+									.getText()),
+					new ElectricalComponent(
+							getView().inputView.sourceInput.valuePanel.tfValue2
+									.getText()) };
+			
+			int loadTopology = getView().inputView.loadInput.getTopology();
+			
+			ElectricalComponent[] loadComponents = new ElectricalComponent[] {
+					new ElectricalComponent(
+							getView().inputView.loadInput.valuePanel.tfValue1
+									.getText()),
+					new ElectricalComponent(
+							getView().inputView.loadInput.valuePanel.tfValue2
+									.getText()) };
+			
+			SourceLoadNetwork sourceNetwork = new SourceLoadNetwork(sourceTopology, sourceComponents);
+			SourceLoadNetwork loadNetwork = new SourceLoadNetwork(loadTopology, loadComponents);
+			
+			model.getNetwork().calculateMatchingNetworks(sourceNetwork, loadNetwork, frequency);
+			model.getNetwork().calculateReturnLossOfAllSolutions(frequency*0.8, frequency*1.2);
+			
 			displayMonteCarlo(getView().propertiesView.monteCarloPanel.btnMonteCarlo
 					.isSelected());
-			
-			getView().graphView.setVisible(!(getView().inputView.sourceInput.getTopology() == SourceLoadNetwork.Z || getView().inputView.loadInput.getTopology() == SourceLoadNetwork.Z));
+			getView().graphView
+					.setVisible(!(getView().inputView.sourceInput.getTopology() == SourceLoadNetwork.Z || getView().inputView.loadInput
+							.getTopology() == SourceLoadNetwork.Z));
 
 		}
 	}
@@ -229,7 +227,7 @@ public class ImpedanceProController {
 		monteCarloPanel.tfH.setEnabled(display);
 		monteCarloPanel.tfN.setEnabled(display);
 	}
-	
+
 	public void openInfoPDF() {
 		try {
 			Desktop.getDesktop().open(DocumentUtil.loadResourcePDF("info.pdf"));
@@ -237,7 +235,7 @@ public class ImpedanceProController {
 			System.out.println("Couldn't load info.pdf");
 		}
 	}
-	
+
 	public void openHelpPDF() {
 		try {
 			Desktop.getDesktop().open(DocumentUtil.loadResourcePDF("info.pdf"));

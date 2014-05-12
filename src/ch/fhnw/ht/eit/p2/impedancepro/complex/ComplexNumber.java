@@ -72,6 +72,10 @@ public class ComplexNumber {
 	public double abs() {
 		return Math.sqrt(re * re + im * im);
 	}
+	
+	public ComplexNumber conj() {
+		return new ComplexNumber(getRe(), -getIm());
+	}
 
 	public static double angle(ComplexNumber c) {
 		return Math.atan2(c.im, c.re);

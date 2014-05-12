@@ -12,10 +12,12 @@ public class SourceLoadNetwork {
 	public static final byte Z = 5;
 	
 	private int topology;
-	private ComplexNumber impedance;
 	private ElectricalComponent[] electricalComponents;
-	
 
+	public SourceLoadNetwork(int topology, ElectricalComponent[] electricalComponents) {
+		this.topology = topology;
+		this.electricalComponents = electricalComponents;
+	}
 	
 	public int getTopology() {
 		return topology;
@@ -29,6 +31,7 @@ public class SourceLoadNetwork {
 		
 		double w = 2 * Math.PI * f;
 		
+		ComplexNumber impedance = new ComplexNumber();
 		ComplexNumber XR = new ComplexNumber(getElectricalComponents()[0].getValue(), 0);
 		ComplexNumber XC = new ComplexNumber(0, -1/(w*getElectricalComponents()[1].getValue()));
 		ComplexNumber XL = new ComplexNumber(0, w*getElectricalComponents()[1].getValue());
@@ -56,10 +59,6 @@ public class SourceLoadNetwork {
 		}
 				
 		return impedance;
-	}
-	
-	public void setImpedance(ComplexNumber impedance) {
-		this.impedance = impedance;
 	}
 
 	public ElectricalComponent[] getElectricalComponents() {

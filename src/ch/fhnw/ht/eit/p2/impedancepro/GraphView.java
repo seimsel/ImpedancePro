@@ -14,32 +14,28 @@ import javax.swing.JPanel;
 public class GraphView extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	public GraphPanel amplitudeGraph, reflectionGraph;
+	public GraphPanel amplitudeGraph, returnLossGraph;
 
 	public GraphView() {
 		super();
 
-		JPanel amplitudeGraphBorderPanel = new JPanel(new BorderLayout());
-		JPanel reflectionGraphBorderPanel = new JPanel(new BorderLayout());
+		JPanel returnLossGraphBorderPanel = new JPanel(new BorderLayout());
 
 		setLayout(new GridLayout(1, 0));
 
-		amplitudeGraph = new GraphPanel("Frequenz", "Amplitude");
-		reflectionGraph = new GraphPanel("Frequenz", "Reflexion");
+		returnLossGraph = new GraphPanel("Frequenz", "Reflexion");
 
-		amplitudeGraphBorderPanel.setBorder(BorderFactory
-				.createTitledBorder("Amplitude"));
-		reflectionGraphBorderPanel.setBorder(BorderFactory
+		returnLossGraphBorderPanel.setBorder(BorderFactory
 				.createTitledBorder("Reflexion"));
 
-		amplitudeGraphBorderPanel.add(amplitudeGraph);
-		reflectionGraphBorderPanel.add(reflectionGraph);
+		returnLossGraphBorderPanel.add(returnLossGraph);
 
-		add(amplitudeGraphBorderPanel);
-		add(reflectionGraphBorderPanel);
+		add(returnLossGraphBorderPanel);
 	}
 	
 	public void update(ImpedanceProModel model) {
-		
+		if(model.getNetwork().getReturnLossData() != null) {
+			returnLossGraph.plot.setDataset(model.getNetwork().getReturnLossData());
+		}
 	}
 }

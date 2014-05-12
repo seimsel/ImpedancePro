@@ -1,6 +1,5 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
-import ch.fhnw.ht.eit.p2.impedancepro.complex.ComplexNumber;
 import ch.fhnw.ht.eit.p2.impedancepro.util.EngineeringUtil;
 
 /**
@@ -12,11 +11,9 @@ public class ElectricalComponent {
 	private double value, tolerance;
 	
 	ElectricalComponent() {
-		
 	}
 	
 	ElectricalComponent(String valueString) {
-		this();
 		setValueString(valueString);
 	}
 	
@@ -44,9 +41,5 @@ public class ElectricalComponent {
 
 	public void setTolerance(double tolerance) {
 		this.tolerance = tolerance;
-	}
-	
-	public ComplexNumber getImpedanceAtFrequency(Double frequency) {
-		return null;
 	}
 }

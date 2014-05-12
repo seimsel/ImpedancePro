@@ -1,201 +1,66 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
-import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import ch.fhnw.ht.eit.p2.impedancepro.complex.ComplexNumber;
-import ch.fhnw.ht.eit.p2.impedancepro.util.EngineeringUtil;
 
 /**
  * @author Stephan Fahrni
  */
 
 public class Network {
-	private double frequency;
-	private String frequencyString;
-	private XYDataset swrData, reflectanceData, amplitudeData, amplitudeDBData;
+	private XYSeriesCollection swrData, returnLossData;
 	private double monteCarloResult;
 
-	private MatchingNetwork[] matchingNetworks;
 	private SourceLoadNetwork sourceNetwork;
+	private MatchingNetwork[] matchingNetworks;
 	private SourceLoadNetwork loadNetwork;
-
-	private ComplexNumber Zq;
-	private ComplexNumber Zl;
-	
-	private static final double RANGE = 0.2;
 
 	private ImpedanceProModel model;
 
-	private double LSG1BT1, LSG1BT2, LSG2BT1, LSG2BT2, LSG3BT1, LSG3BT2,
-			LSG4BT1, LSG4BT2;
-
 	public Network(ImpedanceProModel model) {
 		this.model = model;
-		sourceNetwork = new SourceLoadNetwork();
-		loadNetwork = new SourceLoadNetwork();
 	}
 
-	public double getFrequency() {
-		return frequency;
-	}
-
-	public void setFrequency(double frequency) {
-		this.frequency = frequency;
-		this.frequencyString = EngineeringUtil.convert(frequency, 2);
-	}
-
-	public String getFrequencyString() {
-		return frequencyString;
-	}
-
-	public void setFrequencyString(String frequencyString) {
-		this.frequency = EngineeringUtil.parse(frequencyString);
-		this.frequencyString = EngineeringUtil.convert(frequency, 2);
-	}
-
-	public XYDataset getSwrData() {
+	public XYSeriesCollection getSwrData() {
 		return swrData;
 	}
 
-	public void setSwrData(XYDataset swrData) {
+	public XYSeriesCollection getReturnLossData() {
+		return returnLossData;
+	}
+
+	public void setSwrData(XYSeriesCollection swrData) {
 		this.swrData = swrData;
 	}
 
-	public XYDataset getReflectanceData() {
-
-		// Initialize variables
-		
-		double RS = 0, XS = 0, RL = 0, XL = 0;
-		double w0 = 0, f0 = 0;
-		double Cq = 0;
-		double[] f;
-		double[] w;
-		double[] XS1;
-		
-		w0=2*Math.PI*f0;
-		
-		f0 = frequency;
-		f=linspace(1-RANGE*f0,1+RANGE*f0,1e4);
-		w = new double[f.length];
-		
-		for (int i = 0; i < f.length; i++) {
-			
-			w[i]=f[i]*2*Math.PI;
-		}
-		
-		  RS = Zq.getRe();
-		  XS = Zq.getIm();
-		  
-		  RL = Zl.getRe();
-		  XL = Zl.getIm();
-		 
-		  if(XS < 0){
-		 
-		  Cq=-1/(w0*XS); 
-		  
-		  XS1 = new double[w.length];
-		  
-		  for (int i = 0; i < w.length; i++) {
-			  
-			  XS1[i] = -1/(w[i]*Cq); 
-			
-		}
-		  }
-		  
-//		  } else {
-//		  
-//		  Lq=Xq/w0; 
-//		  Xq=w*Lq; 
-//		  
-//		  }
-//		  
-//		  if(Xl < 0) Cl=-1/(w0*Xl); Xl=-1./(w*Cl); else Ll=Xl/w0; Xl=w*Ll; end
-//		  
-//		  Zq=Rq+1j*Xq; Zl=Rl+1j*Xl;
-//		  
-//		  if(Lsg1.error == 0) if(strcmp(Lsg1.type1,'C1') ||
-//		  strcmp(Lsg1.type1,'C2')) X1 = -1./(w*Lsg1.bt1);
-//		  elseif(strcmp(Lsg1.type1,'L1') || strcmp(Lsg1.type1,'L2')) X1 =
-//		  w*Lsg1.bt1; end
-//		  
-//		  if(strcmp(Lsg1.type2,'C1') || strcmp(Lsg1.type2,'C2')) X2 =
-//		  -1./(w*Lsg1.bt2); elseif(strcmp(Lsg1.type2,'L1') ||
-//		  strcmp(Lsg1.type2,'L2')) X2 = w*Lsg1.bt2; end
-//		  
-//		  if(Rq==Rl) ZxL=Zq; else ZxL=par(1j*X1,Zq); end ZxR=Zl+1j*X2;
-//		  
-//		  r1=abs((ZxL-conj(ZxR))./(ZxL+ZxR)); end
-//		  
-//		  if(Lsg2.error == 0) if(strcmp(Lsg2.type1,'C1') ||
-//		  strcmp(Lsg2.type1,'C2')) X1 = -1./(w*Lsg2.bt1);
-//		  elseif(strcmp(Lsg2.type1,'L1') || strcmp(Lsg2.type1,'L2')) X1 =
-//		  w*Lsg2.bt1; end
-//		  
-//		  if(strcmp(Lsg2.type2,'C1') || strcmp(Lsg2.type2,'C2')) X2 =
-//		  -1./(w*Lsg2.bt2); elseif(strcmp(Lsg2.type2,'L1') ||
-//		  strcmp(Lsg2.type2,'L2')) X2 = w*Lsg2.bt2; end
-//		 
-//		  ZxL=par(1j*X1,Zq); ZxR=Zl+1j*X2;
-//		  
-//		  r2=abs((ZxL-conj(ZxR))./(ZxL+ZxR)); end
-//		  
-//		  if(Lsg3.error == 0)
-//		  
-//		  if(strcmp(Lsg3.type1,'C1') || strcmp(Lsg3.type1,'C2')) X1 =
-//		  -1./(w*Lsg3.bt1); elseif(strcmp(Lsg3.type1,'L1') ||
-//		  strcmp(Lsg3.type1,'L2')) X1 = w*Lsg3.bt1; end
-//		  
-//		  if(strcmp(Lsg3.type2,'C1') || strcmp(Lsg3.type2,'C2')) X2 =
-//		  -1./(w*Lsg3.bt2); elseif(strcmp(Lsg3.type2,'L1') ||
-//		  strcmp(Lsg3.type2,'L2')) X2 = w*Lsg3.bt2; end
-//		  
-//		  ZxL=1j*X1+Zq; ZxR=par(Zl,1j*X2);
-//		  
-//		  r3=abs((ZxL-conj(ZxR))./(ZxL+ZxR)); end
-//		  
-//		  if(Lsg4.error == 0) if(strcmp(Lsg4.type1,'C1') ||
-//		  strcmp(Lsg4.type1,'C2')) X1 = -1./(w*Lsg4.bt1);
-//		 elseif(strcmp(Lsg4.type1,'L1') || strcmp(Lsg4.type1,'L2')) X1 =
-//		  w*Lsg4.bt1; end
-//		  
-//		  if(strcmp(Lsg4.type2,'C1') || strcmp(Lsg4.type2,'C2')) X2 =
-//		  -1./(w*Lsg4.bt2); elseif(strcmp(Lsg4.type2,'L1') ||
-//		  strcmp(Lsg4.type2,'L2')) X2 = w*Lsg4.bt2; end
-//		  
-//		  ZxL=1j*X1+Zq; ZxR=par(Zl,1j*X2);
-//		  
-//		  r4=abs((ZxL-conj(ZxR))./(ZxL+ZxR)); 
-		 
-		return reflectanceData;
-
+	public void setReturnLossData(XYSeriesCollection returnLossData) {
+		this.returnLossData = returnLossData;
 	}
 
-	public void setReflectanceData(XYDataset reflectanceData) {
-		this.reflectanceData = reflectanceData;
+	public SourceLoadNetwork getSourceNetwork() {
+		return sourceNetwork;
 	}
 
-	public XYDataset getAmplitudeData() {
-		return amplitudeData;
+	public void setSourceNetwork(SourceLoadNetwork sourceNetwork) {
+		this.sourceNetwork = sourceNetwork;
 	}
 
-	public void setAmplitudeData(XYDataset amplitudeData) {
-		this.amplitudeData = amplitudeData;
+	public SourceLoadNetwork getLoadNetwork() {
+		return loadNetwork;
 	}
 
-	public XYDataset getAmplitudeDBData() {
-		return amplitudeDBData;
-	}
-
-	public void setAmplitudeDBData(XYDataset amplitudeDBData) {
-		this.amplitudeDBData = amplitudeDBData;
+	public void setLoadNetwork(SourceLoadNetwork loadNetwork) {
+		this.loadNetwork = loadNetwork;
 	}
 
 	public double getMonteCarloResult() {
 		return monteCarloResult;
 	}
 
-	public void setMonteCarloResult(double monteCarloResult) {
-		this.monteCarloResult = monteCarloResult;
+	public MatchingNetwork[] getMatchingNetworks() {
+		return matchingNetworks;
 	}
 
 	/**
@@ -221,9 +86,14 @@ public class Network {
 	 * </pre>
 	 */
 
-	public void calculateMatchingNetworks() {
+	public void calculateMatchingNetworks(SourceLoadNetwork sourceNetwork,
+			SourceLoadNetwork loadNetwork, double frequency) {
+
+		this.sourceNetwork = sourceNetwork;
+		this.loadNetwork = loadNetwork;
 
 		// Initialize varbiable with zero
+		double LSG1BT1 = 0, LSG1BT2 = 0, LSG2BT1 = 0, LSG2BT2 = 0, LSG3BT1 = 0, LSG3BT2 = 0, LSG4BT1 = 0, LSG4BT2 = 0;
 
 		byte[] topology = new byte[4];
 
@@ -240,36 +110,33 @@ public class Network {
 
 		// Get load and source network
 
-		Zq = new ComplexNumber();
-		Zq = sourceNetwork.getImpedanceAtFrequency(frequency);
+		ComplexNumber ZS = sourceNetwork.getImpedanceAtFrequency(frequency);
+		ComplexNumber ZL = loadNetwork.getImpedanceAtFrequency(frequency);
 
-		Zl = new ComplexNumber();
-		Zl = loadNetwork.getImpedanceAtFrequency(frequency);
+		RS = ZS.getRe();
+		XS = ZS.getIm();
 
-		RS = Zq.getRe();
-		XS = Zq.getIm();
-
-		RL = Zl.getRe();
-		XL = Zl.getIm();
+		RL = ZL.getRe();
+		XL = ZL.getIm();
 
 		w = 2 * Math.PI * frequency;
 
 		if (RS == RL) {
 
 			X11 = 0;
-			X12 = -(Zq.getIm() + Zl.getIm());
+			X12 = -(ZS.getIm() + ZL.getIm());
 
-			X21 = -Math.pow(Zq.abs(), 2) / (2 * XS);
+			X21 = -Math.pow(ZS.abs(), 2) / (2 * XS);
 			X22 = -((Math.pow(XS, 2) * X21 + XS * Math.pow(X21, 2) + Math.pow(
 					RS, 2) * X21)
 					/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X21 * XS + Math
-							.pow(X21, 2)) + Zl.getIm());
+							.pow(X21, 2)) + ZL.getIm());
 
-			X32 = -Math.pow(Zl.abs(), 2) / (2 * XL);
+			X32 = -Math.pow(ZL.abs(), 2) / (2 * XL);
 			X31 = -((Math.pow(XL, 2) * X32 + XL * Math.pow(X32, 2) + Math.pow(
 					RL, 2) * X32)
 					/ (Math.pow(RL, 2) + Math.pow(XL, 2) + 2 * X32 * XL + Math
-							.pow(X32, 2)) + Zq.getIm());
+							.pow(X32, 2)) + ZS.getIm());
 
 			X41 = 0;
 			X42 = 0;
@@ -280,7 +147,7 @@ public class Network {
 
 			// In this part, solution 1 and 2 is calculated
 
-			re = Zl.getRe();
+			re = ZL.getRe();
 			a = 1 - RS / re;
 
 			b = XS;
@@ -297,7 +164,7 @@ public class Network {
 				X12 = -((Math.pow(XS, 2) * X11 + XS * Math.pow(X11, 2) + Math
 						.pow(RS, 2) * X11)
 						/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X11 * XS + Math
-								.pow(X11, 2)) + Zl.getIm());
+								.pow(X11, 2)) + ZL.getIm());
 
 			} else {
 
@@ -316,7 +183,7 @@ public class Network {
 				X22 = -((Math.pow(XS, 2) * X21 + XS * Math.pow(X21, 2) + Math
 						.pow(RS, 2) * X21)
 						/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X21 * XS + Math
-								.pow(X21, 2)) + Zl.getIm());
+								.pow(X21, 2)) + ZL.getIm());
 
 			} else {
 
@@ -326,7 +193,7 @@ public class Network {
 
 			// In this part, solution 3 and 4 is calculated
 
-			re = Zq.getRe();
+			re = ZS.getRe();
 
 			a = 1 - RL / re;
 			b = XL;
@@ -343,7 +210,7 @@ public class Network {
 				X31 = -((Math.pow(XL, 2) * X32 + XL * Math.pow(X32, 2) + Math
 						.pow(RL, 2) * X32)
 						/ (Math.pow(RL, 2) + Math.pow(XL, 2) + 2 * X32 * XL + Math
-								.pow(X32, 2)) + Zq.getIm());
+								.pow(X32, 2)) + ZS.getIm());
 
 			} else {
 
@@ -362,7 +229,7 @@ public class Network {
 				X41 = -((Math.pow(XL, 2) * X42 + XL * Math.pow(X42, 2) + Math
 						.pow(RL, 2) * X42)
 						/ (Math.pow(RL, 2) + Math.pow(XL, 2) + 2 * X42 * XL + Math
-								.pow(X42, 2)) + Zq.getIm());
+								.pow(X42, 2)) + ZS.getIm());
 
 			} else {
 
@@ -646,32 +513,127 @@ public class Network {
 		model.notifyObservers();
 	}
 
+	public double calculateReturnLossAtFrequency(
+			SourceLoadNetwork sourceNetwork, MatchingNetwork matchingNetwork,
+			SourceLoadNetwork loadNetwork, double frequency) {
+		ComplexNumber ZS = sourceNetwork.getImpedanceAtFrequency(frequency);
+		ComplexNumber ZL = loadNetwork.getImpedanceAtFrequency(frequency);
+
+		double value1 = matchingNetwork.getElectricalComponents()[0].getValue();
+		double value2 = matchingNetwork.getElectricalComponents()[1].getValue();
+
+		ComplexNumber Z1 = new ComplexNumber();
+		ComplexNumber Z2 = new ComplexNumber();
+
+		ComplexNumber ZR = new ComplexNumber();
+		ComplexNumber r = new ComplexNumber();
+
+		double w = 2 * Math.PI * frequency;
+
+		switch (matchingNetwork.getTopology()) {
+		default:
+		case MatchingNetwork.PAR_C_SER_C:
+			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
+			Z2 = new ComplexNumber(0.0, -1 / (w * value2));
+			ZL = ComplexNumber.parallel(new ComplexNumber[] { Z1, Z2.add(ZL) });
+			break;
+
+		case MatchingNetwork.PAR_C_SER_L:
+			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
+			Z2 = new ComplexNumber(0.0, w * value2);
+			ZL = ComplexNumber.parallel(new ComplexNumber[] { Z1, Z2.add(ZL) });
+			break;
+
+		case MatchingNetwork.PAR_L_SER_C:
+			Z1 = new ComplexNumber(0.0, w * value1);
+			Z2 = new ComplexNumber(0.0, -1 / (w * value2));
+			ZL = ComplexNumber.parallel(new ComplexNumber[] { Z1, Z2.add(ZL) });
+			break;
+
+		case MatchingNetwork.PAR_L_SER_L:
+			Z1 = new ComplexNumber(0.0, w * value1);
+			Z2 = new ComplexNumber(0.0, w * value2);
+			ZL = ComplexNumber.parallel(new ComplexNumber[] { Z1, Z2.add(ZL) });
+			break;
+
+		case MatchingNetwork.SER_C_PAR_C:
+			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
+			Z2 = new ComplexNumber(0.0, -1 / (w * value2));
+			ZL = Z1.add(ComplexNumber.parallel(new ComplexNumber[] { Z2, ZL }));
+			break;
+
+		case MatchingNetwork.SER_C_PAR_L:
+			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
+			Z2 = new ComplexNumber(0.0, w * value2);
+			ZL = Z1.add(ComplexNumber.parallel(new ComplexNumber[] { Z2, ZL }));
+			break;
+
+		case MatchingNetwork.SER_L_PAR_C:
+			Z1 = new ComplexNumber(0.0, w * value1);
+			Z2 = new ComplexNumber(0.0, -1 / (w * value2));
+			ZL = Z1.add(ComplexNumber.parallel(new ComplexNumber[] { Z2, ZL }));
+			break;
+
+		case MatchingNetwork.SER_L_PAR_L:
+			Z1 = new ComplexNumber(0.0, w * value1);
+			Z2 = new ComplexNumber(0.0, w * value2);
+			ZL = Z1.add(ComplexNumber.parallel(new ComplexNumber[] { Z2, ZL }));
+			break;
+
+		case MatchingNetwork.SER_C:
+			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
+			ZL = Z1.add(ZL);
+			break;
+
+		case MatchingNetwork.SER_L:
+			Z1 = new ComplexNumber(0.0, w * value1);
+			ZL = Z1.add(ZL);
+			break;
+
+		case MatchingNetwork.PAR_C:
+			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
+			ZL = ComplexNumber.parallel(new ComplexNumber[] { Z1, ZL });
+			break;
+
+		case MatchingNetwork.PAR_L:
+			Z1 = new ComplexNumber(0.0, w * value1);
+			ZL = ComplexNumber.parallel(new ComplexNumber[] { Z1, ZL });
+			break;
+		}
+
+		r = (ZS.sub(ZR.conj())).div(ZS.add(ZR));
+
+		return r.abs();
+	}
+
+	public void calculateReturnLossOfAllSolutions(double lowerFrequency,
+			double upperFrequency) {
+		XYSeries rData[] = new XYSeries[getMatchingNetworks().length];
+		XYSeriesCollection rDataCollection = new XYSeriesCollection();
+
+		for (int i = 0; i < getMatchingNetworks().length; i++) {
+			rData[i] = new XYSeries("return_loss" + i);
+			double[] f = linspace(lowerFrequency, upperFrequency, 1000.0);
+
+			for (int j = 0; j < getMatchingNetworks().length; j++) {
+				rData[i].add(
+						f[j],
+						calculateReturnLossAtFrequency(getSourceNetwork(),
+								getMatchingNetworks()[i], getLoadNetwork(),
+								f[j]));
+			}
+
+			rDataCollection.addSeries(rData[i]);
+		}
+
+		setReturnLossData(rDataCollection);
+
+		model.setChanged();
+		model.notifyObservers();
+	}
+
 	public void calculateMonteCarlo() {
 
-	}
-
-	public MatchingNetwork[] getMatchingNetworks() {
-		return matchingNetworks;
-	}
-
-	public void setMatchingNetworks(MatchingNetwork[] matchingNetworks) {
-		this.matchingNetworks = matchingNetworks;
-	}
-
-	public SourceLoadNetwork getSourceNetwork() {
-		return sourceNetwork;
-	}
-
-	public void setSourceNetwork(SourceLoadNetwork sourceNetwork) {
-		this.sourceNetwork = sourceNetwork;
-	}
-
-	public SourceLoadNetwork getLoadNetwork() {
-		return loadNetwork;
-	}
-
-	public void setLoadNetwork(SourceLoadNetwork loadNetwork) {
-		this.loadNetwork = loadNetwork;
 	}
 
 	private int byteArrayToInt(byte[] encodedValue) {
