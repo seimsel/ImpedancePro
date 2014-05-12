@@ -1,6 +1,10 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
+import java.awt.Desktop;
+import java.io.IOException;
 import java.util.Arrays;
+
+import ch.fhnw.ht.eit.p2.impedancepro.util.DocumentUtil;
 
 /**
  * The <code>ImpedanceProController</code> class triggers the models
@@ -224,5 +228,21 @@ public class ImpedanceProController {
 		monteCarloPanel.tfFu.setEnabled(display);
 		monteCarloPanel.tfH.setEnabled(display);
 		monteCarloPanel.tfN.setEnabled(display);
+	}
+	
+	public void openInfoPDF() {
+		try {
+			Desktop.getDesktop().open(DocumentUtil.loadResourcePDF("info.pdf"));
+		} catch (IOException e) {
+			System.out.println("Couldn't load info.pdf");
+		}
+	}
+	
+	public void openHelpPDF() {
+		try {
+			Desktop.getDesktop().open(DocumentUtil.loadResourcePDF("info.pdf"));
+		} catch (IOException e) {
+			System.out.println("Couldn't load help.pdf");
+		}
 	}
 }

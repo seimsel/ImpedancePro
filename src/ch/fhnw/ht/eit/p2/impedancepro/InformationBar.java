@@ -45,11 +45,13 @@ public class InformationBar extends JPanel implements ActionListener {
 		btnInfo.setContentAreaFilled(false);
 		btnInfo.setBorderPainted(false);
 		btnInfo.addActionListener(this);
+		btnInfo.setName("info");
 		
 		btnHelp.setFocusable(false);
 		btnHelp.setContentAreaFilled(false);
 		btnHelp.setBorderPainted(false);
 		btnHelp.addActionListener(this);
+		btnHelp.setName("help");
 		
 		add(lbInfoText, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
 				0, // gridy
@@ -92,6 +94,14 @@ public class InformationBar extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		
+		if(e.getSource() instanceof JButton) {
+			JButton btn = (JButton) e.getSource();
+			
+			if(btn.getName() == "info") {
+				controller.openInfoPDF();
+			} else if(btn.getName() == "help") {
+				controller.openHelpPDF();
+			}
+		}
 	}
 }
