@@ -535,69 +535,69 @@ public class Network {
 		case MatchingNetwork.PAR_C_SER_C:
 			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
 			Z2 = new ComplexNumber(0.0, -1 / (w * value2));
-			ZL = ComplexNumber.parallel(new ComplexNumber[] { Z1, Z2.add(ZL) });
+			ZR = ComplexNumber.parallel(new ComplexNumber[] { Z1, Z2.add(ZL) });
 			break;
 
 		case MatchingNetwork.PAR_C_SER_L:
 			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
 			Z2 = new ComplexNumber(0.0, w * value2);
-			ZL = ComplexNumber.parallel(new ComplexNumber[] { Z1, Z2.add(ZL) });
+			ZR = ComplexNumber.parallel(new ComplexNumber[] { Z1, Z2.add(ZL) });
 			break;
 
 		case MatchingNetwork.PAR_L_SER_C:
 			Z1 = new ComplexNumber(0.0, w * value1);
 			Z2 = new ComplexNumber(0.0, -1 / (w * value2));
-			ZL = ComplexNumber.parallel(new ComplexNumber[] { Z1, Z2.add(ZL) });
+			ZR = ComplexNumber.parallel(new ComplexNumber[] { Z1, Z2.add(ZL) });
 			break;
 
 		case MatchingNetwork.PAR_L_SER_L:
 			Z1 = new ComplexNumber(0.0, w * value1);
 			Z2 = new ComplexNumber(0.0, w * value2);
-			ZL = ComplexNumber.parallel(new ComplexNumber[] { Z1, Z2.add(ZL) });
+			ZR = ComplexNumber.parallel(new ComplexNumber[] { Z1, Z2.add(ZL) });
 			break;
 
 		case MatchingNetwork.SER_C_PAR_C:
 			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
 			Z2 = new ComplexNumber(0.0, -1 / (w * value2));
-			ZL = Z1.add(ComplexNumber.parallel(new ComplexNumber[] { Z2, ZL }));
+			ZR = Z1.add(ComplexNumber.parallel(new ComplexNumber[] { Z2, ZL }));
 			break;
 
 		case MatchingNetwork.SER_C_PAR_L:
 			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
 			Z2 = new ComplexNumber(0.0, w * value2);
-			ZL = Z1.add(ComplexNumber.parallel(new ComplexNumber[] { Z2, ZL }));
+			ZR = Z1.add(ComplexNumber.parallel(new ComplexNumber[] { Z2, ZL }));
 			break;
 
 		case MatchingNetwork.SER_L_PAR_C:
 			Z1 = new ComplexNumber(0.0, w * value1);
 			Z2 = new ComplexNumber(0.0, -1 / (w * value2));
-			ZL = Z1.add(ComplexNumber.parallel(new ComplexNumber[] { Z2, ZL }));
+			ZR = Z1.add(ComplexNumber.parallel(new ComplexNumber[] { Z2, ZL }));
 			break;
 
 		case MatchingNetwork.SER_L_PAR_L:
 			Z1 = new ComplexNumber(0.0, w * value1);
 			Z2 = new ComplexNumber(0.0, w * value2);
-			ZL = Z1.add(ComplexNumber.parallel(new ComplexNumber[] { Z2, ZL }));
+			ZR = Z1.add(ComplexNumber.parallel(new ComplexNumber[] { Z2, ZL }));
 			break;
 
 		case MatchingNetwork.SER_C:
 			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
-			ZL = Z1.add(ZL);
+			ZR = Z1.add(ZL);
 			break;
 
 		case MatchingNetwork.SER_L:
 			Z1 = new ComplexNumber(0.0, w * value1);
-			ZL = Z1.add(ZL);
+			ZR = Z1.add(ZL);
 			break;
 
 		case MatchingNetwork.PAR_C:
 			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
-			ZL = ComplexNumber.parallel(new ComplexNumber[] { Z1, ZL });
+			ZR = ComplexNumber.parallel(new ComplexNumber[] { Z1, ZL });
 			break;
 
 		case MatchingNetwork.PAR_L:
 			Z1 = new ComplexNumber(0.0, w * value1);
-			ZL = ComplexNumber.parallel(new ComplexNumber[] { Z1, ZL });
+			ZR = ComplexNumber.parallel(new ComplexNumber[] { Z1, ZL });
 			break;
 		}
 
@@ -610,20 +610,21 @@ public class Network {
 			double upperFrequency) {
 		XYSeries rData[] = new XYSeries[getMatchingNetworks().length];
 		XYSeriesCollection rDataCollection = new XYSeriesCollection();
-
+		
 		for (int i = 0; i < getMatchingNetworks().length; i++) {
 			rData[i] = new XYSeries("return_loss" + i);
-			double[] f = linspace(lowerFrequency, upperFrequency, 1000.0);
+			double[] f = linspace(lowerFrequency, upperFrequency, 100e3);
 
-			for (int j = 0; j < getMatchingNetworks().length; j++) {
-				rData[i].add(
-						f[j],
-						calculateReturnLossAtFrequency(getSourceNetwork(),
-								getMatchingNetworks()[i], getLoadNetwork(),
-								f[j]));
+			if(getMatchingNetworks()[i] != null) {
+				for (int j = 0; j < f.length; j++) {
+					rData[i].add(
+							f[j],
+							calculateReturnLossAtFrequency(getSourceNetwork(),
+									getMatchingNetworks()[i], getLoadNetwork(),
+									f[j]));
+				}
 			}
-
-			rDataCollection.addSeries(rData[i]);
+				rDataCollection.addSeries(rData[i]);
 		}
 
 		setReturnLossData(rDataCollection);

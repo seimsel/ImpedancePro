@@ -17,13 +17,13 @@ import javax.swing.JPanel;
 public class PropertiesView extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	public ReflectionPanel reflectionPanel;
+	public ReturnLossPanel reflectionPanel;
 	public MonteCarloPanel monteCarloPanel;
 
 	public PropertiesView(ImpedanceProController controller) {
 		setLayout(new GridBagLayout());
 
-		reflectionPanel = new ReflectionPanel(controller);
+		reflectionPanel = new ReturnLossPanel(controller);
 		monteCarloPanel = new MonteCarloPanel(controller);
 
 		JPanel reflectionBorderPanel = new JPanel(new BorderLayout());

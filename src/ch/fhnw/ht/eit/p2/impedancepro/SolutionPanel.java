@@ -33,30 +33,30 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 	public ValuePanel valuePanel;
 	
 	private ImpedanceProController controller;
+	private int topology;
+	private JLabel lbDesignator1, lbDesignator2, lbUnit1, lbUnit2;
+	
+	private WebImage matchingNetworkImage;
 
 	public SolutionPanel(Color color, int topology,
 			ImpedanceProController controller) {
 		super();
 
+		matchingNetworkImage = new WebImage();
+		matchingNetworkImage.setDisplayType(DisplayType.fitComponent);
+		
+		lbDesignator1 = new JLabel();
+		lbDesignator2 = new JLabel();
+		lbValue1 = new JLabel();
+		lbValue2 = new JLabel();
+		lbUnit1 = new JLabel();
+		lbUnit2 = new JLabel();
+		
+		this.setTopology(topology);
 		this.controller = controller;
 		
 		setLayout(new GridBagLayout());
 		setBorder(BorderFactory.createLineBorder(color, 2));
-
-		lbValue1 = new JLabel();
-		lbValue2 = new JLabel();
-
-		WebImage matchingNetworkImage = new WebImage();
-
-		try {
-			matchingNetworkImage.setImage(ImageUtil
-					.loadResourceImage("matching_" + topology + "_512.png"));
-		} catch (NullPointerException ex) {
-			System.out.println("Could not load Solution-Panel-Image: matching_"
-					+ topology + "_512.png");
-		}
-
-		matchingNetworkImage.setDisplayType(DisplayType.fitComponent);
 
 		add(matchingNetworkImage, new GridBagConstraints(
 				GridBagConstraints.RELATIVE, // gridx
@@ -71,45 +71,13 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 				0, // ipadx
 				50 // ipady
 				));
-
-		switch (topology) {
-		default:
-		case 0000:
-			break;
-		case 0021:
-		case 1100:
-			addToRow(new JLabel("C1: "), 1, GridBagConstraints.EAST);
-			addToRow(lbValue1, 1, GridBagConstraints.WEST);
-			break;
-		case 0022:
-		case 1200:
-			addToRow(new JLabel("L1: "), 1, GridBagConstraints.EAST);
-			addToRow(lbValue1, 1, GridBagConstraints.WEST);
-			break;
-		case 1122:
-		case 1221:
-		case 2112:
-		case 2211:
-			addToRow(new JLabel("C1: "), 1, GridBagConstraints.EAST);
-			addToRow(lbValue1, 1, GridBagConstraints.WEST);
-			addToRow(new JLabel("L1: "), 2, GridBagConstraints.EAST);
-			addToRow(lbValue2, 2, GridBagConstraints.WEST);
-			break;
-		case 1222:
-		case 2212:
-			addToRow(new JLabel("L1: "), 1, GridBagConstraints.EAST);
-			addToRow(lbValue1, 1, GridBagConstraints.WEST);
-			addToRow(new JLabel("L2: "), 2, GridBagConstraints.EAST);
-			addToRow(lbValue2, 2, GridBagConstraints.WEST);
-			break;
-		case 1121:
-		case 2111:
-			addToRow(new JLabel("C1: "), 1, GridBagConstraints.EAST);
-			addToRow(lbValue1, 1, GridBagConstraints.WEST);
-			addToRow(new JLabel("C2: "), 2, GridBagConstraints.EAST);
-			addToRow(lbValue2, 2, GridBagConstraints.WEST);
-			break;
-		}
+		
+		addToRow(lbDesignator1, 1, GridBagConstraints.EAST);
+		addToRow(lbValue1, 1, GridBagConstraints.EAST);
+		addToRow(lbUnit1, 1, GridBagConstraints.WEST);
+		addToRow(lbDesignator2, 2, GridBagConstraints.EAST);
+		addToRow(lbValue2, 2, GridBagConstraints.EAST);
+		addToRow(lbUnit2, 2, GridBagConstraints.WEST);
 
 		addToRow(new JLabel("  "), 1, GridBagConstraints.EAST);
 
@@ -128,7 +96,7 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 
 		add(valuePanel, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
 				4, // gridy
-				4, // gridwidth
+				5, // gridwidth
 				1, // gridheigth
 				1.0, // weightx
 				0.0, // weighty
@@ -181,7 +149,69 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 	public void focusLost(FocusEvent fe) {
 		ActionEvent ae = new ActionEvent(this, 0, "focus_action");
 		actionPerformed(ae);
+	}
 
+	public int getTopology() {
+		return topology;
+	}
+
+	public void setTopology(int topology) {
+		this.topology = topology;
+		
+		try {
+			matchingNetworkImage.setImage(ImageUtil
+					.loadResourceImage("matching_" + topology + "_512.png"));
+		} catch (NullPointerException ex) {
+			System.out.println("Could not load Solution-Panel-Image: matching_"
+					+ topology + "_512.png");
+		}
+		
+		switch (topology) {
+		default:
+		case 0000:
+			lbDesignator1.setText(" ");
+			lbDesignator2.setText(" ");
+			lbUnit1.setText(" ");
+			lbUnit2.setText(" ");
+			break;
+		case 0021:
+		case 1100:
+			lbDesignator1.setText("C1: ");
+			lbDesignator2.setText(" ");
+			lbUnit1.setText("F");
+			lbUnit2.setText(" ");
+			break;
+		case 0022:
+		case 1200:
+			lbDesignator1.setText("L1: ");
+			lbDesignator2.setText(" ");
+			lbUnit1.setText("H");
+			lbUnit2.setText(" ");
+			break;
+		case 1122:
+		case 1221:
+		case 2112:
+		case 2211:
+			lbDesignator1.setText("C1: ");
+			lbDesignator2.setText("L1: ");
+			lbUnit1.setText("F");
+			lbUnit2.setText("H");
+			break;
+		case 1222:
+		case 2212:
+			lbDesignator1.setText("L1: ");
+			lbDesignator2.setText("L2: ");
+			lbUnit1.setText("H");
+			lbUnit2.setText("H");
+			break;
+		case 1121:
+		case 2111:
+			lbDesignator1.setText("C1: ");
+			lbDesignator2.setText("C2: ");
+			lbUnit1.setText("F");
+			lbUnit2.setText("F");
+			break;
+		}
 	}
 
 	/**
