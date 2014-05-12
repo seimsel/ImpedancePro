@@ -26,7 +26,7 @@ import com.alee.managers.tooltip.TooltipWay;
  * 
  * @author Simon Zumbrunnen
  */
-public class InputPanel extends JPanel implements ActionListener, FocusListener {
+public class InputPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	public static final byte SOURCE = 0;
@@ -34,7 +34,7 @@ public class InputPanel extends JPanel implements ActionListener, FocusListener 
 
 	public ValuePanel valuePanel;
 	public FrequencyPanel frequencyPanel;
-	
+
 	private int type;
 	private int topology;
 	private WebToggleButton[] topologyChooseButtons = new WebToggleButton[6];
@@ -53,7 +53,7 @@ public class InputPanel extends JPanel implements ActionListener, FocusListener 
 
 		valuePanel = new ValuePanel();
 		frequencyPanel = new FrequencyPanel();
-		
+
 		setLayout(new GridBagLayout());
 
 		for (int i = 0; i < topologyChooseButtons.length; i++) {
@@ -114,28 +114,13 @@ public class InputPanel extends JPanel implements ActionListener, FocusListener 
 				0, // ipadx
 				0 // ipady
 				));
-		
-		if(type == SOURCE) {
+
+		if (type == SOURCE) {
 			frequencyPanel = new FrequencyPanel();
 			add(frequencyPanel, new GridBagConstraints(
-					GridBagConstraints.RELATIVE,	//gridx
-	                0,								//gridy
-	                1,								//gridwidth
-	                1,								//gridheigth
-	                0.0,							//weightx
-	                0.0,							//weighty
-	                GridBagConstraints.WEST,		//anchor
-	                GridBagConstraints.NONE,		//fill
-	                new Insets(0, 0, 0, 0),			//insets
-	                0,								//ipadx
-	                0								//ipady
-	        ));
-		}
-
-			
-			add(valuePanel, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
-					1, // gridy
-					2, // gridwidth
+					GridBagConstraints.RELATIVE, // gridx
+					0, // gridy
+					1, // gridwidth
 					1, // gridheigth
 					0.0, // weightx
 					0.0, // weighty
@@ -146,6 +131,20 @@ public class InputPanel extends JPanel implements ActionListener, FocusListener 
 					0 // ipady
 					));
 		}
+
+		add(valuePanel, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+				1, // gridy
+				2, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.WEST, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
+	}
 
 	public int getType() {
 		return type;
@@ -167,19 +166,19 @@ public class InputPanel extends JPanel implements ActionListener, FocusListener 
 		valuePanel.lbValue1Unit.setText("Ohm");
 		valuePanel.lbTolerance1Unit.setText("%");
 		valuePanel.lbTolerance2Unit.setText("%");
-		
+
 		valuePanel.lbValue1.setVisible(true);
 		valuePanel.tfValue1.setVisible(true);
 		valuePanel.lbValue1Unit.setVisible(true);
 		valuePanel.tfTolerance1.setVisible(true);
 		valuePanel.lbTolerance1Unit.setVisible(true);
-		
+
 		valuePanel.lbValue2.setVisible(true);
 		valuePanel.tfValue2.setVisible(true);
 		valuePanel.lbValue2Unit.setVisible(true);
 		valuePanel.tfTolerance2.setVisible(true);
 		valuePanel.lbTolerance2Unit.setVisible(true);
-		
+
 		switch (topology) {
 		default:
 		case SourceLoadNetwork.R:
@@ -210,7 +209,7 @@ public class InputPanel extends JPanel implements ActionListener, FocusListener 
 			valuePanel.lbTolerance2Unit.setVisible(false);
 			break;
 		}
-		
+
 		this.topology = topology;
 	}
 
@@ -223,25 +222,13 @@ public class InputPanel extends JPanel implements ActionListener, FocusListener 
 		controller.viewAction();
 	}
 
-	public void focusGained(FocusEvent e) {
-
-	}
-
-	/**
-	 * Part of the <code>FocusListener</code> interface. Is used to fire an
-	 * action as soon as a textfield loses focus.
-	 */
-	public void focusLost(FocusEvent e) {
-		ActionEvent ae = new ActionEvent(this, 0, "focus_action");
-		actionPerformed(ae);
-	}
-	
 	/**
 	 * The <code>ValuePanel</code> class contains all the inputs.
 	 * 
 	 * @author Simon Zumbrunnen
 	 */
-	public class ValuePanel extends JPanel {
+	public class ValuePanel extends JPanel implements ActionListener,
+			FocusListener {
 		private static final long serialVersionUID = 1L;
 
 		public JTextField tfValue1, tfValue2, tfTolerance1, tfTolerance2;
@@ -252,33 +239,65 @@ public class InputPanel extends JPanel implements ActionListener, FocusListener 
 
 			lbValue1 = new JLabel();
 			lbValue2 = new JLabel();
-			
+
 			lbValue1Unit = new JLabel();
 			lbValue2Unit = new JLabel();
 			lbTolerance1Unit = new JLabel();
 			lbTolerance2Unit = new JLabel();
-			
+
 			tfValue1 = new JTextField("", 5);
-			tfValue2= new JTextField("", 5);
+			tfValue2 = new JTextField("", 5);
 			tfTolerance1 = new JTextField("", 3);
 			tfTolerance2 = new JTextField("", 3);
+			
+			tfValue1.addActionListener(this);
+			tfValue2.addActionListener(this);
+			tfTolerance1.addActionListener(this);
+			tfTolerance2.addActionListener(this);
+			
+			tfValue1.addFocusListener(this);
+			tfValue2.addFocusListener(this);
+			tfTolerance1.addFocusListener(this);
+			tfTolerance2.addFocusListener(this);
 
 			add(lbValue1);
 			add(tfValue1);
 			add(lbValue1Unit);
-			
+
 			add(tfTolerance1);
 			add(lbTolerance1Unit);
-			
+
 			add(lbValue2);
 			add(tfValue2);
 			add(lbValue2Unit);
-			
+
 			add(tfTolerance2);
 			add(lbTolerance2Unit);
 		}
+
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() instanceof WebToggleButton) {
+				WebToggleButton btn = (WebToggleButton) e.getSource();
+				setTopology(Integer.parseInt(btn.getName()));
+			}
+
+			controller.viewAction();
+		}
+
+		public void focusGained(FocusEvent e) {
+
+		}
+
+		/**
+		 * Part of the <code>FocusListener</code> interface. Is used to fire an
+		 * action as soon as a textfield loses focus.
+		 */
+		public void focusLost(FocusEvent e) {
+			ActionEvent ae = new ActionEvent(this, 0, "focus_action");
+			actionPerformed(ae);
+		}
 	}
-	
+
 	/**
 	 * The <code>FrequencyPanel</code> class is used to add a frequency input to
 	 * the source input.
@@ -295,7 +314,7 @@ public class InputPanel extends JPanel implements ActionListener, FocusListener 
 			tfFrequency = new JTextField("", 4);
 			lbFrequency = new JLabel("<html><i>f</i>:</html>");
 			lbFrequencyUnit = new JLabel("MHz");
-			
+
 			add(lbFrequency);
 			add(tfFrequency);
 			add(lbFrequencyUnit);

@@ -1,6 +1,7 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -44,6 +45,7 @@ public class ImpedanceProView extends JFrame implements Observer {
 	public SolutionView solutionView;
 	public GraphView graphView;
 	public PropertiesView propertiesView;
+	public InformationBar informationBar;
 	
 	public ImpedanceProView(ImpedanceProController controller) {
 		super();
@@ -80,14 +82,17 @@ public class ImpedanceProView extends JFrame implements Observer {
 	 * <code>PropertiesView</code>.
 	 */
 	private void addComponents() {
+		Container contentPane = getContentPane();
+		
+		setLayout(new GridBagLayout());
+		
 		inputView = new InputView(controller);
 		solutionView = new SolutionView(controller);
 		graphView = new GraphView();
 		propertiesView = new PropertiesView(controller);
-		
-		setLayout(new GridBagLayout());
+		informationBar = new InformationBar(controller);
 				
-		getContentPane().add(inputView, new GridBagConstraints(
+		contentPane.add(inputView, new GridBagConstraints(
 				0,								//gridx
 				GridBagConstraints.RELATIVE,	//gridy
                 1,								//gridwidth
@@ -101,7 +106,7 @@ public class ImpedanceProView extends JFrame implements Observer {
                 0								//ipady
         ));
 
-		getContentPane().add(solutionView, new GridBagConstraints(
+		contentPane.add(solutionView, new GridBagConstraints(
 				0,								//gridx
 				GridBagConstraints.RELATIVE,	//gridy
                 1,								//gridwidth
@@ -115,7 +120,7 @@ public class ImpedanceProView extends JFrame implements Observer {
                 0								//ipady
         ));
 		
-		getContentPane().add(graphView, new GridBagConstraints(
+		contentPane.add(graphView, new GridBagConstraints(
 				0,								//gridx
 				GridBagConstraints.RELATIVE,	//gridy
                 1,								//gridwidth
@@ -129,7 +134,21 @@ public class ImpedanceProView extends JFrame implements Observer {
                 0								//ipady
         ));
 		
-		getContentPane().add(propertiesView, new GridBagConstraints(
+		contentPane.add(propertiesView, new GridBagConstraints(
+				0,								//gridx
+				GridBagConstraints.RELATIVE,	//gridy
+                1,								//gridwidth
+                1,								//gridheigth
+                1.0,							//weightx
+                0.0,							//weighty
+                GridBagConstraints.CENTER,		//anchor
+                GridBagConstraints.HORIZONTAL,	//fill
+                new Insets(0, 0, 0, 0),			//insets
+                0,								//ipadx
+                0								//ipady
+        ));
+		
+		contentPane.add(informationBar, new GridBagConstraints(
 				0,								//gridx
 				GridBagConstraints.RELATIVE,	//gridy
                 1,								//gridwidth
