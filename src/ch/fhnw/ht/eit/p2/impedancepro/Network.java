@@ -430,7 +430,7 @@ public class Network {
 
 		for (int i = 0; i < getMatchingNetworks().length; i++) {
 			rData[i] = new XYSeries("return_loss" + i);
-			double[] f = linspace(lowerFrequency, upperFrequency, 100e3);
+			double[] f = linspace(lowerFrequency, upperFrequency, 1000);
 
 			if (getMatchingNetworks()[i] != null) {
 				for (int j = 0; j < f.length; j++) {
@@ -465,8 +465,8 @@ public class Network {
 		return value;
 	}
 
-	public double[] linspace(double begin, double end, double step) {
-		int n = (int) Math.floor((end - begin) / step) + 1;
+	public double[] linspace(double begin, double end, int n) {		
+		double step = (end-begin) / (n-1);
 		double[] res = new double[n];
 		for (int i = 0; i < res.length; i++) {
 			res[i] = begin + i * step;
