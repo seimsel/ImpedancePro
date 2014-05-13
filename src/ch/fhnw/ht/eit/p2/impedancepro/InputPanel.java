@@ -6,8 +6,6 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -23,7 +21,7 @@ import com.alee.managers.tooltip.TooltipWay;
  * 
  * @author Simon Zumbrunnen
  */
-public class InputPanel extends JPanel implements ActionListener, FocusListener {
+public class InputPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	public static final byte SOURCE = 0;
@@ -219,19 +217,6 @@ public class InputPanel extends JPanel implements ActionListener, FocusListener 
 		controller.viewAction();
 	}
 
-	public void focusGained(FocusEvent e) {
-
-	}
-
-	/**
-	 * Part of the <code>FocusListener</code> interface. Is used to fire an
-	 * action as soon as a textfield loses focus.
-	 */
-	public void focusLost(FocusEvent e) {
-		ActionEvent ae = new ActionEvent(this, 0, "focus_action");
-		actionPerformed(ae);
-	}
-
 	/**
 	 * The <code>ValuePanel</code> class contains all the inputs.
 	 * 
@@ -263,11 +248,6 @@ public class InputPanel extends JPanel implements ActionListener, FocusListener 
 			tfValue2.addActionListener(InputPanel.this);
 			tfTolerance1.addActionListener(InputPanel.this);
 			tfTolerance2.addActionListener(InputPanel.this);
-			
-			tfValue1.addFocusListener(InputPanel.this);
-			tfValue2.addFocusListener(InputPanel.this);
-			tfTolerance1.addFocusListener(InputPanel.this);
-			tfTolerance2.addFocusListener(InputPanel.this);
 
 			add(lbValue1);
 			add(tfValue1);
@@ -303,7 +283,6 @@ public class InputPanel extends JPanel implements ActionListener, FocusListener 
 			lbFrequencyUnit = new JLabel("Hz");
 
 			tfFrequency.addActionListener(InputPanel.this);
-			tfFrequency.addFocusListener(InputPanel.this);
 			
 			add(lbFrequency);
 			add(tfFrequency);

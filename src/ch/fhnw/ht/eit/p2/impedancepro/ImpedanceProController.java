@@ -72,13 +72,15 @@ public class ImpedanceProController {
 
 			System.out.println("View has changed");
 
-			double frequency = getView().inputView.sourceInput.frequencyPanel.tfFrequency
-							.getValue();
 
-			int sourceTopology = getView().inputView.sourceInput.getTopology();
+				double frequency = getView().inputView.sourceInput.frequencyPanel.tfFrequency
+						.getValue();
 
-			ElectricalComponent[] sourceComponents = new ElectricalComponent[] {
-					new ElectricalComponent(
+				int sourceTopology = getView().inputView.sourceInput
+						.getTopology();
+
+				ElectricalComponent[] sourceComponents = new ElectricalComponent[] {
+						new ElectricalComponent(
 							getView().inputView.sourceInput.valuePanel.tfValue1
 									.getValue()),
 					new ElectricalComponent(
@@ -108,12 +110,16 @@ public class ImpedanceProController {
 			if (getView().inputView.sourceInput.getTopology() == SourceLoadNetwork.Z
 					|| getView().inputView.loadInput.getTopology() == SourceLoadNetwork.Z) {
 				getView().graphView.setEnabled(false);
-				getView().propertiesView.settingsPanel.btnMonteCarlo.setEnabled(false);
-				getView().propertiesView.settingsPanel.cbReturnLoss.setEnabled(false);
+				getView().propertiesView.settingsPanel.btnMonteCarlo
+						.setEnabled(false);
+				getView().propertiesView.settingsPanel.cbReturnLoss
+						.setEnabled(false);
 			} else {
 				getView().graphView.setEnabled(true);
-				getView().propertiesView.settingsPanel.btnMonteCarlo.setEnabled(true);
-				getView().propertiesView.settingsPanel.cbReturnLoss.setEnabled(true);
+				getView().propertiesView.settingsPanel.btnMonteCarlo
+						.setEnabled(true);
+				getView().propertiesView.settingsPanel.cbReturnLoss
+						.setEnabled(true);
 			}
 
 			if (getView().propertiesView.settingsPanel.btnMonteCarlo

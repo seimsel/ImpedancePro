@@ -7,8 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -23,8 +21,7 @@ import com.alee.extended.image.WebImage;
  * 
  * @author Simon Zumbrunnen
  */
-public class SolutionPanel extends JPanel implements ActionListener,
-		FocusListener {
+public class SolutionPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	public JLabel lbValue1, lbValue2;
@@ -80,10 +77,6 @@ public class SolutionPanel extends JPanel implements ActionListener,
 		addToRow(new JLabel("  "), 1, GridBagConstraints.EAST);
 
 		valuePanel = new ValuePanel(topology);
-		valuePanel.tfValue1.addFocusListener(this);
-		valuePanel.tfValue2.addFocusListener(this);
-		valuePanel.tfTolerance1.addFocusListener(this);
-		valuePanel.tfTolerance2.addFocusListener(this);
 
 		valuePanel.tfValue1.addActionListener(this);
 		valuePanel.tfValue2.addActionListener(this);
@@ -134,19 +127,6 @@ public class SolutionPanel extends JPanel implements ActionListener,
 
 	public void actionPerformed(ActionEvent ae) {
 		controller.viewAction();
-	}
-
-	public void focusGained(FocusEvent fe) {
-
-	}
-
-	/**
-	 * Part of the <code>FocusListener</code> interface. Is used to fire an
-	 * action as soon as a textfield loses focus.
-	 */
-	public void focusLost(FocusEvent fe) {
-		ActionEvent ae = new ActionEvent(this, 0, "focus_action");
-		actionPerformed(ae);
 	}
 
 	public int getTopology() {
