@@ -93,7 +93,6 @@ public class Network {
 		this.loadNetwork = loadNetwork;
 
 		// Initialize varbiable with zero
-		double LSG1BT1 = 0, LSG1BT2 = 0, LSG2BT1 = 0, LSG2BT2 = 0, LSG3BT1 = 0, LSG3BT2 = 0, LSG4BT1 = 0, LSG4BT2 = 0;
 
 		double w = 0;
 
@@ -124,17 +123,19 @@ public class Network {
 			X11 = 0;
 			X12 = -(ZS.getIm() + ZL.getIm());
 
-			X21 = -Math.pow(ZS.abs(), 2) / (2 * XS);
-			X22 = -((Math.pow(XS, 2) * X21 + XS * Math.pow(X21, 2) + Math.pow(
-					RS, 2) * X21)
-					/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X21 * XS + Math
-							.pow(X21, 2)) + ZL.getIm());
+			X21 = exceptionhandler(-Math.pow(ZS.abs(), 2) / (2 * XS));
 
-			X32 = -Math.pow(ZL.abs(), 2) / (2 * XL);
-			X31 = -((Math.pow(XL, 2) * X32 + XL * Math.pow(X32, 2) + Math.pow(
-					RL, 2) * X32)
+			X22 = exceptionhandler(-((Math.pow(XS, 2) * X21 + XS
+					* Math.pow(X21, 2) + Math.pow(RS, 2) * X21)
+					/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X21 * XS + Math
+							.pow(X21, 2)) + ZL.getIm()));
+
+			X32 = exceptionhandler(-Math.pow(ZL.abs(), 2) / (2 * XL));
+
+			X31 = exceptionhandler(-((Math.pow(XL, 2) * X32 + XL
+					* Math.pow(X32, 2) + Math.pow(RL, 2) * X32)
 					/ (Math.pow(RL, 2) + Math.pow(XL, 2) + 2 * X32 * XL + Math
-							.pow(X32, 2)) + ZS.getIm());
+							.pow(X32, 2)) + ZS.getIm()));
 
 			X41 = 0;
 			X42 = 0;
@@ -235,26 +236,26 @@ public class Network {
 
 			}
 		}
-		
-		solution1 = createNetwork(solution1,X11,X12,LSG1BT1,LSG1BT2,w);
-		solution2 = createNetwork(solution2,X21,X22,LSG2BT1,LSG2BT2,w);
-		solution3 = createNetwork(solution3,X31,X32,LSG3BT1,LSG3BT2,w);
-		solution4 = createNetwork(solution4,X41,X42,LSG4BT1,LSG4BT2,w);
-				
+
+		solution1 = createNetwork(solution1, X11, X12, w);
+		solution2 = createNetwork(solution2, X21, X22, w);
+		solution3 = createNetwork(solution3, X31, X32, w);
+		solution4 = createNetwork(solution4, X41, X42, w);
 
 		matchingNetworks = new MatchingNetwork[] { solution1, solution2,
 				solution3, solution4 };
-		
+
 		model.setChanged();
 		model.notifyObservers();
 	}
 
 	public MatchingNetwork createNetwork(MatchingNetwork solution,
-			double reactance1, double reactance2, double sol1, double sol2,
-			double w) {
-			
+			double reactance1, double reactance2, double w) {
+
+		double sol1 = 0, sol2 = 0;
+
 		byte[] topology = new byte[4];
-		
+
 		if (solution != null) {
 
 			// determine C or L of solution
@@ -466,5 +467,21 @@ public class Network {
 			res[i] = begin + i * step;
 		}
 		return res;
+	}
+
+	public double exceptionhandler(double check) {
+		try {
+
+			if (Double.isNaN(check)) {
+				throw new Exception("NaN result!");
+			}
+			if (Double.isInfinite(check)) {
+				throw new Exception("Result is Infinite");
+			}
+		} catch (Exception e) {
+			check = 0.0;
+		}
+		return check;
+
 	}
 }
