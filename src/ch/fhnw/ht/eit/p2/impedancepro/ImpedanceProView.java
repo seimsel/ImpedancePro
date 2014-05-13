@@ -18,6 +18,7 @@ import ch.fhnw.ht.eit.p2.impedancepro.util.ImageUtil;
 /**
  * The <code>ImpedanceProView</code> class is the main view of ImpedancePro. It
  * displays all the relevant data.
+ * 
  * @author Simon Zumbrunnen
  */
 public class ImpedanceProView extends JFrame implements Observer {
@@ -27,36 +28,35 @@ public class ImpedanceProView extends JFrame implements Observer {
 	public static final Color LIGHT_GREEN = new Color(100, 170, 100, 100);
 	public static final Color LIGHT_RED = new Color(255, 100, 100, 100);
 	public static final Color LIGHT_YELLOW = new Color(255, 200, 100, 100);
-	
+
 	public static final Color BLUE = new Color(100, 100, 255);
 	public static final Color GREEN = new Color(100, 170, 100);
 	public static final Color RED = new Color(255, 100, 100);
 	public static final Color YELLOW = new Color(255, 200, 100);
-		
+
 	public static final Dimension PREF_WINDOW_SIZE = new Dimension(800, 600);
 	public static final Dimension MIN_WINDOW_SIZE = new Dimension(800, 600);
-	
-	private ImpedanceProController controller;
-	
-	private Image icon;
 
+	private ImpedanceProController controller;
+
+	private Image icon;
 
 	public InputView inputView;
 	public SolutionView solutionView;
 	public GraphView graphView;
 	public PropertiesView propertiesView;
 	public InformationBar informationBar;
-	
+
 	public ImpedanceProView(ImpedanceProController controller) {
 		super();
-	
+
 		try {
 			icon = ImageUtil.loadResourceImage("icon_512.png");
-		} catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println("Could not load icon_512.png");
 		}
-		
-		setLookAndFeel(); //Has to be first
+
+		setLookAndFeel(); // Has to be first
 		initializeWindow();
 		setController(controller);
 		addComponents();
@@ -64,7 +64,7 @@ public class ImpedanceProView extends JFrame implements Observer {
 		setVisible(true);
 		setIconImage(icon);
 	}
-	
+
 	/**
 	 * Sets size, location, title etc. of the window.
 	 */
@@ -73,96 +73,90 @@ public class ImpedanceProView extends JFrame implements Observer {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(PREF_WINDOW_SIZE);
 		setMinimumSize(MIN_WINDOW_SIZE);
-		setLocation(50,50);
+		setLocation(50, 50);
 	}
-	
+
 	/**
-	 * Adds the 4 main panels <code>InputView</code>,
-	 * <code>SolutionView</code>, <code>GraphView</code> and
-	 * <code>PropertiesView</code>.
+	 * Adds the 4 main panels <code>InputView</code>, <code>SolutionView</code>,
+	 * <code>GraphView</code> and <code>PropertiesView</code>.
 	 */
 	private void addComponents() {
 		Container contentPane = getContentPane();
-		
+
 		setLayout(new GridBagLayout());
-		
+
 		inputView = new InputView(controller);
 		solutionView = new SolutionView(controller);
 		graphView = new GraphView();
 		propertiesView = new PropertiesView(controller);
 		informationBar = new InformationBar(controller);
-				
-		contentPane.add(inputView, new GridBagConstraints(
-				0,								//gridx
-				GridBagConstraints.RELATIVE,	//gridy
-                1,								//gridwidth
-                1,								//gridheigth
-                1.0,							//weightx
-                0.0,							//weighty
-                GridBagConstraints.CENTER,		//anchor
-                GridBagConstraints.HORIZONTAL,	//fill
-                new Insets(0, 0, 0, 0),			//insets
-                0,								//ipadx
-                0								//ipady
-        ));
 
-		contentPane.add(solutionView, new GridBagConstraints(
-				0,								//gridx
-				GridBagConstraints.RELATIVE,	//gridy
-                1,								//gridwidth
-                1,								//gridheigth
-                1.0,							//weightx
-                0.1,							//weighty
-                GridBagConstraints.CENTER,		//anchor
-                GridBagConstraints.BOTH,		//fill
-                new Insets(0, 0, 0, 0),			//insets
-                0,								//ipadx
-                0								//ipady
-        ));
-		
-		contentPane.add(graphView, new GridBagConstraints(
-				0,								//gridx
-				GridBagConstraints.RELATIVE,	//gridy
-                1,								//gridwidth
-                1,								//gridheigth
-                1.0,							//weightx
-                0.9,							//weighty
-                GridBagConstraints.CENTER,		//anchor
-                GridBagConstraints.BOTH,		//fill
-                new Insets(0, 0, 0, 0),			//insets
-                0,								//ipadx
-                0								//ipady
-        ));
-		
-		contentPane.add(propertiesView, new GridBagConstraints(
-				0,								//gridx
-				GridBagConstraints.RELATIVE,	//gridy
-                1,								//gridwidth
-                1,								//gridheigth
-                1.0,							//weightx
-                0.0,							//weighty
-                GridBagConstraints.CENTER,		//anchor
-                GridBagConstraints.HORIZONTAL,	//fill
-                new Insets(0, 0, 0, 0),			//insets
-                0,								//ipadx
-                0								//ipady
-        ));
-		
-		contentPane.add(informationBar, new GridBagConstraints(
-				0,								//gridx
-				GridBagConstraints.RELATIVE,	//gridy
-                1,								//gridwidth
-                1,								//gridheigth
-                1.0,							//weightx
-                0.0,							//weighty
-                GridBagConstraints.CENTER,		//anchor
-                GridBagConstraints.HORIZONTAL,	//fill
-                new Insets(0, 0, 0, 0),			//insets
-                0,								//ipadx
-                0								//ipady
-        ));
+		contentPane.add(inputView, new GridBagConstraints(0, // gridx
+				GridBagConstraints.RELATIVE, // gridy
+				2, // gridwidth
+				1, // gridheigth
+				1.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.HORIZONTAL, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
+
+		contentPane.add(solutionView, new GridBagConstraints(0, // gridx
+				GridBagConstraints.RELATIVE, // gridy
+				2, // gridwidth
+				1, // gridheigth
+				1.0, // weightx
+				0.1, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.BOTH, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
+
+		contentPane.add(graphView, new GridBagConstraints(0, // gridx
+				GridBagConstraints.RELATIVE, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				1.0, // weightx
+				0.9, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.BOTH, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
+
+		contentPane.add(propertiesView, new GridBagConstraints(1, // gridx
+				GridBagConstraints.RELATIVE, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.9, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.VERTICAL, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
+
+		contentPane.add(informationBar, new GridBagConstraints(0, // gridx
+				GridBagConstraints.RELATIVE, // gridy
+				2, // gridwidth
+				1, // gridheigth
+				1.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.HORIZONTAL, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
 	}
-	
+
 	/**
 	 * Sets the look and feel to the system look and feel and changes the
 	 * default background color of all panels to white.
@@ -170,13 +164,13 @@ public class ImpedanceProView extends JFrame implements Observer {
 	private void setLookAndFeel() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println("Look and feel not supported");
 		}
-		
+
 		UIManager.getLookAndFeelDefaults().put("Panel.background", Color.WHITE);
 	}
-	
+
 	/**
 	 * Fills all the inputs (e.g. textfields) with an example value.
 	 */
@@ -184,22 +178,22 @@ public class ImpedanceProView extends JFrame implements Observer {
 		InputPanel sourceInput = inputView.sourceInput;
 		InputPanel loadInput = inputView.loadInput;
 		MonteCarloPanel monteCarloPanel = propertiesView.monteCarloPanel;
-		
-		for(int i=0; i<6; i++){
+
+		for (int i = 0; i < 6; i++) {
 			sourceInput.setTopology(i);
 			sourceInput.frequencyPanel.tfFrequency.setText("100M");
 			sourceInput.valuePanel.tfValue1.setText("50");
 			sourceInput.valuePanel.tfValue2.setText("159.2n");
 			sourceInput.valuePanel.tfTolerance1.setText("5");
 			sourceInput.valuePanel.tfTolerance2.setText("5");
-			
+
 			loadInput.setTopology(i);
 			loadInput.valuePanel.tfValue1.setText("60");
 			loadInput.valuePanel.tfValue2.setText("39.8p");
 			loadInput.valuePanel.tfTolerance1.setText("5");
 			loadInput.valuePanel.tfTolerance2.setText("5");
 		}
-		
+
 		sourceInput.setTopology(2);
 		loadInput.setTopology(1);
 
@@ -208,7 +202,7 @@ public class ImpedanceProView extends JFrame implements Observer {
 		monteCarloPanel.tfH.setText("0.2");
 		monteCarloPanel.tfN.setText("1000");
 	}
-	
+
 	public ImpedanceProController getController() {
 		return controller;
 	}

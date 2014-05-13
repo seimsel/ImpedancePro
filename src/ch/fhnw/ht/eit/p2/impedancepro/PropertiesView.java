@@ -10,38 +10,38 @@ import javax.swing.JPanel;
 
 /**
  * The <code>PropertiesView</code> combines a <code>MonteCarloPanel</code> and a
- * <code>ReflectionPanel</code>. All the configurations can be changed here.
+ * <code>ReturnLossPanel</code>. All the configurations can be changed here.
  * 
  * @author Simon Zumbrunnen
  */
 public class PropertiesView extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	public ReturnLossPanel reflectionPanel;
+	public SettingsPanel settingsPanel;
 	public MonteCarloPanel monteCarloPanel;
 
 	public PropertiesView(ImpedanceProController controller) {
 		setLayout(new GridBagLayout());
 
-		reflectionPanel = new ReturnLossPanel(controller);
+		settingsPanel = new SettingsPanel(controller);
 		monteCarloPanel = new MonteCarloPanel(controller);
 
-		JPanel reflectionBorderPanel = new JPanel(new BorderLayout());
+		JPanel returnLossBorderPanel = new JPanel(new BorderLayout());
 		JPanel monteCarloBorderPanel = new JPanel(new BorderLayout());
 
-		reflectionBorderPanel.add(reflectionPanel);
+		returnLossBorderPanel.add(settingsPanel);
 		monteCarloBorderPanel.add(monteCarloPanel);
 
-		reflectionBorderPanel.setBorder(BorderFactory
-				.createTitledBorder("Plot"));
+		returnLossBorderPanel.setBorder(BorderFactory
+				.createTitledBorder("Einstellungen"));
 		monteCarloBorderPanel.setBorder(BorderFactory
 				.createTitledBorder("Monte-Carlo"));
-
-		add(reflectionBorderPanel, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+		
+		add(monteCarloBorderPanel, new GridBagConstraints(0, // gridx
 				GridBagConstraints.RELATIVE, // gridy
 				1, // gridwidth
 				1, // gridheigth
-				0.2, // weightx
+				1.0, // weightx
 				1.0, // weighty
 				GridBagConstraints.CENTER, // anchor
 				GridBagConstraints.BOTH, // fill
@@ -49,13 +49,13 @@ public class PropertiesView extends JPanel {
 				0, // ipadx
 				0 // ipady
 				));
-
-		add(monteCarloBorderPanel, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+		
+		add(returnLossBorderPanel, new GridBagConstraints(0, // gridx
 				GridBagConstraints.RELATIVE, // gridy
 				1, // gridwidth
 				1, // gridheigth
-				0.8, // weightx
-				1.0, // weighty
+				1.0, // weightx
+				0.0, // weighty
 				GridBagConstraints.CENTER, // anchor
 				GridBagConstraints.BOTH, // fill
 				new Insets(0, 0, 0, 0), // insets

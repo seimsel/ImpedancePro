@@ -11,22 +11,26 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.alee.extended.button.WebSwitch;
+
 /**
  * The <code>ReturnLossPanel</code> class contains the settings for the graphs.
  * 
  * @author Simon Zumbrunnen
  */
-public class ReturnLossPanel extends JPanel implements ActionListener {
+public class SettingsPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	String[] returnLossStrings = { "SWR", "R" };
 
 	public JComboBox<String> cbReturnLoss;
+	public WebSwitch btnMonteCarlo;
 
 	private JLabel lbReturnLoss;
+	private JLabel lbMonteCarlo;
 	private ImpedanceProController controller;
 
-	public ReturnLossPanel(ImpedanceProController controller) {
+	public SettingsPanel(ImpedanceProController controller) {
 		super();
 		
 		this.controller = controller;
@@ -38,9 +42,16 @@ public class ReturnLossPanel extends JPanel implements ActionListener {
 
 		cbReturnLoss.setFocusable(false);
 		cbReturnLoss.addActionListener(this);
-
-		add(lbReturnLoss, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
-				1, // gridy
+		
+		btnMonteCarlo = new WebSwitch();
+		btnMonteCarlo.setSelected(true, false);
+		btnMonteCarlo.setFocusable(false);
+		btnMonteCarlo.addActionListener(this);
+		
+		lbMonteCarlo = new JLabel("Monte-Carlo:");
+		
+		add(lbMonteCarlo, new GridBagConstraints(0, // gridx
+				GridBagConstraints.RELATIVE, // gridy
 				1, // gridwidth
 				1, // gridheigth
 				0.0, // weightx
@@ -52,8 +63,34 @@ public class ReturnLossPanel extends JPanel implements ActionListener {
 				0 // ipady
 				));
 		
-		add(cbReturnLoss, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
-				1, // gridy
+		add(btnMonteCarlo, new GridBagConstraints(1, // gridx
+				GridBagConstraints.RELATIVE, // gridy
+				2, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.WEST, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
+		
+		add(lbReturnLoss, new GridBagConstraints(0, // gridx
+				GridBagConstraints.RELATIVE, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
+		
+		add(cbReturnLoss, new GridBagConstraints(1, // gridx
+				GridBagConstraints.RELATIVE, // gridy
 				1, // gridwidth
 				1, // gridheigth
 				0.0, // weightx

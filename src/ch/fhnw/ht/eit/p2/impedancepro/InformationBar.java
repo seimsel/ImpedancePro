@@ -34,9 +34,9 @@ public class InformationBar extends JPanel implements ActionListener {
 		
 		try {
 			btnInfo.setIcon(new ImageIcon(ImageUtil
-					.loadResourceImage("info_26.png")));
+					.loadResourceImage("info_20.png")));
 			btnHelp.setIcon(new ImageIcon(ImageUtil
-					.loadResourceImage("help_26.png")));
+					.loadResourceImage("help_20.png")));
 		} catch (NullPointerException ex) {
 			System.out.println("Could not load Icons");
 		}

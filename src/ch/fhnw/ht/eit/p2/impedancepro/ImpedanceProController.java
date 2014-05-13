@@ -68,17 +68,19 @@ public class ImpedanceProController {
 	public void viewAction() {
 
 		System.out.println("View action");
-		
+
 		getNewValues();
 
 		if (viewHasChanged()) {
-			
+
 			System.out.println("View has changed");
-			
-			double frequency = EngineeringUtil.parse(getView().inputView.sourceInput.frequencyPanel.tfFrequency.getText());
-			
+
+			double frequency = EngineeringUtil
+					.parse(getView().inputView.sourceInput.frequencyPanel.tfFrequency
+							.getText());
+
 			int sourceTopology = getView().inputView.sourceInput.getTopology();
-			
+
 			ElectricalComponent[] sourceComponents = new ElectricalComponent[] {
 					new ElectricalComponent(
 							getView().inputView.sourceInput.valuePanel.tfValue1
@@ -86,9 +88,9 @@ public class ImpedanceProController {
 					new ElectricalComponent(
 							getView().inputView.sourceInput.valuePanel.tfValue2
 									.getText()) };
-			
+
 			int loadTopology = getView().inputView.loadInput.getTopology();
-			
+
 			ElectricalComponent[] loadComponents = new ElectricalComponent[] {
 					new ElectricalComponent(
 							getView().inputView.loadInput.valuePanel.tfValue1
@@ -96,19 +98,31 @@ public class ImpedanceProController {
 					new ElectricalComponent(
 							getView().inputView.loadInput.valuePanel.tfValue2
 									.getText()) };
-			
-			SourceLoadNetwork sourceNetwork = new SourceLoadNetwork(sourceTopology, sourceComponents);
-			SourceLoadNetwork loadNetwork = new SourceLoadNetwork(loadTopology, loadComponents);
-			
-			model.getNetwork().calculateMatchingNetworks(sourceNetwork, loadNetwork, frequency);
-			model.getNetwork().calculateReturnLossOfAllSolutions(frequency*0.8, frequency*1.2);
-			
-			getView().graphView
-					.setVisible(!(getView().inputView.sourceInput.getTopology() == SourceLoadNetwork.Z || getView().inputView.loadInput
-							.getTopology() == SourceLoadNetwork.Z));
-						
-			if(getView().propertiesView.monteCarloPanel.btnMonteCarlo
-					.isSelected() && !(getView().inputView.sourceInput.getTopology() == SourceLoadNetwork.Z || getView().inputView.loadInput
+
+			SourceLoadNetwork sourceNetwork = new SourceLoadNetwork(
+					sourceTopology, sourceComponents);
+			SourceLoadNetwork loadNetwork = new SourceLoadNetwork(loadTopology,
+					loadComponents);
+
+			model.getNetwork().calculateMatchingNetworks(sourceNetwork,
+					loadNetwork, frequency);
+			model.getNetwork().calculateReturnLossOfAllSolutions(
+					frequency * 0.8, frequency * 1.2);
+
+			if (getView().inputView.sourceInput.getTopology() == SourceLoadNetwork.Z
+					|| getView().inputView.loadInput.getTopology() == SourceLoadNetwork.Z) {
+				getView().graphView.setEnabled(false);
+				getView().propertiesView.settingsPanel.btnMonteCarlo.setEnabled(false);
+				getView().propertiesView.settingsPanel.cbReturnLoss.setEnabled(false);
+			} else {
+				getView().graphView.setEnabled(true);
+				getView().propertiesView.settingsPanel.btnMonteCarlo.setEnabled(true);
+				getView().propertiesView.settingsPanel.cbReturnLoss.setEnabled(true);
+			}
+
+			if (getView().propertiesView.settingsPanel.btnMonteCarlo
+					.isSelected()
+					&& !(getView().inputView.sourceInput.getTopology() == SourceLoadNetwork.Z || getView().inputView.loadInput
 							.getTopology() == SourceLoadNetwork.Z)) {
 				displayMonteCarlo(true);
 			} else {
@@ -126,7 +140,7 @@ public class ImpedanceProController {
 		InputPanel loadInput = view.inputView.loadInput;
 		SolutionPanel[] solutionPanels = view.solutionView.getSolutionPanels();
 		MonteCarloPanel monteCarloPanel = view.propertiesView.monteCarloPanel;
-		ReturnLossPanel reflectionPanel = view.propertiesView.reflectionPanel;
+		SettingsPanel settingsPanel = view.propertiesView.settingsPanel;
 
 		newInputValues = new String[] {
 				sourceInput.frequencyPanel.tfFrequency.getText(),
@@ -166,9 +180,9 @@ public class ImpedanceProController {
 		newSourceTopology = sourceInput.getTopology();
 		newLoadTopology = loadInput.getTopology();
 
-		newReflectionPlotType = reflectionPanel.cbReturnLoss.getSelectedIndex();
+		newReflectionPlotType = settingsPanel.cbReturnLoss.getSelectedIndex();
 
-		newMonteCarloState = monteCarloPanel.btnMonteCarlo.isSelected();
+		newMonteCarloState = settingsPanel.btnMonteCarlo.isSelected();
 	}
 
 	/**
@@ -236,7 +250,7 @@ public class ImpedanceProController {
 		monteCarloPanel.tfFu.setEnabled(display);
 		monteCarloPanel.tfH.setEnabled(display);
 		monteCarloPanel.tfN.setEnabled(display);
-		
+
 		for (int i = 0; i < solutionPanels.length; i++) {
 			solutionPanels[i].valuePanel.setVisible(display);
 		}
