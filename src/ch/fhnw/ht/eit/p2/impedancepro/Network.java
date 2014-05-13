@@ -237,10 +237,14 @@ public class Network {
 			}
 		}
 
-		solution1 = createNetwork(solution1, X11, X12, w);
-		solution2 = createNetwork(solution2, X21, X22, w);
-		solution3 = createNetwork(solution3, X31, X32, w);
-		solution4 = createNetwork(solution4, X41, X42, w);
+		solution1 = createNetwork(solution1, X11, MatchingNetwork.PAR, X12,
+				MatchingNetwork.SER, w);
+		solution2 = createNetwork(solution2, X21, MatchingNetwork.PAR, X22,
+				MatchingNetwork.SER, w);
+		solution3 = createNetwork(solution3, X31, MatchingNetwork.SER, X32,
+				MatchingNetwork.PAR, w);
+		solution4 = createNetwork(solution4, X41, MatchingNetwork.SER, X42,
+				MatchingNetwork.PAR, w);
 
 		matchingNetworks = new MatchingNetwork[] { solution1, solution2,
 				solution3, solution4 };
@@ -250,7 +254,8 @@ public class Network {
 	}
 
 	public MatchingNetwork createNetwork(MatchingNetwork solution,
-			double reactance1, double reactance2, double w) {
+			double reactance1, byte orientation1, double reactance2,
+			byte orientation2, double w) {
 
 		double sol1 = 0, sol2 = 0;
 
@@ -282,14 +287,14 @@ public class Network {
 
 						sol1 = reactance1 / w;
 
-						topology[0] = MatchingNetwork.PAR;
+						topology[0] = orientation1;
 						topology[1] = MatchingNetwork.L;
 
 					} else {
 
 						sol1 = -1 / (w * reactance1);
 
-						topology[0] = MatchingNetwork.PAR;
+						topology[0] = orientation1;
 						topology[1] = MatchingNetwork.C;
 
 					}
@@ -300,14 +305,14 @@ public class Network {
 
 						sol2 = reactance2 / w;
 
-						topology[2] = MatchingNetwork.SER;
+						topology[2] = orientation2;
 						topology[3] = MatchingNetwork.L;
 
 					} else {
 
 						sol2 = -1 / (w * reactance2);
 
-						topology[2] = MatchingNetwork.SER;
+						topology[2] = orientation2;
 						topology[3] = MatchingNetwork.C;
 
 					}
