@@ -1,4 +1,4 @@
-package ch.fhnw.ht.eit.p2.impedancepro.util;
+package ch.fhnw.ht.eit.p2.impedancepro;
 
 /**
  * The <code>EngineeringUtil</code> class contains methods to handle engineering

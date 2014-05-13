@@ -1,4 +1,4 @@
-package ch.fhnw.ht.eit.p2.impedancepro.util;
+package ch.fhnw.ht.eit.p2.impedancepro;
 
 import java.io.File;
 
@@ -29,7 +29,7 @@ public class DocumentUtil {
 	 * @return The <code>Image</code> object
 	 */
 	public static File loadResourcePDF(String pdfName) {
-		File pdf = new File(DocumentUtil.class.getResource(".." + File.separator + "documents/"
+		File pdf = new File(DocumentUtil.class.getResource("documents" + File.separator
 				+ pdfName).getPath());
 		return pdf;
 	}

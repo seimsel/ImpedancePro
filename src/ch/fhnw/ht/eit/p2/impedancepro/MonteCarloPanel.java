@@ -11,8 +11,6 @@ import java.awt.event.FocusListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ch.fhnw.ht.eit.p2.impedancepro.util.ImageUtil;
-
 import com.alee.extended.image.DisplayType;
 import com.alee.extended.image.WebImage;
 

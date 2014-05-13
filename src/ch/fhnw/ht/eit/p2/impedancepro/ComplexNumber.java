@@ -1,4 +1,4 @@
-package ch.fhnw.ht.eit.p2.impedancepro.complex;
+package ch.fhnw.ht.eit.p2.impedancepro;
 
 /**
  * @author Richard Gut

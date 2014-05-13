@@ -3,8 +3,6 @@ package ch.fhnw.ht.eit.p2.impedancepro;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import ch.fhnw.ht.eit.p2.impedancepro.complex.ComplexNumber;
-
 /**
  * @author Stephan Fahrni
  */

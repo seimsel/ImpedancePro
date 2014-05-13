@@ -1,6 +1,5 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
-import ch.fhnw.ht.eit.p2.impedancepro.complex.ComplexNumber;
 
 public class SourceLoadNetwork {
 	

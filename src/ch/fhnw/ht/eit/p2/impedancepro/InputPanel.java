@@ -13,8 +13,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ch.fhnw.ht.eit.p2.impedancepro.util.ImageUtil;
-
 import com.alee.extended.panel.WebButtonGroup;
 import com.alee.laf.button.WebToggleButton;
 import com.alee.managers.tooltip.TooltipManager;

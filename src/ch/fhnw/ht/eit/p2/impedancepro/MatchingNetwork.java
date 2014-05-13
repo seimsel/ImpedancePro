@@ -19,7 +19,7 @@ public class MatchingNetwork {
 	public static final int PAR_L_SER_C = 1221;
 	public static final int PAR_L_SER_L = 1222;
 	public static final int SER_C_PAR_C = 2111;
-	public static final int SER_C_PAR_L = 2122;
+	public static final int SER_C_PAR_L = 2112;
 	public static final int SER_L_PAR_C = 2211;
 	public static final int SER_L_PAR_L = 2212;
 	public static final int SER_C = 0021;

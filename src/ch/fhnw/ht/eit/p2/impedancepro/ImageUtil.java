@@ -1,4 +1,4 @@
-package ch.fhnw.ht.eit.p2.impedancepro.util;
+package ch.fhnw.ht.eit.p2.impedancepro;
 
 import java.awt.Container;
 import java.awt.Image;
@@ -44,7 +44,7 @@ public class ImageUtil {
 	 */
 	public static Image loadResourceImage(String imageName) {
 		MediaTracker tracker = new MediaTracker(p);
-		Image img = (new ImageIcon(ImageUtil.class.getResource(".." + File.separator + "images/"
+		Image img = (new ImageIcon(ImageUtil.class.getResource("images" + File.separator
 				+ imageName))).getImage();
 		tracker.addImage(img, 0);
 		try {

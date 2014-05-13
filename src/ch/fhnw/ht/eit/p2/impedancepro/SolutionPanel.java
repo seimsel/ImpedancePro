@@ -14,8 +14,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ch.fhnw.ht.eit.p2.impedancepro.util.ImageUtil;
-
 import com.alee.extended.image.DisplayType;
 import com.alee.extended.image.WebImage;
 
@@ -25,16 +23,17 @@ import com.alee.extended.image.WebImage;
  * 
  * @author Simon Zumbrunnen
  */
-public class SolutionPanel extends JPanel implements ActionListener, FocusListener {
+public class SolutionPanel extends JPanel implements ActionListener,
+		FocusListener {
 	private static final long serialVersionUID = 1L;
 
 	public JLabel lbValue1, lbValue2;
 	public ValuePanel valuePanel;
-	
+
 	private ImpedanceProController controller;
 	private int topology;
 	private JLabel lbDesignator1, lbDesignator2, lbUnit1, lbUnit2;
-	
+
 	private WebImage matchingNetworkImage;
 
 	public SolutionPanel(Color color, int topology,
@@ -43,17 +42,17 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 
 		matchingNetworkImage = new WebImage();
 		matchingNetworkImage.setDisplayType(DisplayType.fitComponent);
-		
+
 		lbDesignator1 = new JLabel();
 		lbDesignator2 = new JLabel();
 		lbValue1 = new JLabel();
 		lbValue2 = new JLabel();
 		lbUnit1 = new JLabel();
 		lbUnit2 = new JLabel();
-		
+
 		this.setTopology(topology);
 		this.controller = controller;
-		
+
 		setLayout(new GridBagLayout());
 		setBorder(BorderFactory.createLineBorder(color, 2));
 
@@ -70,7 +69,7 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 				0, // ipadx
 				50 // ipady
 				));
-		
+
 		addToRow(lbDesignator1, 1, GridBagConstraints.EAST);
 		addToRow(lbValue1, 1, GridBagConstraints.EAST);
 		addToRow(lbUnit1, 1, GridBagConstraints.WEST);
@@ -85,12 +84,12 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 		valuePanel.tfValue2.addFocusListener(this);
 		valuePanel.tfTolerance1.addFocusListener(this);
 		valuePanel.tfTolerance2.addFocusListener(this);
-		
+
 		valuePanel.tfValue1.addActionListener(this);
 		valuePanel.tfValue2.addActionListener(this);
 		valuePanel.tfTolerance1.addActionListener(this);
 		valuePanel.tfTolerance2.addActionListener(this);
-		
+
 		valuePanel.setBorder(BorderFactory.createTitledBorder("Monte-Carlo"));
 
 		add(valuePanel, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
@@ -132,7 +131,7 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 				0 // ipady
 				));
 	}
-	
+
 	public void actionPerformed(ActionEvent ae) {
 		controller.viewAction();
 	}
@@ -156,7 +155,7 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 
 	public void setTopology(int topology) {
 		this.topology = topology;
-		
+
 		try {
 			matchingNetworkImage.setImage(ImageUtil
 					.loadResourceImage("matching_" + topology + "_512.png"));
@@ -164,47 +163,52 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 			System.out.println("Could not load Solution-Panel-Image: matching_"
 					+ topology + "_512.png");
 		}
-		
+
 		switch (topology) {
 		default:
-		case 0000:
+		case MatchingNetwork.NONE:
 			lbDesignator1.setText(" ");
 			lbDesignator2.setText(" ");
 			lbUnit1.setText(" ");
 			lbUnit2.setText(" ");
 			break;
-		case 0021:
-		case 1100:
+		case MatchingNetwork.SER_C:
+		case MatchingNetwork.PAR_C:
 			lbDesignator1.setText("C1: ");
 			lbDesignator2.setText(" ");
 			lbUnit1.setText("F");
 			lbUnit2.setText(" ");
 			break;
-		case 0022:
-		case 1200:
+		case MatchingNetwork.SER_L:
+		case MatchingNetwork.PAR_L:
 			lbDesignator1.setText("L1: ");
 			lbDesignator2.setText(" ");
 			lbUnit1.setText("H");
 			lbUnit2.setText(" ");
 			break;
-		case 1122:
-		case 1221:
-		case 2112:
-		case 2211:
+		case MatchingNetwork.PAR_L_SER_C:
+		case MatchingNetwork.SER_L_PAR_C:
+			lbDesignator1.setText("L1: ");
+			lbDesignator2.setText("C1: ");
+			lbUnit1.setText("H");
+			lbUnit2.setText("F");
+			break;
+		case MatchingNetwork.PAR_C_SER_L:
+		case MatchingNetwork.SER_C_PAR_L:
 			lbDesignator1.setText("C1: ");
 			lbDesignator2.setText("L1: ");
 			lbUnit1.setText("F");
 			lbUnit2.setText("H");
 			break;
-		case 1222:
-		case 2212:
+		case MatchingNetwork.PAR_L_SER_L:
+		case MatchingNetwork.SER_L_PAR_L:
 			lbDesignator1.setText("L1: ");
 			lbDesignator2.setText("L2: ");
 			lbUnit1.setText("H");
 			lbUnit2.setText("H");
 			break;
-		case 1121:
-		case 2111:
+		case MatchingNetwork.PAR_C_SER_C:
+		case MatchingNetwork.SER_C_PAR_C:
 			lbDesignator1.setText("C1: ");
 			lbDesignator2.setText("C2: ");
 			lbUnit1.setText("F");

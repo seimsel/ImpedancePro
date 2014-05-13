@@ -13,8 +13,6 @@ import java.util.Observer;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-import ch.fhnw.ht.eit.p2.impedancepro.util.ImageUtil;
-
 /**
  * The <code>ImpedanceProView</code> class is the main view of ImpedancePro. It
  * displays all the relevant data.

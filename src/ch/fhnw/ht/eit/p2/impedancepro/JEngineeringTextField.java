@@ -4,8 +4,6 @@ import java.awt.Color;
 
 import javax.swing.JTextField;
 
-import ch.fhnw.ht.eit.p2.impedancepro.util.EngineeringUtil;
-
 public class JEngineeringTextField extends JTextField {
 	private static final long serialVersionUID = 1L;
 		

@@ -8,8 +8,6 @@ import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import ch.fhnw.ht.eit.p2.impedancepro.util.EngineeringUtil;
-
 /**
  * The <code>SolutionView</code> class combines up to 4
  * <code>SolutionPanel</code>s.

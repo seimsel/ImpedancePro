@@ -11,8 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ch.fhnw.ht.eit.p2.impedancepro.util.ImageUtil;
-
 public class InformationBar extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	

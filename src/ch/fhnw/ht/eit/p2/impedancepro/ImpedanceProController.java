@@ -4,8 +4,6 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.util.Arrays;
 
-import ch.fhnw.ht.eit.p2.impedancepro.util.DocumentUtil;
-
 /**
  * The <code>ImpedanceProController</code> class triggers the models
  * calculations, as soon as there are changes in the view. It also changes
