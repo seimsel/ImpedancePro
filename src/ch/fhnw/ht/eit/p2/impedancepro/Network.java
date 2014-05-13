@@ -95,8 +95,6 @@ public class Network {
 		// Initialize varbiable with zero
 		double LSG1BT1 = 0, LSG1BT2 = 0, LSG2BT1 = 0, LSG2BT2 = 0, LSG3BT1 = 0, LSG3BT2 = 0, LSG4BT1 = 0, LSG4BT2 = 0;
 
-		byte[] topology = new byte[4];
-
 		double w = 0;
 
 		double re = 0, a = 0, b = 0, c = 0;
@@ -237,109 +235,58 @@ public class Network {
 
 			}
 		}
+		
+		solution1 = createNetwork(solution1,X11,X12,LSG1BT1,LSG1BT2,w);
+		solution2 = createNetwork(solution2,X21,X22,LSG2BT1,LSG2BT2,w);
+		solution3 = createNetwork(solution3,X31,X32,LSG3BT1,LSG3BT2,w);
+		solution4 = createNetwork(solution4,X41,X42,LSG4BT1,LSG4BT2,w);
+				
 
-		// determine C or L of solution 1
+		matchingNetworks = new MatchingNetwork[] { solution1, solution2,
+				solution3, solution4 };
 
-		if (solution1 != null) {
+		model.setChanged();
+		model.notifyObservers();
+	}
 
-			if (X11 == 0 && X12 == 0) {
+	public MatchingNetwork createNetwork(MatchingNetwork solution,
+			double reactance1, double reactance2, double sol1, double sol2,
+			double w) {
+			
+		byte[] topology = new byte[4];
+		
+		if (solution != null) {
 
-				solution1 = null;
+			// determine C or L of solution
+
+			if (reactance1 == 0 && reactance2 == 0) {
+
+				solution = null;
 
 			} else {
 
-				if (X11 == 0) {
-
-					// only wire
+				if (reactance1 == 0) {
 
 					topology[0] = MatchingNetwork.EMPTY;
 					topology[1] = MatchingNetwork.EMPTY;
 
-				} else {
-
-					if (X11 > 0) {
-
-						LSG1BT1 = X11 / w;
-
-						topology[0] = MatchingNetwork.PAR;
-						topology[1] = MatchingNetwork.L;
-
-					} else {
-
-						LSG1BT1 = -1 / (w * X11);
-
-						topology[0] = MatchingNetwork.PAR;
-						topology[1] = MatchingNetwork.C;
-
-					}
-				}
-
-				// determine C or L of solution 1
-
-				if (X12 == 0) {
+				} else if (reactance2 == 0) {
 
 					topology[2] = MatchingNetwork.EMPTY;
 					topology[3] = MatchingNetwork.EMPTY;
 
 				} else {
 
-					if (X12 > 0) {
+					if (reactance1 > 0) {
 
-						LSG1BT2 = X12 / w;
-
-						topology[2] = MatchingNetwork.SER;
-						topology[3] = MatchingNetwork.L;
-
-					} else {
-
-						LSG1BT2 = -1 / (w * X12);
-
-						topology[2] = MatchingNetwork.SER;
-						topology[3] = MatchingNetwork.C;
-
-					}
-
-				}
-
-				solution1.electricalComponents[0].setValue(LSG1BT1);
-				solution1.electricalComponents[1].setValue(LSG1BT2);
-				solution1.setTopology(byteArrayToInt(topology));
-
-			}
-
-		}
-
-		if (solution2 != null) {
-
-			// determine C or L of solution 2
-			if (X21 == 0 && X22 == 0) {
-
-				solution2 = null;
-
-			} else {
-
-				if (X21 == 0) {
-
-					topology[0] = MatchingNetwork.EMPTY;
-					topology[1] = MatchingNetwork.EMPTY;
-
-				} else if (X22 == 0) {
-
-					topology[2] = MatchingNetwork.EMPTY;
-					topology[3] = MatchingNetwork.EMPTY;
-
-				} else {
-
-					if (X21 > 0) {
-
-						LSG2BT1 = X21 / w;
+						sol1 = reactance1 / w;
 
 						topology[0] = MatchingNetwork.PAR;
 						topology[1] = MatchingNetwork.L;
 
 					} else {
 
-						LSG2BT1 = -1 / (w * X21);
+						sol1 = -1 / (w * reactance1);
 
 						topology[0] = MatchingNetwork.PAR;
 						topology[1] = MatchingNetwork.C;
@@ -348,169 +295,33 @@ public class Network {
 
 					// determine C or L of solution 2
 
-					if (X22 > 0) {
+					if (reactance2 > 0) {
 
-						LSG2BT2 = X22 / w;
-
-						topology[2] = MatchingNetwork.SER;
-						topology[3] = MatchingNetwork.L;
-
-					} else {
-
-						LSG2BT2 = -1 / (w * X22);
+						sol2 = reactance2 / w;
 
 						topology[2] = MatchingNetwork.SER;
-						topology[3] = MatchingNetwork.C;
-
-					}
-
-				}
-
-				solution2.electricalComponents[0].setValue(LSG2BT1);
-				solution2.electricalComponents[1].setValue(LSG2BT2);
-				solution2.setTopology(byteArrayToInt(topology));
-
-			}
-
-		}
-
-		if (solution3 != null) {
-
-			// determine C or L of solution 3
-
-			if (X31 == 0 && X32 == 0) {
-
-				solution3 = null;
-
-			} else {
-
-				if (X31 == 0) {
-
-					topology[0] = MatchingNetwork.EMPTY;
-					topology[1] = MatchingNetwork.EMPTY;
-
-				} else {
-
-					if (X31 > 0) {
-
-						LSG3BT1 = X31 / w;
-
-						topology[0] = MatchingNetwork.SER;
-						topology[1] = MatchingNetwork.L;
-
-					} else {
-
-						LSG3BT1 = -1 / (w * X31);
-
-						topology[0] = MatchingNetwork.SER;
-						topology[1] = MatchingNetwork.C;
-					}
-				}
-
-				if (X32 == 0) {
-
-					topology[2] = MatchingNetwork.EMPTY;
-					topology[3] = MatchingNetwork.EMPTY;
-
-				} else {
-
-					// determine C or L of solution 3
-
-					if (X32 > 0) {
-
-						LSG3BT2 = X32 / w;
-
-						topology[2] = MatchingNetwork.PAR;
 						topology[3] = MatchingNetwork.L;
 
 					} else {
 
-						LSG3BT2 = -1 / (w * X32);
+						sol2 = -1 / (w * reactance2);
 
-						topology[2] = MatchingNetwork.PAR;
+						topology[2] = MatchingNetwork.SER;
 						topology[3] = MatchingNetwork.C;
+
 					}
+
 				}
 
-				solution3.electricalComponents[0].setValue(LSG3BT1);
-				solution3.electricalComponents[1].setValue(LSG3BT2);
-				solution3.setTopology(byteArrayToInt(topology));
+				solution.electricalComponents[0].setValue(sol1);
+				solution.electricalComponents[1].setValue(sol2);
+				solution.setTopology(byteArrayToInt(topology));
 
 			}
 
 		}
 
-		if (solution4 != null) {
-
-			// determine C or L of solution 4
-
-			if (X41 == 0 && X42 == 0) {
-
-				solution4 = null;
-
-			} else {
-
-				if (X41 == 0) {
-
-					topology[0] = MatchingNetwork.EMPTY;
-					topology[1] = MatchingNetwork.EMPTY;
-
-				} else {
-
-					if (X41 >= 0) {
-
-						LSG4BT1 = X41 / w;
-
-						topology[0] = MatchingNetwork.SER;
-						topology[1] = MatchingNetwork.L;
-
-					} else {
-
-						LSG4BT1 = -1 / (w * X41);
-
-						topology[0] = MatchingNetwork.SER;
-						topology[1] = MatchingNetwork.C;
-					}
-				}
-
-				// determine C or L of solution 4
-
-				if (X42 == 0) {
-
-					topology[2] = MatchingNetwork.EMPTY;
-					topology[3] = MatchingNetwork.EMPTY;
-				} else {
-
-					if (X42 > 0) {
-
-						LSG4BT2 = X42 / w;
-
-						topology[2] = MatchingNetwork.PAR;
-						topology[3] = MatchingNetwork.L;
-
-					} else {
-
-						LSG4BT2 = -1 / (w * X42);
-
-						topology[2] = MatchingNetwork.PAR;
-						topology[3] = MatchingNetwork.C;
-					}
-
-				}
-
-				solution4.electricalComponents[0].setValue(LSG4BT1);
-				solution4.electricalComponents[1].setValue(LSG4BT2);
-				solution4.setTopology(byteArrayToInt(topology));
-
-			}
-
-		}
-
-		matchingNetworks = new MatchingNetwork[] { solution1, solution2,
-				solution3, solution4 };
-
-		model.setChanged();
-		model.notifyObservers();
+		return solution;
 	}
 
 	public double calculateReturnLossAtFrequency(
@@ -610,12 +421,12 @@ public class Network {
 			double upperFrequency) {
 		XYSeries rData[] = new XYSeries[getMatchingNetworks().length];
 		XYSeriesCollection rDataCollection = new XYSeriesCollection();
-		
+
 		for (int i = 0; i < getMatchingNetworks().length; i++) {
 			rData[i] = new XYSeries("return_loss" + i);
 			double[] f = linspace(lowerFrequency, upperFrequency, 100e3);
 
-			if(getMatchingNetworks()[i] != null) {
+			if (getMatchingNetworks()[i] != null) {
 				for (int j = 0; j < f.length; j++) {
 					rData[i].add(
 							f[j],
@@ -624,7 +435,7 @@ public class Network {
 									f[j]));
 				}
 			}
-				rDataCollection.addSeries(rData[i]);
+			rDataCollection.addSeries(rData[i]);
 		}
 
 		setReturnLossData(rDataCollection);
