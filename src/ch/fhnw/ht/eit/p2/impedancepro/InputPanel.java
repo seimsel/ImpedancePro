@@ -12,7 +12,6 @@ import java.awt.event.FocusListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import ch.fhnw.ht.eit.p2.impedancepro.util.ImageUtil;
 
@@ -26,7 +25,7 @@ import com.alee.managers.tooltip.TooltipWay;
  * 
  * @author Simon Zumbrunnen
  */
-public class InputPanel extends JPanel implements ActionListener {
+public class InputPanel extends JPanel implements ActionListener, FocusListener {
 	private static final long serialVersionUID = 1L;
 
 	public static final byte SOURCE = 0;
@@ -222,16 +221,28 @@ public class InputPanel extends JPanel implements ActionListener {
 		controller.viewAction();
 	}
 
+	public void focusGained(FocusEvent e) {
+
+	}
+
+	/**
+	 * Part of the <code>FocusListener</code> interface. Is used to fire an
+	 * action as soon as a textfield loses focus.
+	 */
+	public void focusLost(FocusEvent e) {
+		ActionEvent ae = new ActionEvent(this, 0, "focus_action");
+		actionPerformed(ae);
+	}
+
 	/**
 	 * The <code>ValuePanel</code> class contains all the inputs.
 	 * 
 	 * @author Simon Zumbrunnen
 	 */
-	public class ValuePanel extends JPanel implements ActionListener,
-			FocusListener {
+	public class ValuePanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
-		public JTextField tfValue1, tfValue2, tfTolerance1, tfTolerance2;
+		public JEngineeringTextField tfValue1, tfValue2, tfTolerance1, tfTolerance2;
 		public JLabel lbValue1, lbValue2, lbValue1Unit, lbValue2Unit;
 		public JLabel lbTolerance1Unit, lbTolerance2Unit;
 
@@ -245,20 +256,20 @@ public class InputPanel extends JPanel implements ActionListener {
 			lbTolerance1Unit = new JLabel();
 			lbTolerance2Unit = new JLabel();
 
-			tfValue1 = new JTextField("", 5);
-			tfValue2 = new JTextField("", 5);
-			tfTolerance1 = new JTextField("", 3);
-			tfTolerance2 = new JTextField("", 3);
+			tfValue1 = new JEngineeringTextField(5);
+			tfValue2 = new JEngineeringTextField(5);
+			tfTolerance1 = new JEngineeringTextField(3);
+			tfTolerance2 = new JEngineeringTextField(3);
 			
-			tfValue1.addActionListener(this);
-			tfValue2.addActionListener(this);
-			tfTolerance1.addActionListener(this);
-			tfTolerance2.addActionListener(this);
+			tfValue1.addActionListener(InputPanel.this);
+			tfValue2.addActionListener(InputPanel.this);
+			tfTolerance1.addActionListener(InputPanel.this);
+			tfTolerance2.addActionListener(InputPanel.this);
 			
-			tfValue1.addFocusListener(this);
-			tfValue2.addFocusListener(this);
-			tfTolerance1.addFocusListener(this);
-			tfTolerance2.addFocusListener(this);
+			tfValue1.addFocusListener(InputPanel.this);
+			tfValue2.addFocusListener(InputPanel.this);
+			tfTolerance1.addFocusListener(InputPanel.this);
+			tfTolerance2.addFocusListener(InputPanel.this);
 
 			add(lbValue1);
 			add(tfValue1);
@@ -274,28 +285,6 @@ public class InputPanel extends JPanel implements ActionListener {
 			add(tfTolerance2);
 			add(lbTolerance2Unit);
 		}
-
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() instanceof WebToggleButton) {
-				WebToggleButton btn = (WebToggleButton) e.getSource();
-				setTopology(Integer.parseInt(btn.getName()));
-			}
-
-			controller.viewAction();
-		}
-
-		public void focusGained(FocusEvent e) {
-
-		}
-
-		/**
-		 * Part of the <code>FocusListener</code> interface. Is used to fire an
-		 * action as soon as a textfield loses focus.
-		 */
-		public void focusLost(FocusEvent e) {
-			ActionEvent ae = new ActionEvent(this, 0, "focus_action");
-			actionPerformed(ae);
-		}
 	}
 
 	/**
@@ -307,14 +296,17 @@ public class InputPanel extends JPanel implements ActionListener {
 	public class FrequencyPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
-		public JTextField tfFrequency;
+		public JEngineeringTextField tfFrequency;
 		private JLabel lbFrequency, lbFrequencyUnit;
 
 		public FrequencyPanel() {
-			tfFrequency = new JTextField("", 4);
+			tfFrequency = new JEngineeringTextField(4);
 			lbFrequency = new JLabel("<html><i>f</i>:</html>");
-			lbFrequencyUnit = new JLabel("MHz");
+			lbFrequencyUnit = new JLabel("Hz");
 
+			tfFrequency.addActionListener(InputPanel.this);
+			tfFrequency.addFocusListener(InputPanel.this);
+			
 			add(lbFrequency);
 			add(tfFrequency);
 			add(lbFrequencyUnit);

@@ -10,7 +10,6 @@ import java.awt.event.FocusListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import ch.fhnw.ht.eit.p2.impedancepro.util.ImageUtil;
 
@@ -27,7 +26,7 @@ public class MonteCarloPanel extends JPanel implements ActionListener,
 		FocusListener {
 	private static final long serialVersionUID = 1L;
 
-	public JTextField tfN, tfFu, tfFo, tfH;
+	public JEngineeringTextField tfN, tfFu, tfFo, tfH;
 
 	private JLabel lbN, lbFu, lbFo, lbH;
 
@@ -43,10 +42,10 @@ public class MonteCarloPanel extends JPanel implements ActionListener,
 		lbFo = new JLabel("<html><i>f</i>g<sub>o</sub>: </html>");
 		lbH = new JLabel("h:");
 
-		tfN = new JTextField(4);
-		tfFu = new JTextField(4);
-		tfFo = new JTextField(4);
-		tfH = new JTextField(4);
+		tfN = new JEngineeringTextField(4);
+		tfFu = new JEngineeringTextField(4);
+		tfFo = new JEngineeringTextField(4);
+		tfH = new JEngineeringTextField(4);
 
 		tfN.addFocusListener(this);
 		tfFu.addFocusListener(this);

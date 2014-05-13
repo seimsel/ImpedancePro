@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import ch.fhnw.ht.eit.p2.impedancepro.util.DocumentUtil;
-import ch.fhnw.ht.eit.p2.impedancepro.util.EngineeringUtil;
 
 /**
  * The <code>ImpedanceProController</code> class triggers the models
@@ -75,29 +74,28 @@ public class ImpedanceProController {
 
 			System.out.println("View has changed");
 
-			double frequency = EngineeringUtil
-					.parse(getView().inputView.sourceInput.frequencyPanel.tfFrequency
-							.getText());
+			double frequency = getView().inputView.sourceInput.frequencyPanel.tfFrequency
+							.getValue();
 
 			int sourceTopology = getView().inputView.sourceInput.getTopology();
 
 			ElectricalComponent[] sourceComponents = new ElectricalComponent[] {
 					new ElectricalComponent(
 							getView().inputView.sourceInput.valuePanel.tfValue1
-									.getText()),
+									.getValue()),
 					new ElectricalComponent(
 							getView().inputView.sourceInput.valuePanel.tfValue2
-									.getText()) };
+									.getValue()) };
 
 			int loadTopology = getView().inputView.loadInput.getTopology();
 
 			ElectricalComponent[] loadComponents = new ElectricalComponent[] {
 					new ElectricalComponent(
 							getView().inputView.loadInput.valuePanel.tfValue1
-									.getText()),
+									.getValue()),
 					new ElectricalComponent(
 							getView().inputView.loadInput.valuePanel.tfValue2
-									.getText()) };
+									.getValue()) };
 
 			SourceLoadNetwork sourceNetwork = new SourceLoadNetwork(
 					sourceTopology, sourceComponents);

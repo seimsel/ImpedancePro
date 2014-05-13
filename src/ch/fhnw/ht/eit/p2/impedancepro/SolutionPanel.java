@@ -13,7 +13,6 @@ import java.awt.event.FocusListener;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import ch.fhnw.ht.eit.p2.impedancepro.util.ImageUtil;
 
@@ -223,19 +222,19 @@ public class SolutionPanel extends JPanel implements ActionListener, FocusListen
 	public class ValuePanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
-		public JTextField tfValue1;
-		public JTextField tfValue2;
-		public JTextField tfTolerance1;
-		public JTextField tfTolerance2;
+		public JEngineeringTextField tfValue1;
+		public JEngineeringTextField tfValue2;
+		public JEngineeringTextField tfTolerance1;
+		public JEngineeringTextField tfTolerance2;
 		public JLabel lbMonteCarlo;
 
 		public ValuePanel(int topology) {
 			setLayout(new GridBagLayout());
 
-			tfValue1 = new JTextField("", 5);
-			tfValue2 = new JTextField("", 5);
-			tfTolerance1 = new JTextField("", 3);
-			tfTolerance2 = new JTextField("", 3);
+			tfValue1 = new JEngineeringTextField(5);
+			tfValue2 = new JEngineeringTextField(5);
+			tfTolerance1 = new JEngineeringTextField(3);
+			tfTolerance2 = new JEngineeringTextField(3);
 			lbMonteCarlo = new JLabel();
 
 			add(new JLabel("Erfüllt: "), new GridBagConstraints(

@@ -244,7 +244,7 @@ public class Network {
 
 		matchingNetworks = new MatchingNetwork[] { solution1, solution2,
 				solution3, solution4 };
-
+		
 		model.setChanged();
 		model.notifyObservers();
 	}

@@ -8,6 +8,8 @@ import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import ch.fhnw.ht.eit.p2.impedancepro.util.EngineeringUtil;
+
 /**
  * The <code>SolutionView</code> class combines up to 4
  * <code>SolutionPanel</code>s.
@@ -62,10 +64,10 @@ public class SolutionView extends JPanel {
 		for (int i = 0; i < matchingNetworks.length; i++) {
 			if (matchingNetworks[i] != null) {
 				solutionPanels[i].setVisible(true);
-				solutionPanels[i].lbValue1.setText(matchingNetworks[i]
-						.getElectricalComponents()[0].getValueString());
-				solutionPanels[i].lbValue2.setText(matchingNetworks[i]
-						.getElectricalComponents()[1].getValueString());
+				solutionPanels[i].lbValue1.setText(EngineeringUtil.convert(matchingNetworks[i]
+						.getElectricalComponents()[0].getValue(), 3));
+				solutionPanels[i].lbValue2.setText(EngineeringUtil.convert(matchingNetworks[i]
+						.getElectricalComponents()[1].getValue(), 3));
 				solutionPanels[i].setTopology(matchingNetworks[i].getTopology());
 			} else {
 				solutionPanels[i].setVisible(false);
