@@ -61,6 +61,13 @@ public class EngineeringUtil {
 	 *            The String to be parsed
 	 */
 	public static double parse(String str) {
+		if (str.contains("e") || str.contains("E") ) {
+			
+			System.out.println("There is a e or E");
+			return Double.parseDouble(str);
+		}
+		
+		
 		return parse(str.toCharArray());
 	}
 
