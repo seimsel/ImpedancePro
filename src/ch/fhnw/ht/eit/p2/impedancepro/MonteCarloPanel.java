@@ -21,7 +21,9 @@ import com.alee.extended.image.WebImage;
 public class MonteCarloPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
-	public JEngineeringTextField tfN, tfFu, tfFo, tfH;
+	JIntegerTextField tfN;
+
+	public JEngineeringTextField tfFu, tfFo, tfH;
 
 	private JLabel lbN, lbFu, lbFo, lbH;
 
@@ -37,7 +39,7 @@ public class MonteCarloPanel extends JPanel implements ActionListener {
 		lbFo = new JLabel("<html><i>f</i>g<sub>o</sub>: </html>");
 		lbH = new JLabel("h:");
 
-		tfN = new JEngineeringTextField(4);
+		tfN = new JIntegerTextField(4);
 		tfFu = new JEngineeringTextField(4);
 		tfFo = new JEngineeringTextField(4);
 		tfH = new JEngineeringTextField(4);
@@ -46,6 +48,9 @@ public class MonteCarloPanel extends JPanel implements ActionListener {
 		tfFu.addActionListener(this);
 		tfFo.addActionListener(this);
 		tfH.addActionListener(this);
+		
+		tfN.setRange(1, 10000);
+		tfH.setRange(1e-21, 1);
 
 		add(lbFo, new GridBagConstraints(0, // gridx
 				1, // gridy

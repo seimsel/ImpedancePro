@@ -11,14 +11,14 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class InformationBar extends JPanel implements ActionListener {
+public class InformationPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
 	public JLabel lbInfoText;
 
 	private ImpedanceProController controller;
 	
-	InformationBar(ImpedanceProController controller) {
+	InformationPanel(ImpedanceProController controller) {
 		super();
 		
 		this.controller = controller;

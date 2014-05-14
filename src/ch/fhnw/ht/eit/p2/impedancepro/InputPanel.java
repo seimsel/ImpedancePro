@@ -243,11 +243,16 @@ public class InputPanel extends JPanel implements ActionListener {
 			tfValue2 = new JEngineeringTextField(5);
 			tfTolerance1 = new JEngineeringTextField(3);
 			tfTolerance2 = new JEngineeringTextField(3);
-			
+						
 			tfValue1.addActionListener(InputPanel.this);
 			tfValue2.addActionListener(InputPanel.this);
 			tfTolerance1.addActionListener(InputPanel.this);
 			tfTolerance2.addActionListener(InputPanel.this);
+			
+			tfValue1.setRange(1e-21, 1e21);
+			tfValue2.setRange(1e-21, 1e21);
+			tfTolerance1.setRange(0, 99);
+			tfTolerance2.setRange(0, 99);
 
 			add(lbValue1);
 			add(tfValue1);
@@ -283,6 +288,7 @@ public class InputPanel extends JPanel implements ActionListener {
 			lbFrequencyUnit = new JLabel("Hz");
 
 			tfFrequency.addActionListener(InputPanel.this);
+			tfFrequency.setRange(1, 100e9);
 			
 			add(lbFrequency);
 			add(tfFrequency);

@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,6 +30,8 @@ public class SettingsPanel extends JPanel implements ActionListener {
 
 	private JLabel lbReturnLoss;
 	private JLabel lbMonteCarlo;
+	private JButton btnInfo;
+	private JButton btnHelp;
 	private ImpedanceProController controller;
 
 	public SettingsPanel(ImpedanceProController controller) {
@@ -49,6 +53,30 @@ public class SettingsPanel extends JPanel implements ActionListener {
 		btnMonteCarlo.addActionListener(this);
 		
 		lbMonteCarlo = new JLabel("Monte-Carlo:");
+		
+		btnInfo = new JButton();
+		btnHelp = new JButton();
+		
+		try {
+			btnInfo.setIcon(new ImageIcon(ImageUtil
+					.loadResourceImage("info_20.png")));
+			btnHelp.setIcon(new ImageIcon(ImageUtil
+					.loadResourceImage("help_20.png")));
+		} catch (NullPointerException ex) {
+			System.out.println("Could not load Icons");
+		}
+		
+		btnInfo.setFocusable(false);
+		btnInfo.setContentAreaFilled(false);
+		btnInfo.setBorderPainted(false);
+		btnInfo.addActionListener(this);
+		btnInfo.setName("info");
+		
+		btnHelp.setFocusable(false);
+		btnHelp.setContentAreaFilled(false);
+		btnHelp.setBorderPainted(false);
+		btnHelp.addActionListener(this);
+		btnHelp.setName("help");
 		
 		add(lbMonteCarlo, new GridBagConstraints(0, // gridx
 				GridBagConstraints.RELATIVE, // gridy
@@ -101,10 +129,50 @@ public class SettingsPanel extends JPanel implements ActionListener {
 				0, // ipadx
 				0 // ipady
 				));
+		
+		add(btnInfo, new GridBagConstraints(0, // gridx
+				GridBagConstraints.RELATIVE, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
+		
+		add(btnHelp, new GridBagConstraints(1, // gridx
+				GridBagConstraints.RELATIVE, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		controller.viewAction();
+	public void actionPerformed(ActionEvent e) {		
+		
+		if(e.getSource() instanceof JButton) {
+			JButton btn = (JButton) e.getSource();		
+			if(btn.getName() == "info") {
+				controller.openInfoPDF();
+			} else if(btn.getName() == "help") {
+				controller.openHelpPDF();
+			}
+		} else if(e.getSource() instanceof WebSwitch) {
+			WebSwitch sw = (WebSwitch) e.getSource();
+			controller.displayMonteCarlo(sw.isSelected());
+		} else if(e.getSource() instanceof JComboBox) {
+			JComboBox<?> cb = (JComboBox<?>) e.getSource();
+			controller.setGraphType(cb.getSelectedIndex());
+		}
 	}
 
 	public void update(Observable obs, Object obj) {

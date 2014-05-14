@@ -24,13 +24,12 @@ public class DocumentUtil {
 	 * Loads a PDF which is inside the "documents" resource folder.
 	 * 
 	 * @param pdfName
-	 *            Relative path to the pdf (normally image name e.g.
-	 *            "file.pdf")
+	 *            Relative path to the pdf (normally image name e.g. "file.pdf")
 	 * @return The <code>Image</code> object
 	 */
 	public static File loadResourcePDF(String pdfName) {
-		File pdf = new File(DocumentUtil.class.getResource("documents" + File.separator
-				+ pdfName).getPath());
+		File pdf = new File(DocumentUtil.class.getResource(
+				"documents/" + pdfName).getPath());
 		return pdf;
 	}
 }

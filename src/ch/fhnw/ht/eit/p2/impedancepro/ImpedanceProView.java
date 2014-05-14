@@ -43,7 +43,6 @@ public class ImpedanceProView extends JFrame implements Observer {
 	public SolutionView solutionView;
 	public GraphView graphView;
 	public PropertiesView propertiesView;
-	public InformationBar informationBar;
 
 	public ImpedanceProView(ImpedanceProController controller) {
 		super();
@@ -87,7 +86,6 @@ public class ImpedanceProView extends JFrame implements Observer {
 		solutionView = new SolutionView(controller);
 		graphView = new GraphView();
 		propertiesView = new PropertiesView(controller);
-		informationBar = new InformationBar(controller);
 
 		contentPane.add(inputView, new GridBagConstraints(0, // gridx
 				GridBagConstraints.RELATIVE, // gridy
@@ -140,19 +138,6 @@ public class ImpedanceProView extends JFrame implements Observer {
 				0, // ipadx
 				0 // ipady
 				));
-
-		contentPane.add(informationBar, new GridBagConstraints(0, // gridx
-				GridBagConstraints.RELATIVE, // gridy
-				2, // gridwidth
-				1, // gridheigth
-				1.0, // weightx
-				0.0, // weighty
-				GridBagConstraints.CENTER, // anchor
-				GridBagConstraints.HORIZONTAL, // fill
-				new Insets(0, 0, 0, 0), // insets
-				0, // ipadx
-				0 // ipady
-				));
 	}
 
 	/**
@@ -179,26 +164,29 @@ public class ImpedanceProView extends JFrame implements Observer {
 
 		for (int i = 0; i < 6; i++) {
 			sourceInput.setTopology(i);
-			sourceInput.frequencyPanel.tfFrequency.setText("100M");
-			sourceInput.valuePanel.tfValue1.setText("50");
-			sourceInput.valuePanel.tfValue2.setText("159.2n");
-			sourceInput.valuePanel.tfTolerance1.setText("5");
-			sourceInput.valuePanel.tfTolerance2.setText("5");
+			sourceInput.frequencyPanel.tfFrequency.setValue(100e6);
+			sourceInput.valuePanel.tfValue1.setValue(50);
+			sourceInput.valuePanel.tfValue2.setValue(159.2e-9);
+			sourceInput.valuePanel.tfTolerance1.setValue(5);
+			sourceInput.valuePanel.tfTolerance2.setValue(5);
 
 			loadInput.setTopology(i);
-			loadInput.valuePanel.tfValue1.setText("60");
-			loadInput.valuePanel.tfValue2.setText("39.8p");
-			loadInput.valuePanel.tfTolerance1.setText("5");
-			loadInput.valuePanel.tfTolerance2.setText("5");
+			loadInput.valuePanel.tfValue1.setValue(60);
+			loadInput.valuePanel.tfValue2.setValue(39.8e-12);
+			loadInput.valuePanel.tfTolerance1.setValue(5);
+			loadInput.valuePanel.tfTolerance2.setValue(5);
+
+			double frequency = sourceInput.frequencyPanel.tfFrequency.getValue();
+			
+			propertiesView.monteCarloPanel.tfFu.setValue(0.9 * frequency);
+			propertiesView.monteCarloPanel.tfFo.setValue(1.1 * frequency);
 		}
 
 		sourceInput.setTopology(2);
 		loadInput.setTopology(1);
 
-		monteCarloPanel.tfFu.setText("80M");
-		monteCarloPanel.tfFo.setText("120M");
-		monteCarloPanel.tfH.setText("0.2");
-		monteCarloPanel.tfN.setText("1000");
+		monteCarloPanel.tfH.setValue(0.2);
+		monteCarloPanel.tfN.setValue(1000);
 	}
 
 	public ImpedanceProController getController() {

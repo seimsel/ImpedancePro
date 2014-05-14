@@ -219,6 +219,17 @@ public class SolutionPanel extends JPanel implements ActionListener {
 			tfValue2 = new JEngineeringTextField(5);
 			tfTolerance1 = new JEngineeringTextField(3);
 			tfTolerance2 = new JEngineeringTextField(3);
+			
+			tfValue1.setRange(1e-21, 1e21);
+			tfValue2.setRange(1e-21, 1e21);
+			tfTolerance1.setRange(0, 99);
+			tfTolerance2.setRange(0, 99);
+			
+			tfValue1.setEmptyAllowed(true);
+			tfValue2.setEmptyAllowed(true);
+			tfTolerance1.setEmptyAllowed(true);
+			tfTolerance2.setEmptyAllowed(true);
+			
 			lbMonteCarlo = new JLabel();
 
 			add(new JLabel("Erfüllt: "), new GridBagConstraints(

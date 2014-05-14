@@ -19,27 +19,17 @@ import com.alee.managers.tooltip.TooltipWay;
  * 
  */
 
-public class JEngineeringTextField extends JTextField implements FocusListener {
+public class JIntegerTextField extends JTextField implements FocusListener {
 	private static final long serialVersionUID = 1L;
-	private JEngineeringTextField txtField = this;
-	private double minValue = -Double.MAX_VALUE, maxValue = Double.MAX_VALUE,
+	private JIntegerTextField txtField = this;
+	private int minValue = -Integer.MAX_VALUE, maxValue = Integer.MAX_VALUE,
 			value;
 	private boolean emptyAllowed = false;
-	private int digits = 1;
 	private boolean edited = false;
 	private boolean errorDisplayed = false;
 
-	public JEngineeringTextField(int col) {
+	public JIntegerTextField(int col) {
 		super(col);
-		init();
-	}
-
-	public JEngineeringTextField(int digits, int col) {
-		super(col);
-		if (digits < 3 || digits > 16) {
-			throw new IllegalArgumentException();
-		}
-		this.digits = digits;
 		init();
 	}
 
@@ -50,6 +40,10 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 				if (e.getKeyChar() != KeyEvent.VK_ENTER)
 					edited = true;
 				char caracter = e.getKeyChar();
+				if (caracter == 'd' || caracter == 'f') {
+					e.consume();
+					return;
+				}
 				int offs = txtField.getCaretPosition();
 
 				String tfText = txtField.getText().substring(0, offs)
@@ -57,9 +51,9 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 
 				try {
 					if (caracter == '-' || caracter == '+' || caracter == 'e') {
-						EngineeringUtil.parse(tfText.trim() + "1");
+						Integer.parseInt(tfText.trim() + "1");
 					} else {
-						EngineeringUtil.parse(tfText.trim());
+						Integer.parseInt(tfText.trim());
 					}
 				} catch (Exception ex) {
 					e.consume();
@@ -70,7 +64,7 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 	}
 	
 	public boolean verify() {
-		double v = 0.0;
+		int v = 0;
 		if (txtField.getText().isEmpty() && isEmptyAllowed()) {
 			return true;
 		} else if (txtField.getText().isEmpty() && !isEmptyAllowed()) {
@@ -78,7 +72,7 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 			return false;
 		} else {
 			try {
-				v = EngineeringUtil.parse(txtField.getText());
+				v = Integer.parseInt(txtField.getText());
 			} catch (NumberFormatException e) {
 				errorMsg();
 				return false;
@@ -97,38 +91,38 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 		}
 	}
 
-	public void setValue(double value) {
+	public void setValue(int value) {
 		this.value = value;
 		edited = false;
-		setText(EngineeringUtil.convert(value, digits));
+		setText(String.valueOf(value));
 	}
 
 	public double getValue() {
 		return value;
 	}
 
-	public void setRange(double minValue, double maxValue) {
+	public void setRange(int minValue, int maxValue) {
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 		TooltipManager.setTooltip(
 				txtField,
-				"" + EngineeringUtil.convert(minValue, 2)
+				"" + String.valueOf(minValue)
 						+ " \u2264 Eingabe \u2264 "
-						+ EngineeringUtil.convert(maxValue, 2),
+						+ String.valueOf(maxValue),
 				TooltipWay.down, 0);
 	}
 
-	public void setMinValue(double minValue) {
+	public void setMinValue(int minValue) {
 		this.minValue = minValue;
 		TooltipManager.setTooltip(txtField,
-				"" + EngineeringUtil.convert(minValue, 2) + " \u2264 Eingabe",
+				"" + String.valueOf(minValue) + " \u2264 Eingabe",
 				TooltipWay.down, 0);
 	}
 
-	public void setMaxValue(double maxValue) {
+	public void setMaxValue(int maxValue) {
 		this.maxValue = maxValue;
 		TooltipManager.setTooltip(txtField,
-				"Eingabe \u2264 " + EngineeringUtil.convert(maxValue, 2),
+				"Eingabe \u2264 " + String.valueOf(maxValue),
 				TooltipWay.down, 0);
 	}
 
@@ -165,7 +159,7 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 
 					public void actionPerformed(ActionEvent e) {
 						setBackground(color);
-						setText(EngineeringUtil.convert(value, digits));
+						setText(String.valueOf(value));
 						edited = false;
 						errorDisplayed = false;
 					}

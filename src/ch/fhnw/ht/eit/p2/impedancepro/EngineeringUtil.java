@@ -1,5 +1,7 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
+import java.util.Locale;
+
 /**
  * The <code>EngineeringUtil</code> class contains methods to handle engineering
  * notation.
@@ -13,6 +15,7 @@ public class EngineeringUtil {
 
 	private final static char[] PREFIX_TEST_ARRAY = { 'f', 'p', 'n', 'u', 'µ',
 			'm', 'k', 'K', 'M', 'G', 'T' };
+
 	private final static int[] PREFIX_EXP_ARRAY = { -15, -12, -9, -6, -6, -3,
 			3, 3, 6, 9, 12 };
 
@@ -46,10 +49,10 @@ public class EngineeringUtil {
 
 		if (index >= 0 && index < PREFIX_ARRAY.length) {
 			// If a prefix exists use it to create the correct string
-			return String.format("%." + dp + "f%s", val, PREFIX_ARRAY[index]);
+			return String.format(Locale.US, "%." + dp + "f%s", val, PREFIX_ARRAY[index]);
 		} else {
 			// If no prefix exists just make a string of the form 000e000
-			return String.format("%." + dp + "fe%d", val, count * 3);
+			return String.format(Locale.US, "%." + dp + "fe%d", val, count * 3);
 		}
 	}
 
@@ -62,8 +65,6 @@ public class EngineeringUtil {
 	 */
 	public static double parse(String str) {
 		if (str.contains("e") || str.contains("E") ) {
-			
-			System.out.println("There is a e or E");
 			return Double.parseDouble(str);
 		}
 		
@@ -176,5 +177,9 @@ public class EngineeringUtil {
 			value *= -1;
 
 		return value * Math.pow(10, exponent);
+	}
+	
+	public static char[] getPrefixTestArray() {
+		return PREFIX_TEST_ARRAY;
 	}
 }
