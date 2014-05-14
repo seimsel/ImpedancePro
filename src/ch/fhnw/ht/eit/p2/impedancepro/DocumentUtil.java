@@ -1,6 +1,11 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.jfree.io.IOUtils;
 
 /**
  * The <code>DocumentUtil</code> class enables a simple way of loading files.
@@ -26,10 +31,16 @@ public class DocumentUtil {
 	 * @param pdfName
 	 *            Relative path to the pdf (normally image name e.g. "file.pdf")
 	 * @return The <code>Image</code> object
+	 * @throws IOException 
 	 */
-	public static File loadResourcePDF(String pdfName) {
-		File pdf = new File(DocumentUtil.class.getResource(
-				"documents/" + pdfName).getPath());
-		return pdf;
+	public static File loadResourcePDF(String pdfName) throws IOException {
+		InputStream in = DocumentUtil.class.getResourceAsStream("documents/" + pdfName);
+		File pdf = File.createTempFile("temp", ".pdf");
+        pdf.deleteOnExit();
+        FileOutputStream out = new FileOutputStream(pdf);
+        IOUtils.getInstance().copyStreams(in, out);
+        in.close();
+        out.close();
+        return pdf;
 	}
 }
