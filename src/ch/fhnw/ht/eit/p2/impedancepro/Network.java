@@ -274,11 +274,6 @@ public class Network {
 					topology[0] = MatchingNetwork.EMPTY;
 					topology[1] = MatchingNetwork.EMPTY;
 
-				} else if (reactance2 == 0) {
-
-					topology[2] = MatchingNetwork.EMPTY;
-					topology[3] = MatchingNetwork.EMPTY;
-
 				} else {
 
 					if (reactance1 > 0) {
@@ -296,6 +291,14 @@ public class Network {
 						topology[1] = MatchingNetwork.C;
 
 					}
+				}
+
+				if (reactance2 == 0) {
+
+					topology[2] = MatchingNetwork.EMPTY;
+					topology[3] = MatchingNetwork.EMPTY;
+
+				} else {
 
 					// determine C or L of solution 2
 
@@ -463,8 +466,8 @@ public class Network {
 		return value;
 	}
 
-	public double[] linspace(double begin, double end, int n) {		
-		double step = (end-begin) / (n-1);
+	public double[] linspace(double begin, double end, int n) {
+		double step = (end - begin) / (n - 1);
 		double[] res = new double[n];
 		for (int i = 0; i < res.length; i++) {
 			res[i] = begin + i * step;
