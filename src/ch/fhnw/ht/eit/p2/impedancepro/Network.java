@@ -1,5 +1,7 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
+import java.util.Random;
+
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -451,8 +453,47 @@ public class Network {
 		model.notifyObservers();
 	}
 
-	public void calculateMonteCarlo() {
+	public void calculateMonteCarlo(SourceLoadNetwork sourceNetwork,
+			SourceLoadNetwork loadNetwork, double fgo, double fgu, int n) {
 
+		Random rand = new Random(System.currentTimeMillis());
+
+		double[] componentvaluesource;
+		componentvaluesource = new double[n];
+
+		double[] componentvalueload;
+		componentvalueload = new double[n];
+
+		for (int i = 0; i < componentvaluesource.length; i++) {
+
+			componentvaluesource[i] = rand.nextDouble()
+					* ((((sourceNetwork.getElectricalComponents()[0]
+							.getTolerance() / 100) + 1.0) * sourceNetwork
+							.getElectricalComponents()[0].getValue()) - ((1.0 - (sourceNetwork
+							.getElectricalComponents()[0].getTolerance() / 100)) * sourceNetwork
+							.getElectricalComponents()[0].getValue()))
+					+ ((1.0 - (sourceNetwork.getElectricalComponents()[0]
+							.getTolerance() / 100)) * sourceNetwork
+							.getElectricalComponents()[0].getValue());
+
+			System.out.println(+componentvaluesource[i]);
+
+		}
+
+		for (int i = 0; i < componentvalueload.length; i++) {
+
+			componentvaluesource[i] = rand.nextDouble()
+					* ((((loadNetwork.getElectricalComponents()[0]
+							.getTolerance() / 100) + 1.0) * loadNetwork
+							.getElectricalComponents()[0].getValue()) - ((1.0 - (loadNetwork
+							.getElectricalComponents()[0].getTolerance() / 100)) * loadNetwork
+							.getElectricalComponents()[0].getValue()))
+					+ ((1.0 - (loadNetwork.getElectricalComponents()[0]
+							.getTolerance() / 100)) * loadNetwork
+							.getElectricalComponents()[0].getValue());
+
+			System.out.println(+componentvalueload[i]);
+		}
 	}
 
 	private int byteArrayToInt(byte[] encodedValue) {
