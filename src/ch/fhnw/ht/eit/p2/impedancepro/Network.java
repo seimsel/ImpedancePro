@@ -77,7 +77,7 @@ public class Network {
 	 * X21 = L or C parallel source
 	 * X22 = L or C in series of source
 	 * 
-	 * 	 *	Solution 3&4
+	 * Solution 3&4
 	 * 
 	 * X31 = L or C in series of load
 	 * X32 = L or C parallel load
@@ -453,51 +453,7 @@ public class Network {
 		model.notifyObservers();
 	}
 
-	public double calculateMonteCarlo(SourceLoadNetwork sourceNetwork,
-			MatchingNetwork matchingNetwork, SourceLoadNetwork loadNetwork,
-			double fgo, double fgu, int n) {
 
-		Random rand = new Random(System.currentTimeMillis());
-
-		double[] componentvaluesource;
-		componentvaluesource = new double[n];
-
-		double[] componentvalueload;
-		componentvalueload = new double[n];
-
-		for (int i = 0; i < componentvaluesource.length; i++) {
-
-			componentvaluesource[i] = rand.nextDouble()
-					* ((((sourceNetwork.getElectricalComponents()[0]
-							.getTolerance() / 100) + 1.0) * sourceNetwork
-							.getElectricalComponents()[0].getValue()) - ((1.0 - (sourceNetwork
-							.getElectricalComponents()[0].getTolerance() / 100)) * sourceNetwork
-							.getElectricalComponents()[0].getValue()))
-					+ ((1.0 - (sourceNetwork.getElectricalComponents()[0]
-							.getTolerance() / 100)) * sourceNetwork
-							.getElectricalComponents()[0].getValue());
-
-			System.out.println(+componentvaluesource[i]);
-
-		}
-
-		for (int i = 0; i < componentvalueload.length; i++) {
-
-			componentvaluesource[i] = rand.nextDouble()
-					* ((((loadNetwork.getElectricalComponents()[0]
-							.getTolerance() / 100) + 1.0) * loadNetwork
-							.getElectricalComponents()[0].getValue()) - ((1.0 - (loadNetwork
-							.getElectricalComponents()[0].getTolerance() / 100)) * loadNetwork
-							.getElectricalComponents()[0].getValue()))
-					+ ((1.0 - (loadNetwork.getElectricalComponents()[0]
-							.getTolerance() / 100)) * loadNetwork
-							.getElectricalComponents()[0].getValue());
-
-			//System.out.println(+componentvalueload[i]);
-		}
-
-		return 0.0; // Prozentangabe fŸr 1 Netzwerk
-	}
 
 	private int byteArrayToInt(byte[] encodedValue) {
 		int value = 0;
@@ -509,17 +465,7 @@ public class Network {
 
 		return value;
 	}
-
-	public void calculateMonteCarloOfAllSolutions(double fgo, double fgu, int n) {
-		for (int i = 0; i < getMatchingNetworks().length; i++) {
-			calculateMonteCarlo(getSourceNetwork(), getMatchingNetworks()[i],
-					getLoadNetwork(), fgo, fgu, n);
-		}
-		
-		model.setChanged();
-		model.notifyObservers();
-	}
-
+	
 	public double[] linspace(double begin, double end, int n) {
 		double step = (end - begin) / (n - 1);
 		double[] res = new double[n];
