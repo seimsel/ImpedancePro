@@ -33,9 +33,13 @@ public class ImpedanceProModel extends Observable {
 
 	public double calculateMonteCarlo(SourceLoadNetwork sourceNetwork,
 			MatchingNetwork matchingNetwork, SourceLoadNetwork loadNetwork,
-			double fgo, double fgu, int n) {
+			double lowerFrequency, double upperFrequency, double h, int n ) {
 		
 		Random rand = new Random(System.currentTimeMillis());
+		
+		double monteCarloResultLower = 1;
+		double monteCarloResultUpper = 1;
+		double delta = 1/n;
 
 		double tolerance0 = sourceNetwork.getElectricalComponents()[0]
 				.getTolerance();
@@ -55,12 +59,18 @@ public class ImpedanceProModel extends Observable {
 
 		double[] componentindex;
 		componentindex = new double[n];
-
+		
 		SourceLoadNetwork[] sourceNetworkMonteCarlo;
 		sourceNetworkMonteCarlo = new SourceLoadNetwork[n];
 
 		SourceLoadNetwork[] loadNetworkMonteCarlo;
 		loadNetworkMonteCarlo = new SourceLoadNetwork[n];
+		
+		double[] reflectionMonteCarloUpperFrequency;
+		reflectionMonteCarloUpperFrequency = new double[n];
+		
+		double[] reflectionMonteCarloLowerFrequency;
+		reflectionMonteCarloLowerFrequency = new double[n];
 
 		for (int i = 0; i < componentindex.length; i++) {
 
@@ -95,9 +105,22 @@ public class ImpedanceProModel extends Observable {
 			//System.out.println("Load0:"+loadNetworkMonteCarlo[i].getElectricalComponents()[0].getValue());
 			//System.out.println("Load1:"+loadNetworkMonteCarlo[i].getElectricalComponents()[1].getValue());
 			
-			//System.out.println(+(network.calculateReturnLossAtFrequency(sourceNetworkMonteCarlo[i], matchingNetwork, loadNetworkMonteCarlo[i], lowerFrequency)  ));
-			//network.calculateReturnLossAtFrequency(sourceNetworkMonteCarlo[i], matchingNetwork, loadNetworkMonteCarlo[i], upperFrequency );
-
+			System.out.println(+(network.calculateReturnLossAtFrequency(sourceNetworkMonteCarlo[i], matchingNetwork, loadNetworkMonteCarlo[i], lowerFrequency)  ));
+			
+			reflectionMonteCarloLowerFrequency[i] = network.calculateReturnLossAtFrequency(sourceNetworkMonteCarlo[i], matchingNetwork, loadNetworkMonteCarlo[i], lowerFrequency );
+			reflectionMonteCarloUpperFrequency[i] = network.calculateReturnLossAtFrequency(sourceNetworkMonteCarlo[i], matchingNetwork, loadNetworkMonteCarlo[i], upperFrequency );
+			
+			if (reflectionMonteCarloLowerFrequency[i] >= h) {
+				
+				monteCarloResultLower -= delta;
+				
+			}
+			
+			if (reflectionMonteCarloUpperFrequency[i] >= h) {
+				
+				monteCarloResultUpper -= delta;
+				
+			}
 		}
 
 		return 0.0;
