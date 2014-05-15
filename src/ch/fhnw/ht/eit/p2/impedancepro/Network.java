@@ -1,5 +1,7 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
+import java.util.Random;
+
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -9,6 +11,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class Network {
 	private XYSeriesCollection swrData, returnLossData;
+	private double monteCarloResult;
 
 	private SourceLoadNetwork sourceNetwork;
 	private MatchingNetwork[] matchingNetworks;
@@ -52,6 +55,10 @@ public class Network {
 		this.loadNetwork = loadNetwork;
 	}
 
+	public double getMonteCarloResult() {
+		return monteCarloResult;
+	}
+
 	public MatchingNetwork[] getMatchingNetworks() {
 		return matchingNetworks;
 	}
@@ -70,7 +77,7 @@ public class Network {
 	 * X21 = L or C parallel source
 	 * X22 = L or C in series of source
 	 * 
-	 * Solution 3&4
+	 * 	 *	Solution 3&4
 	 * 
 	 * X31 = L or C in series of load
 	 * X32 = L or C parallel load
@@ -78,6 +85,7 @@ public class Network {
 	 * X42 = L or C parallel load
 	 * </pre>
 	 */
+
 	public void calculateMatchingNetworks(SourceLoadNetwork sourceNetwork,
 			SourceLoadNetwork loadNetwork, double frequency) {
 
@@ -149,7 +157,16 @@ public class Network {
 			// matched network
 
 			if ((Math.pow(b, 2)) - (a * c) >= 0) {
+				if ((Math.pow(b, 2)) - (a * c) != 0) {
+					X21 = (-b - Math.sqrt((Math.pow(b, 2)) - a * c)) / (a);
 
+					X22 = -((Math.pow(XS, 2) * X21 + XS * Math.pow(X21, 2) + Math
+							.pow(RS, 2) * X21)
+							/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X21 * XS + Math
+									.pow(X21, 2)) + ZL.getIm());
+				} else {
+					solution2 = null;
+				}
 				X11 = (-b + Math.sqrt((Math.pow(b, 2)) - a * c)) / (a);
 
 				X12 = -((Math.pow(XS, 2) * X11 + XS * Math.pow(X11, 2) + Math
@@ -158,28 +175,8 @@ public class Network {
 								.pow(X11, 2)) + ZL.getIm());
 
 			} else {
-
 				solution1 = null;
-
-			}
-
-			// Check, if there a imaginary part of solution 2
-			// If there a imaginary part, component is not applicable to the
-			// matched network
-
-			if ((Math.pow(b, 2)) - (a * c) >= 0) {
-
-				X21 = (-b - Math.sqrt((Math.pow(b, 2)) - a * c)) / (a);
-
-				X22 = -((Math.pow(XS, 2) * X21 + XS * Math.pow(X21, 2) + Math
-						.pow(RS, 2) * X21)
-						/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X21 * XS + Math
-								.pow(X21, 2)) + ZL.getIm());
-
-			} else {
-
 				solution2 = null;
-
 			}
 
 			// In this part, solution 3 and 4 is calculated
@@ -195,6 +192,16 @@ public class Network {
 			// matched network
 
 			if (Math.pow(b, 2) - (a * c) >= 0) {
+				if ((Math.pow(b, 2)) - (a * c) != 0) {
+					X42 = (-b - Math.sqrt(Math.pow(b, 2) - a * c)) / (a);
+
+					X41 = -((Math.pow(XL, 2) * X42 + XL * Math.pow(X42, 2) + Math
+							.pow(RL, 2) * X42)
+							/ (Math.pow(RL, 2) + Math.pow(XL, 2) + 2 * X42 * XL + Math
+									.pow(X42, 2)) + ZS.getIm());
+				} else {
+					solution4 = null;
+				}
 
 				X32 = (-b + Math.sqrt(Math.pow(b, 2) - a * c)) / (a);
 
@@ -206,27 +213,13 @@ public class Network {
 			} else {
 
 				solution3 = null;
+				solution4 = null;
 
 			}
 
 			// Check, if there a imaginary part of solution 4
 			// If there a imaginary part, component is not applicable to the
 			// matched network
-
-			if (Math.pow(b, 2) - (a * c) >= 0) {
-
-				X42 = (-b - Math.sqrt(Math.pow(b, 2) - a * c)) / (a);
-
-				X41 = -((Math.pow(XL, 2) * X42 + XL * Math.pow(X42, 2) + Math
-						.pow(RL, 2) * X42)
-						/ (Math.pow(RL, 2) + Math.pow(XL, 2) + 2 * X42 * XL + Math
-								.pow(X42, 2)) + ZS.getIm());
-
-			} else {
-
-				solution4 = null;
-
-			}
 		}
 
 		solution1 = createNetwork(solution1, X11, MatchingNetwork.PAR, X12,
@@ -237,40 +230,9 @@ public class Network {
 				MatchingNetwork.PAR, w);
 		solution4 = createNetwork(solution4, X41, MatchingNetwork.SER, X42,
 				MatchingNetwork.PAR, w);
-		
-		int numberOfSolutions = 0;
-		if(solution1 != null) {
-			numberOfSolutions++;
-		}
-		if(solution2 != null) {
-			numberOfSolutions++;
-		}
-		if(solution3 != null) {
-			numberOfSolutions++;
-		}
-		if(solution4 != null) {
-			numberOfSolutions++;
-		}
-		
-		matchingNetworks = new MatchingNetwork[numberOfSolutions];
-		
-		int i = 0;
-		if(solution1 != null) {
-			matchingNetworks[i] = solution1;
-			i++;
-		}
-		if(solution2 != null) {
-			matchingNetworks[i] = solution2;
-			i++;
-		}
-		if(solution3 != null) {
-			matchingNetworks[i] = solution3;
-			i++;
-		}
-		if(solution4 != null) {
-			matchingNetworks[i] = solution4;
-			i++;
-		}
+
+		matchingNetworks = new MatchingNetwork[] { solution1, solution2,
+				solution3, solution4 };
 
 		model.setChanged();
 		model.notifyObservers();
@@ -476,7 +438,51 @@ public class Network {
 		model.notifyObservers();
 	}
 
+	public double calculateMonteCarlo(SourceLoadNetwork sourceNetwork,
+			MatchingNetwork matchingNetwork, SourceLoadNetwork loadNetwork,
+			double fgo, double fgu, int n) {
 
+		Random rand = new Random(System.currentTimeMillis());
+
+		double[] componentvaluesource;
+		componentvaluesource = new double[n];
+
+		double[] componentvalueload;
+		componentvalueload = new double[n];
+
+		for (int i = 0; i < componentvaluesource.length; i++) {
+
+			componentvaluesource[i] = rand.nextDouble()
+					* ((((sourceNetwork.getElectricalComponents()[0]
+							.getTolerance() / 100) + 1.0) * sourceNetwork
+							.getElectricalComponents()[0].getValue()) - ((1.0 - (sourceNetwork
+							.getElectricalComponents()[0].getTolerance() / 100)) * sourceNetwork
+							.getElectricalComponents()[0].getValue()))
+					+ ((1.0 - (sourceNetwork.getElectricalComponents()[0]
+							.getTolerance() / 100)) * sourceNetwork
+							.getElectricalComponents()[0].getValue());
+
+			// System.out.println(+componentvaluesource[i]);
+
+		}
+
+		for (int i = 0; i < componentvalueload.length; i++) {
+
+			componentvaluesource[i] = rand.nextDouble()
+					* ((((loadNetwork.getElectricalComponents()[0]
+							.getTolerance() / 100) + 1.0) * loadNetwork
+							.getElectricalComponents()[0].getValue()) - ((1.0 - (loadNetwork
+							.getElectricalComponents()[0].getTolerance() / 100)) * loadNetwork
+							.getElectricalComponents()[0].getValue()))
+					+ ((1.0 - (loadNetwork.getElectricalComponents()[0]
+							.getTolerance() / 100)) * loadNetwork
+							.getElectricalComponents()[0].getValue());
+
+			// System.out.println(+componentvalueload[i]);
+		}
+
+		return 0.0; // Prozentangabe fŸr 1 Netzwerk
+	}
 
 	private int byteArrayToInt(byte[] encodedValue) {
 		int value = 0;
@@ -488,7 +494,17 @@ public class Network {
 
 		return value;
 	}
-	
+
+	public void calculateMonteCarloOfAllSolutions(double fgo, double fgu, int n) {
+		for (int i = 0; i < getMatchingNetworks().length; i++) {
+			calculateMonteCarlo(getSourceNetwork(), getMatchingNetworks()[i],
+					getLoadNetwork(), fgo, fgu, n);
+		}
+
+		model.setChanged();
+		model.notifyObservers();
+	}
+
 	public double[] linspace(double begin, double end, int n) {
 		double step = (end - begin) / (n - 1);
 		double[] res = new double[n];
