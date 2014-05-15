@@ -98,6 +98,13 @@ public class ImpedanceProController {
 						loadNetwork, frequency);
 				model.getNetwork().calculateReturnLossOfAllSolutions(
 						frequency * 0.8, frequency * 1.2);
+				model.calculateMonteCarlo(sourceNetwork, new MatchingNetwork(),
+						loadNetwork,
+						getView().propertiesView.monteCarloPanel.tfFo
+								.getValue(),
+						getView().propertiesView.monteCarloPanel.tfFu
+								.getValue(),
+						getView().propertiesView.monteCarloPanel.tfN.getValue());
 			}
 
 			if (getView().inputView.sourceInput.frequencyPanel.tfFrequency
