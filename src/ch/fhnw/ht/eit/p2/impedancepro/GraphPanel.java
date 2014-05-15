@@ -113,4 +113,8 @@ public class GraphPanel extends JPanel {
 		plot.setRangeAxis(1, axis);
 		plot.mapDatasetToRangeAxis(1, 1);
 	}
+	
+	public void removeYieldGoal() {
+		plot.setDataset(1, null);
+	}
 }

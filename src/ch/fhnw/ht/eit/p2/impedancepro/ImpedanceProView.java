@@ -178,8 +178,8 @@ public class ImpedanceProView extends JFrame implements Observer {
 
 			double frequency = sourceInput.frequencyPanel.tfFrequency.getValue();
 			
-			propertiesView.monteCarloPanel.tfFu.setValue(0.9 * frequency);
-			propertiesView.monteCarloPanel.tfFo.setValue(1.1 * frequency);
+			propertiesView.monteCarloPanel.tfFu.setValue(0.98 * frequency);
+			propertiesView.monteCarloPanel.tfFo.setValue(1.02 * frequency);
 		}
 
 		sourceInput.setTopology(2);
