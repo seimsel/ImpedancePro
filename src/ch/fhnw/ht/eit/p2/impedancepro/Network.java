@@ -453,8 +453,9 @@ public class Network {
 		model.notifyObservers();
 	}
 
-	public void calculateMonteCarlo(SourceLoadNetwork sourceNetwork,
-			SourceLoadNetwork loadNetwork, double fgo, double fgu, int n) {
+	public double calculateMonteCarlo(SourceLoadNetwork sourceNetwork,
+			MatchingNetwork matchingNetwork, SourceLoadNetwork loadNetwork,
+			double fgo, double fgu, int n) {
 
 		Random rand = new Random(System.currentTimeMillis());
 
@@ -492,8 +493,10 @@ public class Network {
 							.getTolerance() / 100)) * loadNetwork
 							.getElectricalComponents()[0].getValue());
 
-			System.out.println(+componentvalueload[i]);
+			//System.out.println(+componentvalueload[i]);
 		}
+
+		return 0.0; // Prozentangabe für 1 Netzwerk
 	}
 
 	private int byteArrayToInt(byte[] encodedValue) {
@@ -505,6 +508,16 @@ public class Network {
 		}
 
 		return value;
+	}
+
+	public void calculateMonteCarloOfAllSolutions(double fgo, double fgu, int n) {
+		for (int i = 0; i < getMatchingNetworks().length; i++) {
+			calculateMonteCarlo(getSourceNetwork(), getMatchingNetworks()[i],
+					getLoadNetwork(), fgo, fgu, n);
+		}
+		
+		model.setChanged();
+		model.notifyObservers();
 	}
 
 	public double[] linspace(double begin, double end, int n) {

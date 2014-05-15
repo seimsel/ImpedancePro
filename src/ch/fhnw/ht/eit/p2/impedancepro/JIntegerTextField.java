@@ -97,7 +97,7 @@ public class JIntegerTextField extends JTextField implements FocusListener {
 		setText(String.valueOf(value));
 	}
 
-	public double getValue() {
+	public int getValue() {
 		return value;
 	}
 
