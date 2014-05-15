@@ -64,18 +64,23 @@ public class ImpedanceProController {
 		getNewValues();
 
 		if (viewHasChanged()) {
+			ImpedanceProView view = getView();
+			InputPanel sourceInput = view.inputView.sourceInput;
+			InputPanel loadInput = view.inputView.loadInput;
+			SolutionPanel[] solutionPanels = view.solutionView
+					.getSolutionPanels();
+			SettingsPanel settingsPanel = view.propertiesView.settingsPanel;
+			MonteCarloPanel monteCarloPanel = view.propertiesView.monteCarloPanel;
+
+			Network network = model.getNetwork();
+			MatchingNetwork[] matchingNetworks = network.getMatchingNetworks();
+
+			int sourceTopology = sourceInput.getTopology();
+			int loadTopology = loadInput.getTopology();
+
 			if (vertifyAllTextFields()) {
-				ImpedanceProView view = getView();
-				InputPanel sourceInput = view.inputView.sourceInput;
-				InputPanel loadInput = view.inputView.loadInput;
-
-				Network network = model.getNetwork();
-
 				double frequency = sourceInput.frequencyPanel.tfFrequency
 						.getValue();
-
-				int sourceTopology = sourceInput.getTopology();
-				int loadTopology = loadInput.getTopology();
 
 				ElectricalComponent[] sourceComponents = new ElectricalComponent[] {
 						new ElectricalComponent(
@@ -83,7 +88,7 @@ public class ImpedanceProController {
 								sourceInput.valuePanel.tfTolerance1.getValue()),
 						new ElectricalComponent(
 								sourceInput.valuePanel.tfValue2.getValue(),
-								sourceInput.valuePanel.tfTolerance1.getValue()) };
+								sourceInput.valuePanel.tfTolerance2.getValue()) };
 
 				ElectricalComponent[] loadComponents = new ElectricalComponent[] {
 						new ElectricalComponent(
@@ -102,105 +107,100 @@ public class ImpedanceProController {
 						* (1 - YIELD_GOAL_RANGE_MAX), frequency
 						* (1 + YIELD_GOAL_RANGE_MAX));
 
-				for (int i = 0; i < model.getNetwork().getMatchingNetworks().length; i++) {
+				for (int i = 0; i < matchingNetworks.length; i++) {
 					ElectricalComponent ec1, ec2;
 
-					if (getView().solutionView.getSolutionPanels()[i].valuePanel.tfValue1
-							.getText().isEmpty()) {
+					if (solutionPanels[i].valuePanel.tfValue1.getText()
+							.isEmpty()) {
 						ec1 = new ElectricalComponent(
-								model.getNetwork().getMatchingNetworks()[i].getElectricalComponents()[0]
+								matchingNetworks[i].getElectricalComponents()[0]
 										.getValue(), 0.0);
 					} else {
 						ec1 = new ElectricalComponent(
-								getView().solutionView.getSolutionPanels()[i].valuePanel.tfValue1
+								solutionPanels[i].valuePanel.tfValue1
 										.getValue(),
-								getView().solutionView.getSolutionPanels()[i].valuePanel.tfTolerance1
+								solutionPanels[i].valuePanel.tfTolerance1
 										.getValue());
 					}
 
-					if (getView().solutionView.getSolutionPanels()[i].valuePanel.tfValue1
-							.getText().isEmpty()) {
+					if (solutionPanels[i].valuePanel.tfValue1.getText()
+							.isEmpty()) {
 						ec2 = new ElectricalComponent(
-								model.getNetwork().getMatchingNetworks()[i].getElectricalComponents()[1]
+								matchingNetworks[i].getElectricalComponents()[1]
 										.getValue(), 0.0);
 					} else {
 						ec2 = new ElectricalComponent(
-								getView().solutionView.getSolutionPanels()[i].valuePanel.tfValue2
+								solutionPanels[i].valuePanel.tfValue2
 										.getValue(),
-								getView().solutionView.getSolutionPanels()[i].valuePanel.tfTolerance2
+								solutionPanels[i].valuePanel.tfTolerance2
 										.getValue());
 					}
 
-					setMonteCarloEnabled(!(getView().inputView.sourceInput
-							.getTopology() == SourceLoadNetwork.Z || getView().inputView.loadInput
-							.getTopology() == SourceLoadNetwork.Z));
+					setMonteCarloEnabled(!(sourceTopology == SourceLoadNetwork.Z || loadTopology == SourceLoadNetwork.Z));
 
-					if (getView().propertiesView.settingsPanel.btnMonteCarlo
-							.isSelected()) {
+					if (settingsPanel.btnMonteCarlo.isSelected()) {
 						model.calculateMonteCarlo(
 								sourceNetwork,
 								new MatchingNetwork(new ElectricalComponent[] {
 										ec1, ec2 }, model.getNetwork()
 										.getMatchingNetworks()[i].getTopology()),
-								loadNetwork,
-								getView().propertiesView.monteCarloPanel.tfFo
-										.getValue(),
-								getView().propertiesView.monteCarloPanel.tfFu
-										.getValue(),
-								getView().propertiesView.monteCarloPanel.tfN
-										.getValue());
+								loadNetwork, monteCarloPanel.tfFo.getValue(),
+								monteCarloPanel.tfFu.getValue(),
+								monteCarloPanel.tfH.getValue(),
+								monteCarloPanel.tfN.getValue());
 					}
 				}
 			}
 
-			if (getView().inputView.sourceInput.frequencyPanel.tfFrequency
-					.verify()) {
-				double frequency = getView().inputView.sourceInput.frequencyPanel.tfFrequency
+			if (sourceInput.frequencyPanel.tfFrequency.verify()) {
+				double frequency = sourceInput.frequencyPanel.tfFrequency
 						.getValue();
 
-				getView().propertiesView.monteCarloPanel.tfFu.setRange(
-						frequency * (1 - YIELD_GOAL_RANGE_MAX), frequency
-								* (1 + YIELD_GOAL_RANGE_MAX));
-				getView().propertiesView.monteCarloPanel.tfFo.setRange(
-						frequency * (1 - YIELD_GOAL_RANGE_MAX), frequency
-								* (1 + YIELD_GOAL_RANGE_MAX));
+				monteCarloPanel.tfFu.setRange(frequency
+						* (1 - YIELD_GOAL_RANGE_MAX), frequency
+						* (1 + YIELD_GOAL_RANGE_MAX));
+				monteCarloPanel.tfFo.setRange(frequency
+						* (1 - YIELD_GOAL_RANGE_MAX), frequency
+						* (1 + YIELD_GOAL_RANGE_MAX));
 
-				if (!(getView().propertiesView.monteCarloPanel.tfFu.verify() && getView().propertiesView.monteCarloPanel.tfFo
+				if (!(monteCarloPanel.tfFu.verify() && monteCarloPanel.tfFo
 						.verify())) {
-					getView().propertiesView.monteCarloPanel.tfFu
+					monteCarloPanel.tfFu
 							.setValue((1 - YIELD_GOAL_RANGE_DEFAULT)
 									* frequency);
-					getView().propertiesView.monteCarloPanel.tfFo
-							.setValue((1 + YIELD_GOAL_RANGE_MAX) * frequency);
+					monteCarloPanel.tfFo.setValue((1 + YIELD_GOAL_RANGE_MAX)
+							* frequency);
 				}
 			}
 		}
 	}
 
 	private boolean vertifyAllTextFields() {
-		boolean verify = true;
-		verify &= getView().inputView.sourceInput.frequencyPanel.tfFrequency
-				.verify();
-		verify &= getView().inputView.sourceInput.valuePanel.tfValue1.verify();
-		verify &= getView().inputView.sourceInput.valuePanel.tfValue2.verify();
-		verify &= getView().inputView.loadInput.valuePanel.tfValue1.verify();
-		verify &= getView().inputView.loadInput.valuePanel.tfValue2.verify();
+		ImpedanceProView view = getView();
+		InputPanel sourceInput = view.inputView.sourceInput;
+		InputPanel loadInput = view.inputView.loadInput;
+		SolutionPanel[] solutionPanels = view.solutionView.getSolutionPanels();
+		MonteCarloPanel monteCarloPanel = view.propertiesView.monteCarloPanel;
 
-		for (int i = 0; i < getView().solutionView.getSolutionPanels().length; i++) {
-			verify &= getView().solutionView.getSolutionPanels()[i].valuePanel.tfValue1
-					.verify();
-			verify &= getView().solutionView.getSolutionPanels()[i].valuePanel.tfValue2
-					.verify();
-			verify &= getView().solutionView.getSolutionPanels()[i].valuePanel.tfTolerance1
-					.verify();
-			verify &= getView().solutionView.getSolutionPanels()[i].valuePanel.tfTolerance2
-					.verify();
+		boolean verify = true;
+
+		verify &= sourceInput.frequencyPanel.tfFrequency.verify();
+		verify &= sourceInput.valuePanel.tfValue1.verify();
+		verify &= sourceInput.valuePanel.tfValue2.verify();
+		verify &= loadInput.valuePanel.tfValue1.verify();
+		verify &= loadInput.valuePanel.tfValue2.verify();
+
+		for (int i = 0; i < solutionPanels.length; i++) {
+			verify &= solutionPanels[i].valuePanel.tfValue1.verify();
+			verify &= solutionPanels[i].valuePanel.tfValue2.verify();
+			verify &= solutionPanels[i].valuePanel.tfTolerance1.verify();
+			verify &= solutionPanels[i].valuePanel.tfTolerance2.verify();
 		}
 
-		verify &= getView().propertiesView.monteCarloPanel.tfN.verify();
-		verify &= getView().propertiesView.monteCarloPanel.tfFu.verify();
-		verify &= getView().propertiesView.monteCarloPanel.tfFo.verify();
-		verify &= getView().propertiesView.monteCarloPanel.tfH.verify();
+		verify &= monteCarloPanel.tfN.verify();
+		verify &= monteCarloPanel.tfFu.verify();
+		verify &= monteCarloPanel.tfFo.verify();
+		verify &= monteCarloPanel.tfH.verify();
 
 		return verify;
 	}
@@ -329,12 +329,14 @@ public class ImpedanceProController {
 	}
 
 	public void setMonteCarloEnabled(boolean enabled) {
-		getView().graphView.setEnabled(enabled);
-		getView().propertiesView.settingsPanel.btnMonteCarlo
-				.setEnabled(enabled);
-		getView().propertiesView.settingsPanel.cbReturnLoss.setEnabled(enabled);
+		ImpedanceProView view = getView();
+		SettingsPanel settingsPanel = view.propertiesView.settingsPanel;
 
-		if (getView().propertiesView.settingsPanel.btnMonteCarlo.isSelected()) {
+		view.graphView.setEnabled(enabled);
+		settingsPanel.btnMonteCarlo.setEnabled(enabled);
+		settingsPanel.cbReturnLoss.setEnabled(enabled);
+
+		if (settingsPanel.btnMonteCarlo.isSelected()) {
 			displayMonteCarlo(enabled);
 		} else {
 			displayMonteCarlo(false);
