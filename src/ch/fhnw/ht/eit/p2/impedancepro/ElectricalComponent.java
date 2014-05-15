@@ -14,6 +14,11 @@ public class ElectricalComponent {
 		setValue(value);
 	}
 	
+	ElectricalComponent(double value, double tolerance) {
+		this(value);
+		setTolerance(tolerance);
+	}
+	
 	public double getValue() {
 		return value;
 	}

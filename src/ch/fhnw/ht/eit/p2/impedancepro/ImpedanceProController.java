@@ -98,13 +98,48 @@ public class ImpedanceProController {
 						loadNetwork, frequency);
 				model.getNetwork().calculateReturnLossOfAllSolutions(
 						frequency * 0.8, frequency * 1.2);
-				model.calculateMonteCarlo(sourceNetwork, new MatchingNetwork(),
-						loadNetwork,
-						getView().propertiesView.monteCarloPanel.tfFo
-								.getValue(),
-						getView().propertiesView.monteCarloPanel.tfFu
-								.getValue(),
-						getView().propertiesView.monteCarloPanel.tfN.getValue());
+
+				for (int i = 0; i < model.getNetwork().getMatchingNetworks().length; i++) {
+					ElectricalComponent ec1, ec2;
+
+					if (getView().solutionView.getSolutionPanels()[i].valuePanel.tfValue1
+							.getText().isEmpty()) {
+						ec1 = new ElectricalComponent(
+								model.getNetwork().getMatchingNetworks()[i].getElectricalComponents()[0]
+										.getValue(), 0.0);
+					} else {
+						ec1 = new ElectricalComponent(
+								getView().solutionView.getSolutionPanels()[i].valuePanel.tfValue1
+										.getValue(),
+								getView().solutionView.getSolutionPanels()[i].valuePanel.tfTolerance1
+										.getValue());
+					}
+
+					if (getView().solutionView.getSolutionPanels()[i].valuePanel.tfValue1
+							.getText().isEmpty()) {
+						ec2 = new ElectricalComponent(
+								model.getNetwork().getMatchingNetworks()[i].getElectricalComponents()[1]
+										.getValue(), 0.0);
+					} else {
+						ec2 = new ElectricalComponent(
+								getView().solutionView.getSolutionPanels()[i].valuePanel.tfValue2
+										.getValue(),
+								getView().solutionView.getSolutionPanels()[i].valuePanel.tfTolerance2
+										.getValue());
+					}
+
+					model.calculateMonteCarlo(sourceNetwork,
+							new MatchingNetwork(new ElectricalComponent[] {
+									ec1, ec2 }, model.getNetwork()
+									.getMatchingNetworks()[i].getTopology()),
+							loadNetwork,
+							getView().propertiesView.monteCarloPanel.tfFo
+									.getValue(),
+							getView().propertiesView.monteCarloPanel.tfFu
+									.getValue(),
+							getView().propertiesView.monteCarloPanel.tfN
+									.getValue());
+				}
 			}
 
 			if (getView().inputView.sourceInput.frequencyPanel.tfFrequency

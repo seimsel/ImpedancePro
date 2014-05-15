@@ -38,6 +38,11 @@ public class MatchingNetwork {
 		electricalComponents[0] = new ElectricalComponent();
 		electricalComponents[1] = new ElectricalComponent();
 	}
+	
+	public MatchingNetwork(ElectricalComponent[] electricalComponents, int topology) {
+		setElectricalComponents(electricalComponents);
+		setTopology(topology);
+	}
 
 	public int getTopology() {
 		return topology;

@@ -59,17 +59,18 @@ public class SolutionView extends JPanel {
 	public void update(ImpedanceProModel model) {
 		MatchingNetwork[] matchingNetworks = model.getNetwork().getMatchingNetworks();
 		SolutionPanel[] solutionPanels = getSolutionPanels();
+		
+		for (int i = 0; i < 4; i++) {
+			solutionPanels[i].setVisible(false);
+		}
+		
 		for (int i = 0; i < matchingNetworks.length; i++) {
-			if (matchingNetworks[i] != null) {
-				solutionPanels[i].setVisible(true);
-				solutionPanels[i].lbValue1.setText(EngineeringUtil.convert(matchingNetworks[i]
-						.getElectricalComponents()[0].getValue(), 3));
-				solutionPanels[i].lbValue2.setText(EngineeringUtil.convert(matchingNetworks[i]
-						.getElectricalComponents()[1].getValue(), 3));
-				solutionPanels[i].setTopology(matchingNetworks[i].getTopology());
-			} else {
-				solutionPanels[i].setVisible(false);
-			} 
+			solutionPanels[i].setVisible(true);
+			solutionPanels[i].lbValue1.setText(EngineeringUtil.convert(matchingNetworks[i]
+					.getElectricalComponents()[0].getValue(), 3));
+			solutionPanels[i].lbValue2.setText(EngineeringUtil.convert(matchingNetworks[i]
+					.getElectricalComponents()[1].getValue(), 3));
+			solutionPanels[i].setTopology(matchingNetworks[i].getTopology());
 		}
 	}
 }

@@ -1,7 +1,5 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
-import java.util.Random;
-
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -85,7 +83,6 @@ public class Network {
 	 * X42 = L or C parallel load
 	 * </pre>
 	 */
-
 	public void calculateMatchingNetworks(SourceLoadNetwork sourceNetwork,
 			SourceLoadNetwork loadNetwork, double frequency) {
 
@@ -245,9 +242,40 @@ public class Network {
 				MatchingNetwork.PAR, w);
 		solution4 = createNetwork(solution4, X41, MatchingNetwork.SER, X42,
 				MatchingNetwork.PAR, w);
-
-		matchingNetworks = new MatchingNetwork[] { solution1, solution2,
-				solution3, solution4 };
+		
+		int numberOfSolutions = 0;
+		if(solution1 != null) {
+			numberOfSolutions++;
+		}
+		if(solution2 != null) {
+			numberOfSolutions++;
+		}
+		if(solution3 != null) {
+			numberOfSolutions++;
+		}
+		if(solution4 != null) {
+			numberOfSolutions++;
+		}
+		
+		matchingNetworks = new MatchingNetwork[numberOfSolutions];
+		
+		int i = 0;
+		if(solution1 != null) {
+			matchingNetworks[i] = solution1;
+			i++;
+		}
+		if(solution2 != null) {
+			matchingNetworks[i] = solution2;
+			i++;
+		}
+		if(solution3 != null) {
+			matchingNetworks[i] = solution3;
+			i++;
+		}
+		if(solution4 != null) {
+			matchingNetworks[i] = solution4;
+			i++;
+		}
 
 		model.setChanged();
 		model.notifyObservers();
