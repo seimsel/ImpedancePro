@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.p2.impedancepro;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.text.DecimalFormat;
 
 import javax.swing.JPanel;
 
@@ -60,6 +61,11 @@ public class GraphPanel extends JPanel {
 		plot.setDomainGridlinePaint(Color.BLACK);
 		plot.setOutlinePaint(null);
 
+		NumberAxis axis = (NumberAxis) plot.getDomainAxis();
+		axis.setNumberFormatOverride(new DecimalFormat("###E0"));
+		axis.setLabelFont(getFont());
+		plot.setDomainAxis(axis);
+		
 		ChartPanel chartPanel = new ChartPanel(chart);
 		chartPanel.setPopupMenu(null);
 		chartPanel.setDomainZoomable(false);

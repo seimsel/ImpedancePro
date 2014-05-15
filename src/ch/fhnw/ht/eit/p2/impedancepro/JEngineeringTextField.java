@@ -49,14 +49,23 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 			public void keyTyped(KeyEvent e) {
 				if (e.getKeyChar() != KeyEvent.VK_ENTER)
 					edited = true;
-				char caracter = e.getKeyChar();
+				char character = e.getKeyChar();
+
 				int offs = txtField.getCaretPosition();
 
-				String tfText = txtField.getText().substring(0, offs)
-						+ caracter + txtField.getText().substring(offs);
-
+				String tfText;
+								
+				if (txtField.getSelectedText() != null) {
+					tfText = txtField.getText().substring(0, getSelectionStart()) + character
+							+ txtField.getText().substring(txtField.getSelectionEnd());
+				} else {
+					tfText = txtField.getText().substring(0, offs) + character
+							+ txtField.getText().substring(offs);
+				}
+				
 				try {
-					if (caracter == '-' || caracter == '+' || caracter == 'e') {
+					if (character == '-' || character == '+'
+							|| character == 'e') {
 						EngineeringUtil.parse(tfText.trim() + "1");
 					} else {
 						EngineeringUtil.parse(tfText.trim());
@@ -68,7 +77,7 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 		});
 		addFocusListener(this);
 	}
-	
+
 	public boolean verify() {
 		double v = 0.0;
 		if (txtField.getText().isEmpty() && isEmptyAllowed()) {
