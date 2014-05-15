@@ -9,7 +9,6 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class Network {
 	private XYSeriesCollection swrData, returnLossData;
-	private double monteCarloResult;
 
 	private SourceLoadNetwork sourceNetwork;
 	private MatchingNetwork[] matchingNetworks;
@@ -51,10 +50,6 @@ public class Network {
 
 	public void setLoadNetwork(SourceLoadNetwork loadNetwork) {
 		this.loadNetwork = loadNetwork;
-	}
-
-	public double getMonteCarloResult() {
-		return monteCarloResult;
 	}
 
 	public MatchingNetwork[] getMatchingNetworks() {
