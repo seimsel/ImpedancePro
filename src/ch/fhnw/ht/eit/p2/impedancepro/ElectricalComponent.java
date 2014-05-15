@@ -8,6 +8,8 @@ public class ElectricalComponent {
 	private double value, tolerance;
 	
 	ElectricalComponent() {
+		setValue(0);
+		setTolerance(0);
 	}
 	
 	ElectricalComponent(double value) {

@@ -24,15 +24,17 @@ public class SolutionView extends JPanel {
 
 		setBorder(BorderFactory.createTitledBorder("Anpass-Netzwerke"));
 		setLayout(new GridBagLayout());
-		
+
 		Color[] colors = new Color[] { ImpedanceProView.LIGHT_BLUE,
 				ImpedanceProView.LIGHT_GREEN, ImpedanceProView.LIGHT_RED,
 				ImpedanceProView.LIGHT_YELLOW };
 
 		SolutionPanel[] solutionPanels = new SolutionPanel[4];
 		for (int i = 0; i < 4; i++) {
-			solutionPanels[i] = new SolutionPanel(colors[i], MatchingNetwork.NONE, controller);
-			add(solutionPanels[i], new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+			solutionPanels[i] = new SolutionPanel(colors[i],
+					MatchingNetwork.NONE, controller);
+			add(solutionPanels[i], new GridBagConstraints(
+					GridBagConstraints.RELATIVE, // gridx
 					0, // gridy
 					1, // gridwidth
 					1, // gridheigth
@@ -47,7 +49,7 @@ public class SolutionView extends JPanel {
 		}
 		setSolutionPanels(solutionPanels);
 	}
-	
+
 	public void setSolutionPanels(SolutionPanel[] solutionPanels) {
 		this.solutionPanels = solutionPanels;
 	}
@@ -57,20 +59,29 @@ public class SolutionView extends JPanel {
 	}
 
 	public void update(ImpedanceProModel model) {
-		MatchingNetwork[] matchingNetworks = model.getNetwork().getMatchingNetworks();
+		MatchingNetwork[] matchingNetworks = model.getNetwork()
+				.getMatchingNetworks();
 		SolutionPanel[] solutionPanels = getSolutionPanels();
-		
+
 		for (int i = 0; i < 4; i++) {
 			solutionPanels[i].setVisible(false);
 		}
-		
+
 		for (int i = 0; i < matchingNetworks.length; i++) {
 			solutionPanels[i].setVisible(true);
-			solutionPanels[i].lbValue1.setText(EngineeringUtil.convert(matchingNetworks[i]
-					.getElectricalComponents()[0].getValue(), 3));
-			solutionPanels[i].lbValue2.setText(EngineeringUtil.convert(matchingNetworks[i]
-					.getElectricalComponents()[1].getValue(), 3));
+			solutionPanels[i].lbValue1
+					.setText(EngineeringUtil.convert(matchingNetworks[i]
+							.getElectricalComponents()[0].getValue(), 3));
+			solutionPanels[i].lbValue2
+					.setText(EngineeringUtil.convert(matchingNetworks[i]
+							.getElectricalComponents()[1].getValue(), 3));
 			solutionPanels[i].setTopology(matchingNetworks[i].getTopology());
+
+			if (model.getNetwork().getMonteCarloResults() != null) {
+				solutionPanels[i].valuePanel.lbMonteCarlo.setText(String
+						.valueOf(Math.round(model.getNetwork()
+								.getMonteCarloResults()[i])) + "%");
+			}
 		}
 	}
 }

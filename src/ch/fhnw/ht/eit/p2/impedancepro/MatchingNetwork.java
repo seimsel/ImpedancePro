@@ -59,5 +59,4 @@ public class MatchingNetwork {
 	public void setElectricalComponents(ElectricalComponent[] electricalComponents) {
 		this.electricalComponents = electricalComponents;
 	}
-
 }

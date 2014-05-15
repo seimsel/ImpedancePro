@@ -47,6 +47,5 @@ public class ImpedancePro {
 		model.addObserver(view);
 		
 		controller.viewAction();
-		
 	}
 }

@@ -33,9 +33,6 @@ public class ImpedanceProController {
 	private int oldSourceTopology;
 	private int oldLoadTopology;
 
-	private static final double YIELD_GOAL_RANGE_DEFAULT = 0.05;
-	private static final double YIELD_GOAL_RANGE_MAX = 0.2;
-
 	public ImpedanceProController(ImpedanceProModel model) {
 		setModel(model);
 	}
@@ -72,11 +69,10 @@ public class ImpedanceProController {
 			SettingsPanel settingsPanel = view.propertiesView.settingsPanel;
 			MonteCarloPanel monteCarloPanel = view.propertiesView.monteCarloPanel;
 
-			Network network = model.getNetwork();
-			MatchingNetwork[] matchingNetworks = network.getMatchingNetworks();
-
 			int sourceTopology = sourceInput.getTopology();
 			int loadTopology = loadInput.getTopology();
+
+			setMonteCarloEnabled(!(sourceTopology == SourceLoadNetwork.Z || loadTopology == SourceLoadNetwork.Z));
 
 			if (vertifyAllTextFields()) {
 				double frequency = sourceInput.frequencyPanel.tfFrequency
@@ -101,54 +97,57 @@ public class ImpedanceProController {
 				SourceLoadNetwork loadNetwork = new SourceLoadNetwork(
 						loadTopology, loadComponents);
 
-				network.calculateMatchingNetworks(sourceNetwork, loadNetwork,
-						frequency);
-				network.calculateReturnLossOfAllSolutions(frequency
-						* (1 - YIELD_GOAL_RANGE_MAX), frequency
-						* (1 + YIELD_GOAL_RANGE_MAX));
+				if (settingsPanel.btnMonteCarlo.isSelected()
+						&& settingsPanel.btnMonteCarlo.isEnabled()) {
 
-				for (int i = 0; i < matchingNetworks.length; i++) {
-					ElectricalComponent ec1, ec2;
+					double lowerFrequency = monteCarloPanel.tfFu.getValue();
+					double upperFrequency = monteCarloPanel.tfFo.getValue();
+					double h = monteCarloPanel.tfH.getValue();
+					int n = monteCarloPanel.tfN.getValue();
 
-					if (solutionPanels[i].valuePanel.tfValue1.getText()
-							.isEmpty()) {
-						ec1 = new ElectricalComponent(
-								matchingNetworks[i].getElectricalComponents()[0]
-										.getValue(), 0.0);
-					} else {
-						ec1 = new ElectricalComponent(
-								solutionPanels[i].valuePanel.tfValue1
-										.getValue(),
-								solutionPanels[i].valuePanel.tfTolerance1
-										.getValue());
+					MatchingNetwork[] monteCarloMatchingNetworks = new MatchingNetwork[4];
+					for (int i = 0; i < monteCarloMatchingNetworks.length; i++) {
+						monteCarloMatchingNetworks[i] = new MatchingNetwork();
+						
+						if (solutionPanels[i].valuePanel.tfValue1.getText()
+								.isEmpty()) {
+							monteCarloMatchingNetworks[i].getElectricalComponents()[0].setValue(-1);
+						} else {
+							monteCarloMatchingNetworks[i].getElectricalComponents()[0].setValue(solutionPanels[i].valuePanel.tfValue1
+									.getValue());
+						}
+
+						if (solutionPanels[i].valuePanel.tfValue2.getText()
+								.isEmpty()) {
+							monteCarloMatchingNetworks[i].getElectricalComponents()[1].setValue(-1);
+						} else {
+							monteCarloMatchingNetworks[i].getElectricalComponents()[1].setValue(solutionPanels[i].valuePanel.tfValue2
+									.getValue());
+						}
+
+						if (solutionPanels[i].valuePanel.tfTolerance1.getText()
+								.isEmpty()) {
+							monteCarloMatchingNetworks[i].getElectricalComponents()[0].setTolerance(-1);
+						} else {
+							monteCarloMatchingNetworks[i].getElectricalComponents()[0].setTolerance(solutionPanels[i].valuePanel.tfTolerance1
+									.getValue());
+						}
+
+						if (solutionPanels[i].valuePanel.tfTolerance2.getText()
+								.isEmpty()) {
+							monteCarloMatchingNetworks[i].getElectricalComponents()[1].setTolerance(-1);
+						} else {
+							monteCarloMatchingNetworks[i].getElectricalComponents()[1].setTolerance(solutionPanels[i].valuePanel.tfTolerance2
+									.getValue());
+						}
 					}
 
-					if (solutionPanels[i].valuePanel.tfValue1.getText()
-							.isEmpty()) {
-						ec2 = new ElectricalComponent(
-								matchingNetworks[i].getElectricalComponents()[1]
-										.getValue(), 0.0);
-					} else {
-						ec2 = new ElectricalComponent(
-								solutionPanels[i].valuePanel.tfValue2
-										.getValue(),
-								solutionPanels[i].valuePanel.tfTolerance2
-										.getValue());
-					}
-
-					setMonteCarloEnabled(!(sourceTopology == SourceLoadNetwork.Z || loadTopology == SourceLoadNetwork.Z));
-
-					if (settingsPanel.btnMonteCarlo.isSelected()) {
-						model.calculateMonteCarlo(
-								sourceNetwork,
-								new MatchingNetwork(new ElectricalComponent[] {
-										ec1, ec2 }, model.getNetwork()
-										.getMatchingNetworks()[i].getTopology()),
-								loadNetwork, monteCarloPanel.tfFo.getValue(),
-								monteCarloPanel.tfFu.getValue(),
-								monteCarloPanel.tfH.getValue(),
-								monteCarloPanel.tfN.getValue());
-					}
+					model.triggerCalculations(sourceNetwork,
+							monteCarloMatchingNetworks, loadNetwork, frequency,
+							lowerFrequency, upperFrequency, h, n, true);
+				} else {
+					model.triggerCalculations(sourceNetwork, null, loadNetwork,
+							frequency, 0.0, 0.0, 0.0, 0, false);
 				}
 			}
 
@@ -157,19 +156,22 @@ public class ImpedanceProController {
 						.getValue();
 
 				monteCarloPanel.tfFu.setRange(frequency
-						* (1 - YIELD_GOAL_RANGE_MAX), frequency
-						* (1 + YIELD_GOAL_RANGE_MAX));
+						* (1 - ImpedanceProModel.YIELD_GOAL_RANGE_MAX),
+						frequency
+								* (1 + ImpedanceProModel.YIELD_GOAL_RANGE_MAX));
 				monteCarloPanel.tfFo.setRange(frequency
-						* (1 - YIELD_GOAL_RANGE_MAX), frequency
-						* (1 + YIELD_GOAL_RANGE_MAX));
+						* (1 - ImpedanceProModel.YIELD_GOAL_RANGE_MAX),
+						frequency
+								* (1 + ImpedanceProModel.YIELD_GOAL_RANGE_MAX));
 
 				if (!(monteCarloPanel.tfFu.verify() && monteCarloPanel.tfFo
 						.verify())) {
 					monteCarloPanel.tfFu
-							.setValue((1 - YIELD_GOAL_RANGE_DEFAULT)
+							.setValue((1 - ImpedanceProModel.YIELD_GOAL_RANGE_DEFAULT)
 									* frequency);
-					monteCarloPanel.tfFo.setValue((1 + YIELD_GOAL_RANGE_MAX)
-							* frequency);
+					monteCarloPanel.tfFo
+							.setValue((1 + ImpedanceProModel.YIELD_GOAL_RANGE_MAX)
+									* frequency);
 				}
 			}
 		}
@@ -316,15 +318,6 @@ public class ImpedanceProController {
 
 		for (int i = 0; i < solutionPanels.length; i++) {
 			solutionPanels[i].valuePanel.setVisible(display);
-		}
-
-		if (display) {
-			view.graphView.returnLossGraph.setYieldGoal(
-					monteCarloPanel.tfFu.getValue(),
-					monteCarloPanel.tfFo.getValue(),
-					monteCarloPanel.tfH.getValue());
-		} else {
-			view.graphView.returnLossGraph.removeYieldGoal();
 		}
 	}
 

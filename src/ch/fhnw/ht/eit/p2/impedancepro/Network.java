@@ -11,16 +11,25 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class Network {
 	private XYSeriesCollection swrData, returnLossData;
-	private double monteCarloResult;
+
+	private double[] monteCarloResults;
 
 	private SourceLoadNetwork sourceNetwork;
 	private MatchingNetwork[] matchingNetworks;
 	private SourceLoadNetwork loadNetwork;
 
-	private ImpedanceProModel model;
+	public Network() {
+		sourceNetwork = null;
+		matchingNetworks = null;
+		loadNetwork = null;
+	}
 
-	public Network(ImpedanceProModel model) {
-		this.model = model;
+	public double[] getMonteCarloResults() {
+		return monteCarloResults;
+	}
+
+	public void setMonteCarloResults(double[] monteCarloResults) {
+		this.monteCarloResults = monteCarloResults;
 	}
 
 	public XYSeriesCollection getSwrData() {
@@ -53,10 +62,6 @@ public class Network {
 
 	public void setLoadNetwork(SourceLoadNetwork loadNetwork) {
 		this.loadNetwork = loadNetwork;
-	}
-
-	public double getMonteCarloResult() {
-		return monteCarloResult;
 	}
 
 	public MatchingNetwork[] getMatchingNetworks() {
@@ -231,11 +236,39 @@ public class Network {
 		solution4 = createNetwork(solution4, X41, MatchingNetwork.SER, X42,
 				MatchingNetwork.PAR, w);
 
-		matchingNetworks = new MatchingNetwork[] { solution1, solution2,
-				solution3, solution4 };
-
-		model.setChanged();
-		model.notifyObservers();
+		int numberOfSolutions = 0;
+		if(solution1 != null) {
+			numberOfSolutions++;
+		}
+		if(solution2 != null) {
+			numberOfSolutions++;
+		}
+		if(solution3 != null) {
+			numberOfSolutions++;
+		}
+		if(solution4 != null) {
+			numberOfSolutions++;
+		}
+		
+		matchingNetworks = new MatchingNetwork[numberOfSolutions];
+		
+		int i = 0;
+		if(solution1 != null) {
+			matchingNetworks[i] = solution1;
+			i++;
+		}
+		if(solution2 != null) {
+			matchingNetworks[i] = solution2;
+			i++;
+		}
+		if(solution3 != null) {
+			matchingNetworks[i] = solution3;
+			i++;
+		}
+		if(solution4 != null) {
+			matchingNetworks[i] = solution4;
+			i++;
+		}
 	}
 
 	public MatchingNetwork createNetwork(MatchingNetwork solution,
@@ -433,55 +466,102 @@ public class Network {
 		}
 
 		setReturnLossData(rDataCollection);
-
-		model.setChanged();
-		model.notifyObservers();
 	}
 
-	public double calculateMonteCarlo(SourceLoadNetwork sourceNetwork,
-			MatchingNetwork matchingNetwork, SourceLoadNetwork loadNetwork,
-			double fgo, double fgu, int n) {
+	public void calculateMonteCarlo(MatchingNetwork[] matchingNetworks,
+			double lowerFrequency, double upperFrequency, double h, int n) {
+		double[] monteCarloResults = new double[matchingNetworks.length];
 
-		Random rand = new Random(System.currentTimeMillis());
+		for (int i = 0; i < matchingNetworks.length; i++) {
+			Random rand = new Random(System.currentTimeMillis());
 
-		double[] componentvaluesource;
-		componentvaluesource = new double[n];
+			monteCarloResults[i] = 100.0;
+			double delta = 100.0 / n;
 
-		double[] componentvalueload;
-		componentvalueload = new double[n];
+			double tolerance0 = sourceNetwork.getElectricalComponents()[0]
+					.getTolerance();
+			double tolerance1 = sourceNetwork.getElectricalComponents()[1]
+					.getTolerance();
 
-		for (int i = 0; i < componentvaluesource.length; i++) {
+			double tolerance2 = loadNetwork.getElectricalComponents()[0]
+					.getTolerance();
+			double tolerance3 = loadNetwork.getElectricalComponents()[1]
+					.getTolerance();
 
-			componentvaluesource[i] = rand.nextDouble()
-					* ((((sourceNetwork.getElectricalComponents()[0]
-							.getTolerance() / 100) + 1.0) * sourceNetwork
-							.getElectricalComponents()[0].getValue()) - ((1.0 - (sourceNetwork
-							.getElectricalComponents()[0].getTolerance() / 100)) * sourceNetwork
-							.getElectricalComponents()[0].getValue()))
-					+ ((1.0 - (sourceNetwork.getElectricalComponents()[0]
-							.getTolerance() / 100)) * sourceNetwork
-							.getElectricalComponents()[0].getValue());
+			double value0 = sourceNetwork.getElectricalComponents()[0]
+					.getValue();
+			double value1 = sourceNetwork.getElectricalComponents()[1]
+					.getValue();
 
-			// System.out.println(+componentvaluesource[i]);
+			double value2 = loadNetwork.getElectricalComponents()[0].getValue();
+			double value3 = loadNetwork.getElectricalComponents()[1].getValue();
 
+			double[] componentindex;
+			componentindex = new double[n];
+
+			SourceLoadNetwork[] sourceNetworkMonteCarlo;
+			sourceNetworkMonteCarlo = new SourceLoadNetwork[n];
+
+			SourceLoadNetwork[] loadNetworkMonteCarlo;
+			loadNetworkMonteCarlo = new SourceLoadNetwork[n];
+
+			double[] reflectionMonteCarloUpperFrequency;
+			reflectionMonteCarloUpperFrequency = new double[n];
+
+			double[] reflectionMonteCarloLowerFrequency;
+			reflectionMonteCarloLowerFrequency = new double[n];
+
+			for (int j = 0; j < componentindex.length; j++) {
+
+				sourceNetworkMonteCarlo[j] = new SourceLoadNetwork(
+						sourceNetwork.getTopology(),
+						new ElectricalComponent[] {
+								new ElectricalComponent(
+										rand.nextDouble()
+												* ((((tolerance0 / 100.0) + 1.0) * value0) - ((1.0 - (tolerance0 / 100)) * value0))
+												+ ((1.0 - (tolerance0 / 100)) * value0)),
+								new ElectricalComponent(
+										rand.nextDouble()
+												* ((((tolerance1 / 100.0) + 1.0) * value1) - ((1.0 - (tolerance1 / 100)) * value1))
+												+ ((1.0 - (tolerance1 / 100)) * value1)) });
+
+				loadNetworkMonteCarlo[j] = new SourceLoadNetwork(
+						loadNetwork.getTopology(),
+						new ElectricalComponent[] {
+								new ElectricalComponent(
+										rand.nextDouble()
+												* ((((tolerance2 / 100.0) + 1.0) * value2) - ((1.0 - (tolerance2 / 100)) * value2))
+												+ ((1.0 - (tolerance2 / 100)) * value2)),
+								new ElectricalComponent(
+										rand.nextDouble()
+												* ((((tolerance3 / 100.0) + 1.0) * value3) - ((1.0 - (tolerance3 / 100)) * value3))
+												+ ((1.0 - (tolerance3 / 100)) * value3)) });
+
+				// System.out.println("Source0:"+sourceNetworkMonteCarlo[j].getElectricalComponents()[0].getValue());
+				// System.out.println("Source1:"+sourceNetworkMonteCarlo[j].getElectricalComponents()[1].getValue());
+
+				// System.out.println("Load0:"+loadNetworkMonteCarlo[j].getElectricalComponents()[0].getValue());
+				// System.out.println("Load1:"+loadNetworkMonteCarlo[j].getElectricalComponents()[1].getValue());
+
+				// System.out.println(+(calculateReturnLossAtFrequency(sourceNetworkMonteCarlo[j],
+				// matchingNetworks[0], loadNetworkMonteCarlo[j],
+				// lowerFrequency) ));
+
+				reflectionMonteCarloLowerFrequency[j] = calculateReturnLossAtFrequency(
+						sourceNetworkMonteCarlo[j], matchingNetworks[i],
+						loadNetworkMonteCarlo[j], lowerFrequency);
+				reflectionMonteCarloUpperFrequency[j] = calculateReturnLossAtFrequency(
+						sourceNetworkMonteCarlo[j], matchingNetworks[i],
+						loadNetworkMonteCarlo[j], upperFrequency);
+
+				if (reflectionMonteCarloLowerFrequency[j] >= h
+						|| reflectionMonteCarloUpperFrequency[j] >= h) {
+					monteCarloResults[i] -= delta;
+				}
+			}
 		}
 
-		for (int i = 0; i < componentvalueload.length; i++) {
-
-			componentvaluesource[i] = rand.nextDouble()
-					* ((((loadNetwork.getElectricalComponents()[0]
-							.getTolerance() / 100) + 1.0) * loadNetwork
-							.getElectricalComponents()[0].getValue()) - ((1.0 - (loadNetwork
-							.getElectricalComponents()[0].getTolerance() / 100)) * loadNetwork
-							.getElectricalComponents()[0].getValue()))
-					+ ((1.0 - (loadNetwork.getElectricalComponents()[0]
-							.getTolerance() / 100)) * loadNetwork
-							.getElectricalComponents()[0].getValue());
-
-			// System.out.println(+componentvalueload[i]);
-		}
-
-		return 0.0; // Prozentangabe fŸr 1 Netzwerk
+		setMonteCarloResults(monteCarloResults);
 	}
 
 	private int byteArrayToInt(byte[] encodedValue) {
@@ -493,16 +573,6 @@ public class Network {
 		}
 
 		return value;
-	}
-
-	public void calculateMonteCarloOfAllSolutions(double fgo, double fgu, int n) {
-		for (int i = 0; i < getMatchingNetworks().length; i++) {
-			calculateMonteCarlo(getSourceNetwork(), getMatchingNetworks()[i],
-					getLoadNetwork(), fgo, fgu, n);
-		}
-
-		model.setChanged();
-		model.notifyObservers();
 	}
 
 	public double[] linspace(double begin, double end, int n) {

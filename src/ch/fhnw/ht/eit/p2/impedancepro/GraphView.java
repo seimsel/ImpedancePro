@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 public class GraphView extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	public GraphPanel amplitudeGraph, returnLossGraph;
+	public GraphPanel returnLossGraph;
 	private JLabel lbInfo;
 
 	public GraphView() {
