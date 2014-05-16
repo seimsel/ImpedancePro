@@ -499,17 +499,19 @@ public class Network {
 							getSourceNetwork(), getMatchingNetworks()[i],
 							getLoadNetwork(), f[j]);
 					
+					
 					rData[i].add(f[j], r);
 
 					swrData[i].add(f[j], (1 + r) / (1 - r));
 				}
 			}
+			
 			rDataCollection.addSeries(rData[i]);
 			swrDataCollection.addSeries(swrData[i]);
 		}
 
 		setReturnLossData(rDataCollection);
-		setReturnLossData(swrDataCollection);
+		setSwrData(swrDataCollection);
 	}
 
 	public void calculateMonteCarlo(MatchingNetwork[] matchingNetworks,
