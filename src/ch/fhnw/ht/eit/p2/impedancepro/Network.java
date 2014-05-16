@@ -529,7 +529,7 @@ public class Network {
 					.getElectricalComponents()[0].getTolerance();
 			double tolerance5 = matchingNetworks[i]
 					.getElectricalComponents()[1].getTolerance();
-
+			
 			double value0 = sourceNetwork.getElectricalComponents()[0]
 					.getValue();
 			double value1 = sourceNetwork.getElectricalComponents()[1]
@@ -541,7 +541,7 @@ public class Network {
 			double value4 = matchingNetworks[i]
 					.getElectricalComponents()[0].getValue();
 			double value5 = matchingNetworks[i]
-					.getElectricalComponents()[0].getValue();
+					.getElectricalComponents()[1].getValue();
 
 			double[] componentindex;
 			componentindex = new double[n];
@@ -568,43 +568,42 @@ public class Network {
 						new ElectricalComponent[] {
 								new ElectricalComponent(
 										rand.nextDouble()
-												* ((((tolerance0 / 100.0) + 1.0) * value0) - ((1.0 - (tolerance0 / 100)) * value0))
-												+ ((1.0 - (tolerance0 / 100)) * value0)),
+												* ((((tolerance0 / 100.0) + 1.0) * value0) - ((1.0 - (tolerance0 / 100.0)) * value0))
+												+ ((1.0 - (tolerance0 / 100.0)) * value0)),
 								new ElectricalComponent(
 										rand.nextDouble()
-												* ((((tolerance1 / 100.0) + 1.0) * value1) - ((1.0 - (tolerance1 / 100)) * value1))
-												+ ((1.0 - (tolerance1 / 100)) * value1)) });
+												* ((((tolerance1 / 100.0) + 1.0) * value1) - ((1.0 - (tolerance1 / 100.0)) * value1))
+												+ ((1.0 - (tolerance1 / 100.0)) * value1)) });
 
 				loadNetworkMonteCarlo[j] = new SourceLoadNetwork(
 						loadNetwork.getTopology(),
 						new ElectricalComponent[] {
 								new ElectricalComponent(
 										rand.nextDouble()
-												* ((((tolerance2 / 100.0) + 1.0) * value2) - ((1.0 - (tolerance2 / 100)) * value2))
-												+ ((1.0 - (tolerance2 / 100)) * value2)),
+												* ((((tolerance2 / 100.0) + 1.0) * value2) - ((1.0 - (tolerance2 / 100.0)) * value2))
+												+ ((1.0 - (tolerance2 / 100.0)) * value2)),
 								new ElectricalComponent(
 										rand.nextDouble()
-												* ((((tolerance3 / 100.0) + 1.0) * value3) - ((1.0 - (tolerance3 / 100)) * value3))
-												+ ((1.0 - (tolerance3 / 100)) * value3)) });
-
+												* ((((tolerance3 / 100.0) + 1.0) * value3) - ((1.0 - (tolerance3 / 100.0)) * value3))
+												+ ((1.0 - (tolerance3 / 100.0)) * value3)) });
+				
 				matchingNetworksMonteCarlo[j] = new MatchingNetwork(
 						new ElectricalComponent[] {
 								new ElectricalComponent(
 										rand.nextDouble()
-												* ((((tolerance4 / 100.0) + 1.0) * value4) - ((1.0 - (tolerance4 / 100)) * value4))
-												+ ((1.0 - (tolerance4 / 100)) * value4)),
+												* ((((tolerance4 / 100.0) + 1.0) * value4) - ((1.0 - (tolerance4 / 100.0)) * value4))
+												+ ((1.0 - (tolerance4 / 100.0)) * value4)),
 								new ElectricalComponent(
 										rand.nextDouble()
-												* ((((tolerance5 / 100.0) + 1.0) * value5) - ((1.0 - (tolerance5 / 100)) * value5))
-												+ ((1.0 - (tolerance5 / 100)) * value5)) },
+												* ((((tolerance5 / 100.0) + 1.0) * value5) - ((1.0 - (tolerance5 / 100.0)) * value5))
+												+ ((1.0 - (tolerance5 / 100.0)) * value5)) },
 												matchingNetworks[i].getTopology());
-
-
+								
 				reflectionMonteCarloLowerFrequency[j] = calculateReturnLossAtFrequency(
-						sourceNetworkMonteCarlo[j], matchingNetworks[i],
+						sourceNetworkMonteCarlo[j], matchingNetworksMonteCarlo[j],
 						loadNetworkMonteCarlo[j], lowerFrequency);
 				reflectionMonteCarloUpperFrequency[j] = calculateReturnLossAtFrequency(
-						sourceNetworkMonteCarlo[j], matchingNetworks[i],
+						sourceNetworkMonteCarlo[j], matchingNetworksMonteCarlo[j],
 						loadNetworkMonteCarlo[j], upperFrequency);
 
 				if (reflectionMonteCarloLowerFrequency[j] >= h

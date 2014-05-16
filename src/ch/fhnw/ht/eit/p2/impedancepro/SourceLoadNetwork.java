@@ -14,8 +14,8 @@ public class SourceLoadNetwork {
 	private ElectricalComponent[] electricalComponents;
 
 	public SourceLoadNetwork(int topology, ElectricalComponent[] electricalComponents) {
-		this.topology = topology;
-		this.electricalComponents = electricalComponents;
+		setTopology(topology);
+		setElectricalComponents(electricalComponents);
 	}
 	
 	public int getTopology() {
