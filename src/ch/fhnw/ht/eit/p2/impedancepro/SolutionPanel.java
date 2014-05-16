@@ -152,19 +152,33 @@ public class SolutionPanel extends JPanel implements ActionListener {
 			lbUnit1.setText(" ");
 			lbUnit2.setText(" ");
 			break;
-		case MatchingNetwork.SER_C:
-		case MatchingNetwork.PAR_C:
+		case MatchingNetwork.SER_C_NONE:
+		case MatchingNetwork.PAR_C_NONE:
 			lbDesignator1.setText("C1: ");
 			lbDesignator2.setText(" ");
 			lbUnit1.setText("F");
 			lbUnit2.setText(" ");
 			break;
-		case MatchingNetwork.SER_L:
-		case MatchingNetwork.PAR_L:
+		case MatchingNetwork.NONE_SER_C:
+		case MatchingNetwork.NONE_PAR_C:
+			lbDesignator1.setText(" ");
+			lbDesignator2.setText("C1: ");
+			lbUnit1.setText(" ");
+			lbUnit2.setText("F");
+			break;
+		case MatchingNetwork.SER_L_NONE:
+		case MatchingNetwork.PAR_L_NONE:
 			lbDesignator1.setText("L1: ");
 			lbDesignator2.setText(" ");
 			lbUnit1.setText("H");
 			lbUnit2.setText(" ");
+			break;
+		case MatchingNetwork.NONE_SER_L:
+		case MatchingNetwork.NONE_PAR_L:
+			lbDesignator1.setText(" ");
+			lbDesignator2.setText("L1: ");
+			lbUnit1.setText(" ");
+			lbUnit2.setText("H");
 			break;
 		case MatchingNetwork.PAR_L_SER_C:
 		case MatchingNetwork.SER_L_PAR_C:
@@ -288,19 +302,33 @@ public class SolutionPanel extends JPanel implements ActionListener {
 				lbUnit1.setText(" ");
 				lbUnit2.setText(" ");
 				break;
-			case MatchingNetwork.SER_C:
-			case MatchingNetwork.PAR_C:
+			case MatchingNetwork.SER_C_NONE:
+			case MatchingNetwork.PAR_C_NONE:
 				lbDesignator1.setText("C1: ");
 				lbDesignator2.setText(" ");
 				lbUnit1.setText("F");
 				lbUnit2.setText(" ");
 				break;
-			case MatchingNetwork.SER_L:
-			case MatchingNetwork.PAR_L:
+			case MatchingNetwork.NONE_SER_C:
+			case MatchingNetwork.NONE_PAR_C:
+				lbDesignator1.setText(" ");
+				lbDesignator2.setText("C1: ");
+				lbUnit1.setText("");
+				lbUnit2.setText("F");
+				break;
+			case MatchingNetwork.SER_L_NONE:
+			case MatchingNetwork.PAR_L_NONE:
 				lbDesignator1.setText("L1: ");
 				lbDesignator2.setText(" ");
 				lbUnit1.setText("H");
 				lbUnit2.setText(" ");
+				break;
+			case MatchingNetwork.NONE_SER_L:
+			case MatchingNetwork.NONE_PAR_L:
+				lbDesignator1.setText(" ");
+				lbDesignator2.setText("L1: ");
+				lbUnit1.setText(" ");
+				lbUnit2.setText("H");
 				break;
 			case MatchingNetwork.PAR_L_SER_C:
 			case MatchingNetwork.SER_L_PAR_C:

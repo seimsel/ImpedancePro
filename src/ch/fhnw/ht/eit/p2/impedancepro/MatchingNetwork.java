@@ -22,10 +22,14 @@ public class MatchingNetwork {
 	public static final int SER_C_PAR_L = 2112;
 	public static final int SER_L_PAR_C = 2211;
 	public static final int SER_L_PAR_L = 2212;
-	public static final int SER_C = 0021;
-	public static final int SER_L = 0022;
-	public static final int PAR_C = 1100;
-	public static final int PAR_L = 1200;
+	public static final int NONE_PAR_C = 11;
+	public static final int NONE_PAR_L = 12;
+	public static final int NONE_SER_C = 21;
+	public static final int NONE_SER_L = 22;
+	public static final int PAR_C_NONE = 1100;
+	public static final int PAR_L_NONE = 1200;
+	public static final int SER_C_NONE = 2100;
+	public static final int SER_L_NONE = 2200;
 	
 	private int topology;
 	public ElectricalComponent[] electricalComponents;
