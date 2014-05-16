@@ -33,7 +33,7 @@ public class GraphView extends JPanel {
 
 		setLayout(new GridLayout(1, 0));
 
-		returnLossGraph = new GraphPanel("Frequenz / Hz", "");
+		returnLossGraph = new GraphPanel("Frequenz / Hz", "", controller);
 
 		returnLossGraphBorderPanel.setBorder(BorderFactory
 				.createTitledBorder("Reflexion"));

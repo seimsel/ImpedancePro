@@ -8,9 +8,6 @@ import java.util.Observable;
 public class ImpedanceProModel extends Observable {
 
 	private Network network;
-
-	public static final double YIELD_GOAL_RANGE_DEFAULT = 0.05;
-	public static final double YIELD_GOAL_RANGE_MAX = 0.2;
 	
 	private double upperFrequency;
 	private double lowerFrequency;
@@ -36,7 +33,7 @@ public class ImpedanceProModel extends Observable {
 			final MatchingNetwork[] monteCarloMatchingNetworks,
 			final SourceLoadNetwork loadNetwork, final double frequency,
 			final double lowerFrequency, final double upperFrequency,
-			final double h, final int n,
+			final double h, final int n, final double yieldGoalSpan,
 			final boolean monteCarloEnabled) {
 		
 		Thread calculationEngine = new Thread() {
@@ -48,8 +45,8 @@ public class ImpedanceProModel extends Observable {
 				getNetwork().calculateMatchingNetworks(sourceNetwork, loadNetwork,
 						frequency);
 				getNetwork().calculateReturnLossOfAllSolutions(
-						frequency * (1 - YIELD_GOAL_RANGE_MAX),
-						frequency * (1 + YIELD_GOAL_RANGE_MAX));
+						frequency * (1 - yieldGoalSpan),
+						frequency * (1 + yieldGoalSpan));
 
 				if (monteCarloEnabled) {
 					MatchingNetwork[] matchingNetworks = getNetwork()

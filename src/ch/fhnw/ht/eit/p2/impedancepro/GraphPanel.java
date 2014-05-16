@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.text.DecimalFormat;
 
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -20,6 +22,8 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import com.alee.laf.slider.WebSlider;
+
 /**
  * The <code>GraphPanel</code> class is able to show a <code>JFreeChart</code>
  * by setting the dataset of the <code>public XYPlot plot</code>. It is also
@@ -27,10 +31,13 @@ import org.jfree.data.xy.XYSeriesCollection;
  * 
  * @author Simon Zumbrunnen
  */
-public class GraphPanel extends JPanel {
+public class GraphPanel extends JPanel implements ChangeListener {
 	private static final long serialVersionUID = 1L;
 
 	public XYPlot plot;
+	public WebSlider wsSpan;
+	
+	private ImpedanceProController controller;
 
 	/**
 	 * Creates a <code>JFreeChart</code> and configures it.
@@ -40,9 +47,10 @@ public class GraphPanel extends JPanel {
 	 * @param yName
 	 *            The name of the y-axis
 	 */
-	public GraphPanel(String xName, String yName) {
+	public GraphPanel(String xName, String yName, ImpedanceProController controller) {
 		super();
-
+		this.controller = controller;
+		
 		setLayout(new BorderLayout());
 
 		JFreeChart chart = ChartFactory.createXYLineChart("", // title
@@ -54,6 +62,13 @@ public class GraphPanel extends JPanel {
 				false, // tooltips
 				false // urls
 				);
+		
+		wsSpan = new WebSlider(WebSlider.HORIZONTAL);
+		wsSpan.setMaximum(50);
+		wsSpan.setMinimum(1);
+		wsSpan.setValue(10);
+		wsSpan.setFocusable(false);
+		wsSpan.addChangeListener(this);
 
 		plot = chart.getXYPlot();
 		plot.setBackgroundPaint(Color.WHITE);
@@ -80,6 +95,7 @@ public class GraphPanel extends JPanel {
 		renderer.setSeriesPaint(3, ImpedanceProView.YELLOW);
 
 		add(chartPanel);
+		add(wsSpan, BorderLayout.SOUTH);
 	}
 
 	/**
@@ -116,5 +132,9 @@ public class GraphPanel extends JPanel {
 	
 	public void removeYieldGoal() {
 		plot.setDataset(1, null);
+	}
+
+	public void stateChanged(ChangeEvent e) {
+		controller.viewAction();
 	}
 }
