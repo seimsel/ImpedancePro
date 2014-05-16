@@ -104,6 +104,7 @@ public class Network {
 		double re = 0, a = 0, b = 0, c = 0;
 		double X11 = 0, X12 = 0, X21 = 0, X22 = 0, X31 = 0, X32 = 0, X41 = 0, X42 = 0;
 		double RS = 0, XS = 0, RL = 0, XL = 0;
+		boolean specialCase = false;
 
 		MatchingNetwork solution1 = new MatchingNetwork();
 		MatchingNetwork solution2 = new MatchingNetwork();
@@ -124,41 +125,44 @@ public class Network {
 		w = 2 * Math.PI * frequency;
 
 		if (RS == RL) {
-
 			X11 = 0;
 			X12 = -(ZS.getIm() + ZL.getIm());
-
-			if (XS == 0) {
-
-				solution2 = null;
-
-			} else {
-
-				X21 = exceptionhandler(-Math.pow(ZS.abs(), 2) / (2 * XS));
-
-				X22 = exceptionhandler(-((Math.pow(XS, 2) * X21 + XS
-						* Math.pow(X21, 2) + Math.pow(RS, 2) * X21)
-						/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X21 * XS + Math
-								.pow(X21, 2)) + ZL.getIm()));
-
+			if (X12 == 0) {
+				specialCase = true;
 			}
 
-			if (XL == 0) {
+			if (XS == XL) {
+				X21 = exceptionhandler(-Math.pow(ZS.abs(), 2) / (2 * XS));
+				X22 = 0;
 
 				solution3 = null;
-
 			} else {
+				if (XS == 0) {
+					solution2 = null;
+				} else {
 
-				X32 = exceptionhandler(-Math.pow(ZL.abs(), 2) / (2 * XL));
+					X21 = exceptionhandler(-Math.pow(ZS.abs(), 2) / (2 * XS));
 
-				X31 = exceptionhandler(-((Math.pow(XL, 2) * X32 + XL
-						* Math.pow(X32, 2) + Math.pow(RL, 2) * X32)
-						/ (Math.pow(RL, 2) + Math.pow(XL, 2) + 2 * X32 * XL + Math
-								.pow(X32, 2)) + ZS.getIm()));
+					X22 = exceptionhandler(-((Math.pow(XS, 2) * X21 + XS
+							* Math.pow(X21, 2) + Math.pow(RS, 2) * X21)
+							/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X21 * XS + Math
+									.pow(X21, 2)) + ZL.getIm()));
+				}
+
+				if (XL == 0) {
+					solution3 = null;
+
+				} else {
+
+					X32 = exceptionhandler(-Math.pow(ZL.abs(), 2) / (2 * XL));
+
+					X31 = exceptionhandler(-((Math.pow(XL, 2) * X32 + XL
+							* Math.pow(X32, 2) + Math.pow(RL, 2) * X32)
+							/ (Math.pow(RL, 2) + Math.pow(XL, 2) + 2 * X32 * XL + Math
+									.pow(X32, 2)) + ZS.getIm()));
+				}
 			}
-
-			X41 = 0;
-			X42 = 0;
+			solution4 = null;
 		}
 
 		else {
@@ -242,13 +246,13 @@ public class Network {
 		}
 
 		solution1 = createNetwork(solution1, X11, MatchingNetwork.PAR, X12,
-				MatchingNetwork.SER, w);
+				MatchingNetwork.SER, w,specialCase);
 		solution2 = createNetwork(solution2, X21, MatchingNetwork.PAR, X22,
-				MatchingNetwork.SER, w);
+				MatchingNetwork.SER, w,false);
 		solution3 = createNetwork(solution3, X31, MatchingNetwork.SER, X32,
-				MatchingNetwork.PAR, w);
+				MatchingNetwork.PAR, w,false);
 		solution4 = createNetwork(solution4, X41, MatchingNetwork.SER, X42,
-				MatchingNetwork.PAR, w);
+				MatchingNetwork.PAR, w,false);
 
 		int numberOfSolutions = 0;
 		if (solution1 != null) {
@@ -304,79 +308,86 @@ public class Network {
 
 	public MatchingNetwork createNetwork(MatchingNetwork solution,
 			double reactance1, byte orientation1, double reactance2,
-			byte orientation2, double w) {
+			byte orientation2, double w, boolean wire) {
 
 		double sol1 = 0, sol2 = 0;
 
 		byte[] topology = new byte[4];
 
-		if (solution != null) {
+		if (wire) {
+			topology[0] = MatchingNetwork.NONE;
+			topology[1] = MatchingNetwork.NONE;
+			topology[2] = MatchingNetwork.NONE;
+			topology[3] = MatchingNetwork.NONE;
+		} else {
+			if (solution != null) {
 
-			// determine C or L of solution
+				// determine C or L of solution
 
-			if (reactance1 == 0 && reactance2 == 0) {
+				if (reactance1 == 0 && reactance2 == 0) {
 
-				solution = null;
-
-			} else {
-
-				if (reactance1 == 0) {
-
-					topology[0] = MatchingNetwork.EMPTY;
-					topology[1] = MatchingNetwork.EMPTY;
-
-				} else {
-
-					if (reactance1 > 0) {
-
-						sol1 = reactance1 / w;
-
-						topology[0] = orientation1;
-						topology[1] = MatchingNetwork.L;
-
-					} else {
-
-						sol1 = -1 / (w * reactance1);
-
-						topology[0] = orientation1;
-						topology[1] = MatchingNetwork.C;
-
-					}
-				}
-
-				if (reactance2 == 0) {
-
-					topology[2] = MatchingNetwork.EMPTY;
-					topology[3] = MatchingNetwork.EMPTY;
+					solution = null;
 
 				} else {
 
-					// determine C or L of solution 2
+					if (reactance1 == 0) {
 
-					if (reactance2 > 0) {
-
-						sol2 = reactance2 / w;
-
-						topology[2] = orientation2;
-						topology[3] = MatchingNetwork.L;
+						topology[0] = MatchingNetwork.EMPTY;
+						topology[1] = MatchingNetwork.EMPTY;
 
 					} else {
 
-						sol2 = -1 / (w * reactance2);
+						if (reactance1 > 0) {
 
-						topology[2] = orientation2;
-						topology[3] = MatchingNetwork.C;
+							sol1 = reactance1 / w;
+
+							topology[0] = orientation1;
+							topology[1] = MatchingNetwork.L;
+
+						} else {
+
+							sol1 = -1 / (w * reactance1);
+
+							topology[0] = orientation1;
+							topology[1] = MatchingNetwork.C;
+
+						}
+					}
+
+					if (reactance2 == 0) {
+
+						topology[2] = MatchingNetwork.EMPTY;
+						topology[3] = MatchingNetwork.EMPTY;
+
+					} else {
+
+						// determine C or L of solution 2
+
+						if (reactance2 > 0) {
+
+							sol2 = reactance2 / w;
+
+							topology[2] = orientation2;
+							topology[3] = MatchingNetwork.L;
+
+						} else {
+
+							sol2 = -1 / (w * reactance2);
+
+							topology[2] = orientation2;
+							topology[3] = MatchingNetwork.C;
+
+						}
 
 					}
 
-				}
+					solution.electricalComponents[0].setValue(sol1);
+					solution.electricalComponents[1].setValue(sol2);
+					solution.setTopology(byteArrayToInt(topology));
 
-				solution.electricalComponents[0].setValue(sol1);
-				solution.electricalComponents[1].setValue(sol2);
-				solution.setTopology(byteArrayToInt(topology));
+				}
 
 			}
-
 		}
 
 		return solution;
@@ -498,14 +509,13 @@ public class Network {
 					double r = calculateReturnLossAtFrequency(
 							getSourceNetwork(), getMatchingNetworks()[i],
 							getLoadNetwork(), f[j]);
-					
-					
+
 					rData[i].add(f[j], r);
 
 					swrData[i].add(f[j], (1 + r) / (1 - r));
 				}
 			}
-			
+
 			rDataCollection.addSeries(rData[i]);
 			swrDataCollection.addSeries(swrData[i]);
 		}
