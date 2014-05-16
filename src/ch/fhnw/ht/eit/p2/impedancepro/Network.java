@@ -128,19 +128,34 @@ public class Network {
 			X11 = 0;
 			X12 = -(ZS.getIm() + ZL.getIm());
 
-			X21 = exceptionhandler(-Math.pow(ZS.abs(), 2) / (2 * XS));
+			if (XS == 0) {
 
-			X22 = exceptionhandler(-((Math.pow(XS, 2) * X21 + XS
-					* Math.pow(X21, 2) + Math.pow(RS, 2) * X21)
-					/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X21 * XS + Math
-							.pow(X21, 2)) + ZL.getIm()));
+				solution2 = null;
 
-			X32 = exceptionhandler(-Math.pow(ZL.abs(), 2) / (2 * XL));
+			} else {
 
-			X31 = exceptionhandler(-((Math.pow(XL, 2) * X32 + XL
-					* Math.pow(X32, 2) + Math.pow(RL, 2) * X32)
-					/ (Math.pow(RL, 2) + Math.pow(XL, 2) + 2 * X32 * XL + Math
-							.pow(X32, 2)) + ZS.getIm()));
+				X21 = exceptionhandler(-Math.pow(ZS.abs(), 2) / (2 * XS));
+
+				X22 = exceptionhandler(-((Math.pow(XS, 2) * X21 + XS
+						* Math.pow(X21, 2) + Math.pow(RS, 2) * X21)
+						/ (Math.pow(RS, 2) + Math.pow(XS, 2) + 2 * X21 * XS + Math
+								.pow(X21, 2)) + ZL.getIm()));
+
+			}
+
+			if (XL == 0) {
+
+				solution3 = null;
+
+			} else {
+
+				X32 = exceptionhandler(-Math.pow(ZL.abs(), 2) / (2 * XL));
+
+				X31 = exceptionhandler(-((Math.pow(XL, 2) * X32 + XL
+						* Math.pow(X32, 2) + Math.pow(RL, 2) * X32)
+						/ (Math.pow(RL, 2) + Math.pow(XL, 2) + 2 * X32 * XL + Math
+								.pow(X32, 2)) + ZS.getIm()));
+			}
 
 			X41 = 0;
 			X42 = 0;
@@ -260,7 +275,7 @@ public class Network {
 			topology[1] = MatchingNetwork.EMPTY;
 			topology[2] = MatchingNetwork.EMPTY;
 			topology[3] = MatchingNetwork.EMPTY;
-			
+
 			matchingNetworks = new MatchingNetwork[1];
 			matchingNetworks[0] = noSolutions;
 
@@ -435,26 +450,22 @@ public class Network {
 			ZR = Z1.add(ComplexNumber.parallel(new ComplexNumber[] { Z2, ZL }));
 			break;
 
-		case MatchingNetwork.SER_C_NONE:
-		case MatchingNetwork.NONE_SER_C:
+		case MatchingNetwork.SER_C:
 			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
 			ZR = Z1.add(ZL);
 			break;
 
-		case MatchingNetwork.SER_L_NONE:
-		case MatchingNetwork.NONE_SER_L:
+		case MatchingNetwork.SER_L:
 			Z1 = new ComplexNumber(0.0, w * value1);
 			ZR = Z1.add(ZL);
 			break;
 
-		case MatchingNetwork.PAR_C_NONE:
-		case MatchingNetwork.NONE_PAR_C:
+		case MatchingNetwork.PAR_C:
 			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
 			ZR = ComplexNumber.parallel(new ComplexNumber[] { Z1, ZL });
 			break;
 
-		case MatchingNetwork.PAR_L_NONE:
-		case MatchingNetwork.NONE_PAR_L:
+		case MatchingNetwork.PAR_L:
 			Z1 = new ComplexNumber(0.0, w * value1);
 			ZR = ComplexNumber.parallel(new ComplexNumber[] { Z1, ZL });
 			break;
@@ -494,6 +505,7 @@ public class Network {
 		double[] monteCarloResults = new double[matchingNetworks.length];
 
 		for (int i = 0; i < matchingNetworks.length; i++) {
+
 			Random rand = new Random(System.currentTimeMillis());
 
 			monteCarloResults[i] = 100.0;
@@ -508,6 +520,11 @@ public class Network {
 					.getTolerance();
 			double tolerance3 = loadNetwork.getElectricalComponents()[1]
 					.getTolerance();
+			
+			double tolerance4 = matchingNetworks[i]
+					.getElectricalComponents()[0].getTolerance();
+			double tolerance5 = matchingNetworks[i]
+					.getElectricalComponents()[1].getTolerance();
 
 			double value0 = sourceNetwork.getElectricalComponents()[0]
 					.getValue();
@@ -517,6 +534,11 @@ public class Network {
 			double value2 = loadNetwork.getElectricalComponents()[0].getValue();
 			double value3 = loadNetwork.getElectricalComponents()[1].getValue();
 
+			double value4 = matchingNetworks[i]
+					.getElectricalComponents()[0].getValue();
+			double value5 = matchingNetworks[i]
+					.getElectricalComponents()[0].getValue();
+
 			double[] componentindex;
 			componentindex = new double[n];
 
@@ -525,6 +547,9 @@ public class Network {
 
 			SourceLoadNetwork[] loadNetworkMonteCarlo;
 			loadNetworkMonteCarlo = new SourceLoadNetwork[n];
+
+			MatchingNetwork[] matchingNetworksMonteCarlo;
+			matchingNetworksMonteCarlo = new MatchingNetwork[n];
 
 			double[] reflectionMonteCarloUpperFrequency;
 			reflectionMonteCarloUpperFrequency = new double[n];
@@ -558,15 +583,18 @@ public class Network {
 												* ((((tolerance3 / 100.0) + 1.0) * value3) - ((1.0 - (tolerance3 / 100)) * value3))
 												+ ((1.0 - (tolerance3 / 100)) * value3)) });
 
-				// System.out.println("Source0:"+sourceNetworkMonteCarlo[j].getElectricalComponents()[0].getValue());
-				// System.out.println("Source1:"+sourceNetworkMonteCarlo[j].getElectricalComponents()[1].getValue());
+				matchingNetworksMonteCarlo[j] = new MatchingNetwork(
+						new ElectricalComponent[] {
+								new ElectricalComponent(
+										rand.nextDouble()
+												* ((((tolerance4 / 100.0) + 1.0) * value4) - ((1.0 - (tolerance4 / 100)) * value4))
+												+ ((1.0 - (tolerance4 / 100)) * value4)),
+								new ElectricalComponent(
+										rand.nextDouble()
+												* ((((tolerance5 / 100.0) + 1.0) * value5) - ((1.0 - (tolerance5 / 100)) * value5))
+												+ ((1.0 - (tolerance5 / 100)) * value5)) },
+												matchingNetworks[i].getTopology());
 
-				// System.out.println("Load0:"+loadNetworkMonteCarlo[j].getElectricalComponents()[0].getValue());
-				// System.out.println("Load1:"+loadNetworkMonteCarlo[j].getElectricalComponents()[1].getValue());
-
-				// System.out.println(+(calculateReturnLossAtFrequency(sourceNetworkMonteCarlo[j],
-				// matchingNetworks[0], loadNetworkMonteCarlo[j],
-				// lowerFrequency) ));
 
 				reflectionMonteCarloLowerFrequency[j] = calculateReturnLossAtFrequency(
 						sourceNetworkMonteCarlo[j], matchingNetworks[i],
