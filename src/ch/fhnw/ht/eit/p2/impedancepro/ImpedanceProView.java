@@ -84,7 +84,7 @@ public class ImpedanceProView extends JFrame implements Observer {
 
 		inputView = new InputView(controller);
 		solutionView = new SolutionView(controller);
-		graphView = new GraphView();
+		graphView = new GraphView(controller);
 		propertiesView = new PropertiesView(controller);
 
 		contentPane.add(inputView, new GridBagConstraints(0, // gridx

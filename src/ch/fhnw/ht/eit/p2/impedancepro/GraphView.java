@@ -20,12 +20,15 @@ public class GraphView extends JPanel {
 	public GraphPanel returnLossGraph;
 	private JLabel lbInfo;
 
-	public GraphView() {
+	private ImpedanceProController controller;
+
+	public GraphView(ImpedanceProController controller) {
 		super();
+		this.controller = controller;
 
 		lbInfo = new JLabel("Berechnung des Plots nicht mšglich");
 		lbInfo.setVisible(false);
-		
+
 		JPanel returnLossGraphBorderPanel = new JPanel(new GridBagLayout());
 
 		setLayout(new GridLayout(1, 0));
@@ -35,7 +38,8 @@ public class GraphView extends JPanel {
 		returnLossGraphBorderPanel.setBorder(BorderFactory
 				.createTitledBorder("Reflexion"));
 
-		returnLossGraphBorderPanel.add(returnLossGraph, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+		returnLossGraphBorderPanel.add(returnLossGraph, new GridBagConstraints(
+				GridBagConstraints.RELATIVE, // gridx
 				GridBagConstraints.RELATIVE, // gridy
 				1, // gridwidth
 				1, // gridheigth
@@ -47,8 +51,9 @@ public class GraphView extends JPanel {
 				0, // ipadx
 				0 // ipady
 				));
-		
-		returnLossGraphBorderPanel.add(lbInfo, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
+
+		returnLossGraphBorderPanel.add(lbInfo, new GridBagConstraints(
+				GridBagConstraints.RELATIVE, // gridx
 				GridBagConstraints.RELATIVE, // gridy
 				1, // gridwidth
 				1, // gridheigth
@@ -63,13 +68,20 @@ public class GraphView extends JPanel {
 
 		add(returnLossGraphBorderPanel);
 	}
-	
+
 	public void update(ImpedanceProModel model) {
-		if(model.getNetwork().getReturnLossData() != null) {
-			returnLossGraph.plot.setDataset(model.getNetwork().getReturnLossData());
+		if (model.getNetwork().getReturnLossData() != null) {
+			returnLossGraph.plot.setDataset(model.getNetwork()
+					.getReturnLossData());
+		}
+		if (controller.isMonteCarloDisplayed()) {
+			returnLossGraph.setYieldGoal(model.getLowerFrequency(),
+					model.getUpperFrequency(), model.getH());
+		} else {
+			returnLossGraph.removeYieldGoal();
 		}
 	}
-	
+
 	public void setEnabled(boolean enabled) {
 		returnLossGraph.setVisible(enabled);
 		lbInfo.setVisible(!enabled);

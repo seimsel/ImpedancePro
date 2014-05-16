@@ -11,6 +11,10 @@ public class ImpedanceProModel extends Observable {
 
 	public static final double YIELD_GOAL_RANGE_DEFAULT = 0.05;
 	public static final double YIELD_GOAL_RANGE_MAX = 0.2;
+	
+	private double upperFrequency;
+	private double lowerFrequency;
+	private double h;
 
 	public ImpedanceProModel() {
 		setNetwork(new Network());
@@ -37,6 +41,10 @@ public class ImpedanceProModel extends Observable {
 		
 		Thread calculationEngine = new Thread() {
 			public void run() {
+				setUpperFrequency(upperFrequency);
+				setLowerFrequency(lowerFrequency);
+				setH(h);
+				
 				getNetwork().calculateMatchingNetworks(sourceNetwork, loadNetwork,
 						frequency);
 				getNetwork().calculateReturnLossOfAllSolutions(
@@ -81,6 +89,8 @@ public class ImpedanceProModel extends Observable {
 
 					getNetwork().calculateMonteCarlo(matchingNetworks,
 							lowerFrequency, upperFrequency, h, n);
+				} else {
+					getNetwork().setMonteCarloResults(null);
 				}
 				
 				setChanged();
@@ -89,5 +99,29 @@ public class ImpedanceProModel extends Observable {
 		};
 		
 		calculationEngine.start();
+	}
+
+	public double getUpperFrequency() {
+		return upperFrequency;
+	}
+
+	public void setUpperFrequency(double upperFrequency) {
+		this.upperFrequency = upperFrequency;
+	}
+
+	public double getLowerFrequency() {
+		return lowerFrequency;
+	}
+
+	public void setLowerFrequency(double lowerFrequency) {
+		this.lowerFrequency = lowerFrequency;
+	}
+
+	public double getH() {
+		return h;
+	}
+
+	public void setH(double h) {
+		this.h = h;
 	}
 }

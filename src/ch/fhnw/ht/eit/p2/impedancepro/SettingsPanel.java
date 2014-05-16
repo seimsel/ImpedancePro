@@ -5,7 +5,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -169,12 +168,11 @@ public class SettingsPanel extends JPanel implements ActionListener {
 		} else if(e.getSource() instanceof WebSwitch) {
 			WebSwitch sw = (WebSwitch) e.getSource();
 			controller.displayMonteCarlo(sw.isSelected());
+			controller.viewAction();
 		} else if(e.getSource() instanceof JComboBox) {
 			JComboBox<?> cb = (JComboBox<?>) e.getSource();
 			controller.setGraphType(cb.getSelectedIndex());
+			controller.viewAction();
 		}
-	}
-
-	public void update(Observable obs, Object obj) {
 	}
 }

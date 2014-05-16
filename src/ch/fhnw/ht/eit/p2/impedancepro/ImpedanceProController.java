@@ -33,6 +33,10 @@ public class ImpedanceProController {
 	private int oldSourceTopology;
 	private int oldLoadTopology;
 
+	private boolean monteCarloDisplayed = false;
+	
+	private boolean changed = false;
+
 	public ImpedanceProController(ImpedanceProModel model) {
 		setModel(model);
 	}
@@ -59,8 +63,9 @@ public class ImpedanceProController {
 	public void viewAction() {
 
 		getNewValues();
+		checkViewHasChanged();
 
-		if (viewHasChanged()) {
+		if (getChanged()) {
 			ImpedanceProView view = getView();
 			InputPanel sourceInput = view.inputView.sourceInput;
 			InputPanel loadInput = view.inputView.loadInput;
@@ -108,37 +113,51 @@ public class ImpedanceProController {
 					MatchingNetwork[] monteCarloMatchingNetworks = new MatchingNetwork[4];
 					for (int i = 0; i < monteCarloMatchingNetworks.length; i++) {
 						monteCarloMatchingNetworks[i] = new MatchingNetwork();
-						
+
 						if (solutionPanels[i].valuePanel.tfValue1.getText()
 								.isEmpty()) {
-							monteCarloMatchingNetworks[i].getElectricalComponents()[0].setValue(-1);
+							monteCarloMatchingNetworks[i]
+									.getElectricalComponents()[0].setValue(-1);
 						} else {
-							monteCarloMatchingNetworks[i].getElectricalComponents()[0].setValue(solutionPanels[i].valuePanel.tfValue1
-									.getValue());
+							monteCarloMatchingNetworks[i]
+									.getElectricalComponents()[0]
+									.setValue(solutionPanels[i].valuePanel.tfValue1
+											.getValue());
 						}
 
 						if (solutionPanels[i].valuePanel.tfValue2.getText()
 								.isEmpty()) {
-							monteCarloMatchingNetworks[i].getElectricalComponents()[1].setValue(-1);
+							monteCarloMatchingNetworks[i]
+									.getElectricalComponents()[1].setValue(-1);
 						} else {
-							monteCarloMatchingNetworks[i].getElectricalComponents()[1].setValue(solutionPanels[i].valuePanel.tfValue2
-									.getValue());
+							monteCarloMatchingNetworks[i]
+									.getElectricalComponents()[1]
+									.setValue(solutionPanels[i].valuePanel.tfValue2
+											.getValue());
 						}
 
 						if (solutionPanels[i].valuePanel.tfTolerance1.getText()
 								.isEmpty()) {
-							monteCarloMatchingNetworks[i].getElectricalComponents()[0].setTolerance(-1);
+							monteCarloMatchingNetworks[i]
+									.getElectricalComponents()[0]
+									.setTolerance(-1);
 						} else {
-							monteCarloMatchingNetworks[i].getElectricalComponents()[0].setTolerance(solutionPanels[i].valuePanel.tfTolerance1
-									.getValue());
+							monteCarloMatchingNetworks[i]
+									.getElectricalComponents()[0]
+									.setTolerance(solutionPanels[i].valuePanel.tfTolerance1
+											.getValue());
 						}
 
 						if (solutionPanels[i].valuePanel.tfTolerance2.getText()
 								.isEmpty()) {
-							monteCarloMatchingNetworks[i].getElectricalComponents()[1].setTolerance(-1);
+							monteCarloMatchingNetworks[i]
+									.getElectricalComponents()[1]
+									.setTolerance(-1);
 						} else {
-							monteCarloMatchingNetworks[i].getElectricalComponents()[1].setTolerance(solutionPanels[i].valuePanel.tfTolerance2
-									.getValue());
+							monteCarloMatchingNetworks[i]
+									.getElectricalComponents()[1]
+									.setTolerance(solutionPanels[i].valuePanel.tfTolerance2
+											.getValue());
 						}
 					}
 
@@ -175,6 +194,8 @@ public class ImpedanceProController {
 				}
 			}
 		}
+		
+		setChanged(false);
 	}
 
 	private boolean vertifyAllTextFields() {
@@ -261,7 +282,7 @@ public class ImpedanceProController {
 	 * 
 	 * @return Returns true if values have changed and false if not
 	 */
-	private boolean viewHasChanged() {
+	private void checkViewHasChanged() {
 		if (Arrays.deepEquals(newInputValues, oldInputValues)
 				&& Arrays.deepEquals(newMonteCarloValues, oldMonteCarloValues)
 				&& Arrays.deepEquals(newValue1MonteCarlo, oldValue1MonteCarlo)
@@ -273,10 +294,7 @@ public class ImpedanceProController {
 				&& newSourceTopology == oldSourceTopology
 				&& newLoadTopology == oldLoadTopology) {
 
-			return false;
-
 		} else {
-
 			oldInputValues = newInputValues;
 			oldMonteCarloValues = newMonteCarloValues;
 			oldValue1MonteCarlo = newValue1MonteCarlo;
@@ -285,10 +303,19 @@ public class ImpedanceProController {
 			oldTolerance2MonteCarlo = newTolerance2MonteCarlo;
 			oldSourceTopology = newSourceTopology;
 			oldLoadTopology = newLoadTopology;
+			
+			setChanged(true);
 
-			return true;
 		}
 
+	}
+	
+	private void setChanged(boolean changed) {
+		this.changed = changed;
+	}
+	
+	private boolean getChanged() {
+		return this.changed;
 	}
 
 	/**
@@ -299,6 +326,8 @@ public class ImpedanceProController {
 	 *            Whether the monte-carlo components should be enabled or not
 	 */
 	public void displayMonteCarlo(boolean display) {
+		this.monteCarloDisplayed = display;
+
 		ImpedanceProView view = getView();
 		InputPanel sourceInput = view.inputView.sourceInput;
 		InputPanel loadInput = view.inputView.loadInput;
@@ -319,6 +348,8 @@ public class ImpedanceProController {
 		for (int i = 0; i < solutionPanels.length; i++) {
 			solutionPanels[i].valuePanel.setVisible(display);
 		}
+
+		setChanged(true);
 	}
 
 	public void setMonteCarloEnabled(boolean enabled) {
@@ -334,10 +365,17 @@ public class ImpedanceProController {
 		} else {
 			displayMonteCarlo(false);
 		}
+		
+		setChanged(true);
+	}
+
+	public boolean isMonteCarloDisplayed() {
+		return monteCarloDisplayed;
 	}
 
 	public void setGraphType(int type) {
 
+		setChanged(true);
 	}
 
 	public void openInfoPDF() {
