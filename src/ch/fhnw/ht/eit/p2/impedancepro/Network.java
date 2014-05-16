@@ -237,37 +237,54 @@ public class Network {
 				MatchingNetwork.PAR, w);
 
 		int numberOfSolutions = 0;
-		if(solution1 != null) {
+		if (solution1 != null) {
 			numberOfSolutions++;
 		}
-		if(solution2 != null) {
+		if (solution2 != null) {
 			numberOfSolutions++;
 		}
-		if(solution3 != null) {
+		if (solution3 != null) {
 			numberOfSolutions++;
 		}
-		if(solution4 != null) {
+		if (solution4 != null) {
 			numberOfSolutions++;
 		}
-		
-		matchingNetworks = new MatchingNetwork[numberOfSolutions];
-		
-		int i = 0;
-		if(solution1 != null) {
-			matchingNetworks[i] = solution1;
-			i++;
-		}
-		if(solution2 != null) {
-			matchingNetworks[i] = solution2;
-			i++;
-		}
-		if(solution3 != null) {
-			matchingNetworks[i] = solution3;
-			i++;
-		}
-		if(solution4 != null) {
-			matchingNetworks[i] = solution4;
-			i++;
+
+		if (numberOfSolutions == 0) {
+
+			MatchingNetwork noSolutions = new MatchingNetwork();
+
+			byte[] topology = new byte[4];
+
+			topology[0] = MatchingNetwork.EMPTY;
+			topology[1] = MatchingNetwork.EMPTY;
+			topology[2] = MatchingNetwork.EMPTY;
+			topology[3] = MatchingNetwork.EMPTY;
+			
+			matchingNetworks = new MatchingNetwork[1];
+			matchingNetworks[0] = noSolutions;
+
+		} else {
+
+			matchingNetworks = new MatchingNetwork[numberOfSolutions];
+
+			int i = 0;
+			if (solution1 != null) {
+				matchingNetworks[i] = solution1;
+				i++;
+			}
+			if (solution2 != null) {
+				matchingNetworks[i] = solution2;
+				i++;
+			}
+			if (solution3 != null) {
+				matchingNetworks[i] = solution3;
+				i++;
+			}
+			if (solution4 != null) {
+				matchingNetworks[i] = solution4;
+				i++;
+			}
 		}
 	}
 
