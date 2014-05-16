@@ -65,7 +65,7 @@ public class ImpedanceProController {
 	public void viewAction() {		
 		getNewValues();
 		checkViewHasChanged();
-
+		
 		if (getChanged()) {
 			ImpedanceProView view = getView();
 			InputPanel sourceInput = view.inputView.sourceInput;
@@ -84,7 +84,7 @@ public class ImpedanceProController {
 				double frequency = sourceInput.frequencyPanel.tfFrequency
 						.getValue();
 				
-				double yieldGoalSpan = view.graphView.returnLossGraph.wsSpan.getValue()/100.0;
+				double yieldGoalSpan = view.graphView.returnLossGraph.btnSpan.getValue()/20.0;
 
 				ElectricalComponent[] sourceComponents = new ElectricalComponent[] {
 						new ElectricalComponent(
@@ -177,7 +177,7 @@ public class ImpedanceProController {
 				double frequency = sourceInput.frequencyPanel.tfFrequency
 						.getValue();
 				
-				double yieldGoalSpan = view.graphView.returnLossGraph.wsSpan.getValue()/100.0;
+				double yieldGoalSpan = view.graphView.returnLossGraph.btnSpan.getValue()/20.0;
 
 				monteCarloPanel.tfFu.setRange(frequency
 						* (1 - yieldGoalSpan),
@@ -280,7 +280,7 @@ public class ImpedanceProController {
 
 		newSourceTopology = sourceInput.getTopology();
 		newLoadTopology = loadInput.getTopology();
-		newYieldGoalSpan = view.graphView.returnLossGraph.wsSpan.getValue();
+		newYieldGoalSpan = view.graphView.returnLossGraph.btnSpan.getValue();
 	}
 
 	/**

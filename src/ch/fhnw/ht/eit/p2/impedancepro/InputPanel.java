@@ -204,6 +204,12 @@ public class InputPanel extends JPanel implements ActionListener {
 			valuePanel.lbTolerance2Unit.setVisible(false);
 			break;
 		}
+		
+		if(topology == SourceLoadNetwork.Z) {
+			valuePanel.tfValue2.setRange(-1e21, 1e21);
+		} else {
+			valuePanel.tfValue2.setRange(1e-21, 1e21);
+		}
 
 		this.topology = topology;
 	}

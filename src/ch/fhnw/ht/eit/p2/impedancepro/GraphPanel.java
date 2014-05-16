@@ -2,11 +2,13 @@ package ch.fhnw.ht.eit.p2.impedancepro;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -22,8 +24,6 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import com.alee.laf.slider.WebSlider;
-
 /**
  * The <code>GraphPanel</code> class is able to show a <code>JFreeChart</code>
  * by setting the dataset of the <code>public XYPlot plot</code>. It is also
@@ -31,11 +31,11 @@ import com.alee.laf.slider.WebSlider;
  * 
  * @author Simon Zumbrunnen
  */
-public class GraphPanel extends JPanel implements ChangeListener {
+public class GraphPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	public XYPlot plot;
-	public WebSlider wsSpan;
+	public WebIncDecButton btnSpan;
 	
 	private ImpedanceProController controller;
 
@@ -63,12 +63,16 @@ public class GraphPanel extends JPanel implements ChangeListener {
 				false // urls
 				);
 		
-		wsSpan = new WebSlider(WebSlider.HORIZONTAL);
-		wsSpan.setMaximum(50);
-		wsSpan.setMinimum(1);
-		wsSpan.setValue(10);
-		wsSpan.setFocusable(false);
-		wsSpan.addChangeListener(this);
+		JPanel pnSpan = new JPanel(new FlowLayout());
+		
+		btnSpan = new WebIncDecButton();
+		btnSpan.setValue(2);
+		btnSpan.setMaxValue(5);
+		btnSpan.setMinValue(1);
+		btnSpan.addActionListener(this);
+		
+		pnSpan.add(new JLabel("Span: "));
+		pnSpan.add(btnSpan);
 
 		plot = chart.getXYPlot();
 		plot.setBackgroundPaint(Color.WHITE);
@@ -95,7 +99,7 @@ public class GraphPanel extends JPanel implements ChangeListener {
 		renderer.setSeriesPaint(3, ImpedanceProView.YELLOW);
 
 		add(chartPanel);
-		add(wsSpan, BorderLayout.SOUTH);
+		add(pnSpan, BorderLayout.SOUTH);
 	}
 
 	/**
@@ -133,8 +137,9 @@ public class GraphPanel extends JPanel implements ChangeListener {
 	public void removeYieldGoal() {
 		plot.setDataset(1, null);
 	}
-
-	public void stateChanged(ChangeEvent e) {
+	
+	public void actionPerformed(ActionEvent e) {
 		controller.viewAction();
+		System.out.println(btnSpan.getValue());
 	}
 }
