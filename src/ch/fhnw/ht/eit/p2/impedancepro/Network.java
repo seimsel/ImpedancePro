@@ -159,7 +159,6 @@ public class Network {
 
 			X41 = 0;
 			X42 = 0;
-
 		}
 
 		else {
@@ -485,23 +484,32 @@ public class Network {
 		XYSeries rData[] = new XYSeries[getMatchingNetworks().length];
 		XYSeriesCollection rDataCollection = new XYSeriesCollection();
 
+		XYSeries swrData[] = new XYSeries[getMatchingNetworks().length];
+		XYSeriesCollection swrDataCollection = new XYSeriesCollection();
+
 		for (int i = 0; i < getMatchingNetworks().length; i++) {
 			rData[i] = new XYSeries("return_loss" + i);
+			swrData[i] = new XYSeries("return_loss" + i);
+
 			double[] f = linspace(lowerFrequency, upperFrequency, 1000);
 
 			if (getMatchingNetworks()[i] != null) {
 				for (int j = 0; j < f.length; j++) {
-					rData[i].add(
-							f[j],
-							calculateReturnLossAtFrequency(getSourceNetwork(),
-									getMatchingNetworks()[i], getLoadNetwork(),
-									f[j]));
+					double r = calculateReturnLossAtFrequency(
+							getSourceNetwork(), getMatchingNetworks()[i],
+							getLoadNetwork(), f[j]);
+					
+					rData[i].add(f[j], r);
+
+					swrData[i].add(f[j], (1 + r) / (1 - r));
 				}
 			}
 			rDataCollection.addSeries(rData[i]);
+			swrDataCollection.addSeries(swrData[i]);
 		}
 
 		setReturnLossData(rDataCollection);
+		setReturnLossData(swrDataCollection);
 	}
 
 	public void calculateMonteCarlo(MatchingNetwork[] matchingNetworks,
@@ -524,12 +532,12 @@ public class Network {
 					.getTolerance();
 			double tolerance3 = loadNetwork.getElectricalComponents()[1]
 					.getTolerance();
-			
-			double tolerance4 = matchingNetworks[i]
-					.getElectricalComponents()[0].getTolerance();
-			double tolerance5 = matchingNetworks[i]
-					.getElectricalComponents()[1].getTolerance();
-			
+
+			double tolerance4 = matchingNetworks[i].getElectricalComponents()[0]
+					.getTolerance();
+			double tolerance5 = matchingNetworks[i].getElectricalComponents()[1]
+					.getTolerance();
+
 			double value0 = sourceNetwork.getElectricalComponents()[0]
 					.getValue();
 			double value1 = sourceNetwork.getElectricalComponents()[1]
@@ -538,10 +546,10 @@ public class Network {
 			double value2 = loadNetwork.getElectricalComponents()[0].getValue();
 			double value3 = loadNetwork.getElectricalComponents()[1].getValue();
 
-			double value4 = matchingNetworks[i]
-					.getElectricalComponents()[0].getValue();
-			double value5 = matchingNetworks[i]
-					.getElectricalComponents()[1].getValue();
+			double value4 = matchingNetworks[i].getElectricalComponents()[0]
+					.getValue();
+			double value5 = matchingNetworks[i].getElectricalComponents()[1]
+					.getValue();
 
 			double[] componentindex;
 			componentindex = new double[n];
@@ -586,7 +594,7 @@ public class Network {
 										rand.nextDouble()
 												* ((((tolerance3 / 100.0) + 1.0) * value3) - ((1.0 - (tolerance3 / 100.0)) * value3))
 												+ ((1.0 - (tolerance3 / 100.0)) * value3)) });
-				
+
 				matchingNetworksMonteCarlo[j] = new MatchingNetwork(
 						new ElectricalComponent[] {
 								new ElectricalComponent(
@@ -597,13 +605,15 @@ public class Network {
 										rand.nextDouble()
 												* ((((tolerance5 / 100.0) + 1.0) * value5) - ((1.0 - (tolerance5 / 100.0)) * value5))
 												+ ((1.0 - (tolerance5 / 100.0)) * value5)) },
-												matchingNetworks[i].getTopology());
-								
+						matchingNetworks[i].getTopology());
+
 				reflectionMonteCarloLowerFrequency[j] = calculateReturnLossAtFrequency(
-						sourceNetworkMonteCarlo[j], matchingNetworksMonteCarlo[j],
+						sourceNetworkMonteCarlo[j],
+						matchingNetworksMonteCarlo[j],
 						loadNetworkMonteCarlo[j], lowerFrequency);
 				reflectionMonteCarloUpperFrequency[j] = calculateReturnLossAtFrequency(
-						sourceNetworkMonteCarlo[j], matchingNetworksMonteCarlo[j],
+						sourceNetworkMonteCarlo[j],
+						matchingNetworksMonteCarlo[j],
 						loadNetworkMonteCarlo[j], upperFrequency);
 
 				if (reflectionMonteCarloLowerFrequency[j] >= h
