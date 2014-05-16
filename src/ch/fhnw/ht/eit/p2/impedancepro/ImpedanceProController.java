@@ -36,7 +36,7 @@ public class ImpedanceProController {
 	private int oldYieldGoalSpan;
 
 	private boolean monteCarloDisplayed = false;
-	
+	private int graphType = 0;
 	private boolean changed = false;
 
 	public ImpedanceProController(ImpedanceProModel model) {
@@ -382,8 +382,12 @@ public class ImpedanceProController {
 	}
 
 	public void setGraphType(int type) {
-
-		setChanged(true);
+		this.graphType = type;
+		getView().graphView.update(model);
+	}
+	
+	public int getGraphType() {
+		return graphType;
 	}
 
 	public void openInfoPDF() {

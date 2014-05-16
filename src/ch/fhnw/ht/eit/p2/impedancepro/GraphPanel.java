@@ -140,6 +140,5 @@ public class GraphPanel extends JPanel implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		controller.viewAction();
-		System.out.println(btnSpan.getValue());
 	}
 }
