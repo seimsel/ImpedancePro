@@ -85,6 +85,9 @@ public class ImpedanceProController {
 						.getValue();
 				
 				double yieldGoalSpan = view.graphView.returnLossGraph.btnSpan.getValue()/20.0;
+				
+				double lowerFrequency = monteCarloPanel.tfFu.getValue();
+				double upperFrequency = monteCarloPanel.tfFo.getValue();
 
 				ElectricalComponent[] sourceComponents = new ElectricalComponent[] {
 						new ElectricalComponent(
@@ -108,8 +111,6 @@ public class ImpedanceProController {
 				if (settingsPanel.btnMonteCarlo.isSelected()
 						&& settingsPanel.btnMonteCarlo.isEnabled()) {
 
-					double lowerFrequency = monteCarloPanel.tfFu.getValue();
-					double upperFrequency = monteCarloPanel.tfFo.getValue();
 					double h = monteCarloPanel.tfH.getValue();
 					int n = monteCarloPanel.tfN.getValue();
 
@@ -169,7 +170,7 @@ public class ImpedanceProController {
 							lowerFrequency, upperFrequency, h, n, yieldGoalSpan, true);
 				} else {
 					model.triggerCalculations(sourceNetwork, null, loadNetwork,
-							frequency, 0.0, 0.0, 0.0, 0, 0.0, false);
+							frequency, 0.0, 0.0, 0.0, 0, yieldGoalSpan, false);
 				}
 			}
 
@@ -383,6 +384,7 @@ public class ImpedanceProController {
 
 	public void setGraphType(int type) {
 		this.graphType = type;
+		
 		getView().graphView.update(model);
 	}
 	

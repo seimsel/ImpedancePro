@@ -246,13 +246,13 @@ public class Network {
 		}
 
 		solution1 = createNetwork(solution1, X11, MatchingNetwork.PAR, X12,
-				MatchingNetwork.SER, w,specialCase);
+				MatchingNetwork.SER, w, specialCase);
 		solution2 = createNetwork(solution2, X21, MatchingNetwork.PAR, X22,
-				MatchingNetwork.SER, w,false);
+				MatchingNetwork.SER, w, false);
 		solution3 = createNetwork(solution3, X31, MatchingNetwork.SER, X32,
-				MatchingNetwork.PAR, w,false);
+				MatchingNetwork.PAR, w, false);
 		solution4 = createNetwork(solution4, X41, MatchingNetwork.SER, X42,
-				MatchingNetwork.PAR, w,false);
+				MatchingNetwork.PAR, w, false);
 
 		int numberOfSolutions = 0;
 		if (solution1 != null) {

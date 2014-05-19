@@ -36,24 +36,23 @@ public class SolutionPanel extends JPanel implements ActionListener {
 	public SolutionPanel(Color color, int topology,
 			ImpedanceProController controller) {
 		super();
-
-		matchingNetworkImage = new WebImage();
-		matchingNetworkImage.setDisplayType(DisplayType.fitComponent);
-
+		
 		lbDesignator1 = new JLabel();
 		lbDesignator2 = new JLabel();
 		lbValue1 = new JLabel();
 		lbValue2 = new JLabel();
 		lbUnit1 = new JLabel();
 		lbUnit2 = new JLabel();
+		
+		matchingNetworkImage = new WebImage();
 
 		this.controller = controller;
 
 		setLayout(new GridBagLayout());
 		setBorder(BorderFactory.createLineBorder(color, 2));
-
+		
 		add(matchingNetworkImage, new GridBagConstraints(
-				GridBagConstraints.RELATIVE, // gridx
+				0, // gridx
 				0, // gridy
 				1, // gridwidth
 				4, // gridheigth
@@ -66,14 +65,14 @@ public class SolutionPanel extends JPanel implements ActionListener {
 				50 // ipady
 				));
 
-		addToRow(lbDesignator1, 1, GridBagConstraints.EAST);
-		addToRow(lbValue1, 1, GridBagConstraints.EAST);
-		addToRow(lbUnit1, 1, GridBagConstraints.WEST);
-		addToRow(lbDesignator2, 2, GridBagConstraints.EAST);
-		addToRow(lbValue2, 2, GridBagConstraints.EAST);
-		addToRow(lbUnit2, 2, GridBagConstraints.WEST);
+		addToRow(lbDesignator1, 1, GridBagConstraints.EAST, 10);
+		addToRow(lbValue1, 1, GridBagConstraints.EAST, 0);
+		addToRow(lbUnit1, 1, GridBagConstraints.WEST, 0);
+		addToRow(lbDesignator2, 2, GridBagConstraints.EAST, 10);
+		addToRow(lbValue2, 2, GridBagConstraints.EAST, 0);
+		addToRow(lbUnit2, 2, GridBagConstraints.WEST, 0);
 
-		addToRow(new JLabel("  "), 1, GridBagConstraints.EAST);
+		addToRow(new JLabel("  "), 1, GridBagConstraints.EAST, 0);
 
 		valuePanel = new ValuePanel(topology);
 
@@ -110,7 +109,7 @@ public class SolutionPanel extends JPanel implements ActionListener {
 	 * @param anchor
 	 *            The anchor
 	 */
-	private void addToRow(Component comp, int row, int anchor) {
+	private void addToRow(Component comp, int row, int anchor, int ipadx) {
 		add(comp, new GridBagConstraints(GridBagConstraints.RELATIVE, // gridx
 				row, // gridy
 				1, // gridwidth
@@ -120,7 +119,7 @@ public class SolutionPanel extends JPanel implements ActionListener {
 				anchor, // anchor
 				GridBagConstraints.VERTICAL, // fill
 				new Insets(0, 0, 0, 0), // insets
-				0, // ipadx
+				ipadx, // ipadx
 				0 // ipady
 				));
 	}
@@ -135,14 +134,32 @@ public class SolutionPanel extends JPanel implements ActionListener {
 
 	public void setTopology(int topology) {
 		this.topology = topology;
-
+		
+		remove(matchingNetworkImage);
+		
 		try {
-			matchingNetworkImage.setImage(ImageUtil
+			matchingNetworkImage = new WebImage(ImageUtil
 					.loadResourceImage("matching_" + topology + "_512.png"));
 		} catch (NullPointerException ex) {
 			System.out.println("Could not load Solution-Panel-Image: matching_"
 					+ topology + "_512.png");
 		}
+		
+		matchingNetworkImage.setDisplayType(DisplayType.fitComponent);
+		
+		add(matchingNetworkImage, new GridBagConstraints(
+				0, // gridx
+				0, // gridy
+				1, // gridwidth
+				4, // gridheigth
+				1.0, // weightx
+				1.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.BOTH, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				50 // ipady
+				));
 
 		switch (topology) {
 		default:
@@ -154,7 +171,7 @@ public class SolutionPanel extends JPanel implements ActionListener {
 			break;
 		case MatchingNetwork.SER_C_NONE:
 		case MatchingNetwork.PAR_C_NONE:
-			lbDesignator1.setText("C1: ");
+			lbDesignator1.setText("<html><i>C</i><sub>1</sub>:</html> ");
 			lbDesignator2.setText(" ");
 			lbUnit1.setText("F");
 			lbUnit2.setText(" ");
@@ -162,13 +179,13 @@ public class SolutionPanel extends JPanel implements ActionListener {
 		case MatchingNetwork.NONE_SER_C:
 		case MatchingNetwork.NONE_PAR_C:
 			lbDesignator1.setText(" ");
-			lbDesignator2.setText("C1: ");
+			lbDesignator2.setText("<html><i>C</i><sub>1</sub>:</html> ");
 			lbUnit1.setText(" ");
 			lbUnit2.setText("F");
 			break;
 		case MatchingNetwork.SER_L_NONE:
 		case MatchingNetwork.PAR_L_NONE:
-			lbDesignator1.setText("L1: ");
+			lbDesignator1.setText("<html><i>L</i><sub>1</sub>:</html> ");
 			lbDesignator2.setText(" ");
 			lbUnit1.setText("H");
 			lbUnit2.setText(" ");
@@ -176,35 +193,35 @@ public class SolutionPanel extends JPanel implements ActionListener {
 		case MatchingNetwork.NONE_SER_L:
 		case MatchingNetwork.NONE_PAR_L:
 			lbDesignator1.setText(" ");
-			lbDesignator2.setText("L1: ");
+			lbDesignator2.setText("<html><i>L</i><sub>1</sub>:</html> ");
 			lbUnit1.setText(" ");
 			lbUnit2.setText("H");
 			break;
 		case MatchingNetwork.PAR_L_SER_C:
 		case MatchingNetwork.SER_L_PAR_C:
-			lbDesignator1.setText("L1: ");
-			lbDesignator2.setText("C1: ");
+			lbDesignator1.setText("<html><i>L</i><sub>1</sub>:</html> ");
+			lbDesignator2.setText("<html><i>C</i><sub>1</sub>:</html> ");
 			lbUnit1.setText("H");
 			lbUnit2.setText("F");
 			break;
 		case MatchingNetwork.PAR_C_SER_L:
 		case MatchingNetwork.SER_C_PAR_L:
-			lbDesignator1.setText("C1: ");
-			lbDesignator2.setText("L1: ");
+			lbDesignator1.setText("<html><i>C</i><sub>1</sub>:</html> ");
+			lbDesignator2.setText("<html><i>L</i><sub>1</sub>:</html> ");
 			lbUnit1.setText("F");
 			lbUnit2.setText("H");
 			break;
 		case MatchingNetwork.PAR_L_SER_L:
 		case MatchingNetwork.SER_L_PAR_L:
-			lbDesignator1.setText("L1: ");
-			lbDesignator2.setText("L2: ");
+			lbDesignator1.setText("<html><i>L</i><sub>1</sub>:</html> ");
+			lbDesignator2.setText("<html><i>L</i><sub>2</sub>:</html> ");
 			lbUnit1.setText("H");
 			lbUnit2.setText("H");
 			break;
 		case MatchingNetwork.PAR_C_SER_C:
 		case MatchingNetwork.SER_C_PAR_C:
-			lbDesignator1.setText("C1: ");
-			lbDesignator2.setText("C2: ");
+			lbDesignator1.setText("<html><i>C</i><sub>1</sub>:</html> ");
+			lbDesignator2.setText("<html><i>C</i><sub>2</sub>:</html> ");
 			lbUnit1.setText("F");
 			lbUnit2.setText("F");
 			break;
@@ -304,7 +321,7 @@ public class SolutionPanel extends JPanel implements ActionListener {
 				break;
 			case MatchingNetwork.SER_C_NONE:
 			case MatchingNetwork.PAR_C_NONE:
-				lbDesignator1.setText("C1: ");
+				lbDesignator1.setText("<html><i>C</i><sub>1</sub>:</html> ");
 				lbDesignator2.setText(" ");
 				lbUnit1.setText("F");
 				lbUnit2.setText(" ");
@@ -312,13 +329,13 @@ public class SolutionPanel extends JPanel implements ActionListener {
 			case MatchingNetwork.NONE_SER_C:
 			case MatchingNetwork.NONE_PAR_C:
 				lbDesignator1.setText(" ");
-				lbDesignator2.setText("C1: ");
+				lbDesignator2.setText("<html><i>C</i><sub>1</sub>:</html> ");
 				lbUnit1.setText("");
 				lbUnit2.setText("F");
 				break;
 			case MatchingNetwork.SER_L_NONE:
 			case MatchingNetwork.PAR_L_NONE:
-				lbDesignator1.setText("L1: ");
+				lbDesignator1.setText("<html><i>L</i><sub>1</sub>:</html> ");
 				lbDesignator2.setText(" ");
 				lbUnit1.setText("H");
 				lbUnit2.setText(" ");
@@ -326,35 +343,35 @@ public class SolutionPanel extends JPanel implements ActionListener {
 			case MatchingNetwork.NONE_SER_L:
 			case MatchingNetwork.NONE_PAR_L:
 				lbDesignator1.setText(" ");
-				lbDesignator2.setText("L1: ");
+				lbDesignator2.setText("<html><i>L</i><sub>1</sub>:</html> ");
 				lbUnit1.setText(" ");
 				lbUnit2.setText("H");
 				break;
 			case MatchingNetwork.PAR_L_SER_C:
 			case MatchingNetwork.SER_L_PAR_C:
-				lbDesignator1.setText("L1: ");
-				lbDesignator2.setText("C1: ");
+				lbDesignator1.setText("<html><i>L</i><sub>1</sub>:</html> ");
+				lbDesignator2.setText("<html><i>C</i><sub>1</sub>:</html> ");
 				lbUnit1.setText("H");
 				lbUnit2.setText("F");
 				break;
 			case MatchingNetwork.PAR_C_SER_L:
 			case MatchingNetwork.SER_C_PAR_L:
-				lbDesignator1.setText("C1: ");
-				lbDesignator2.setText("L1: ");
+				lbDesignator1.setText("<html><i>C</i><sub>1</sub>:</html> ");
+				lbDesignator2.setText("<html><i>L</i><sub>1</sub>:</html> ");
 				lbUnit1.setText("F");
 				lbUnit2.setText("H");
 				break;
 			case MatchingNetwork.PAR_L_SER_L:
 			case MatchingNetwork.SER_L_PAR_L:
-				lbDesignator1.setText("L1: ");
-				lbDesignator2.setText("L2: ");
+				lbDesignator1.setText("<html><i>L</i><sub>1</sub>:</html> ");
+				lbDesignator2.setText("<html><i>L</i><sub>2</sub>:</html> ");
 				lbUnit1.setText("H");
 				lbUnit2.setText("H");
 				break;
 			case MatchingNetwork.PAR_C_SER_C:
 			case MatchingNetwork.SER_C_PAR_C:
-				lbDesignator1.setText("C1: ");
-				lbDesignator2.setText("C2: ");
+				lbDesignator1.setText("<html><i>C</i><sub>1</sub>:</html> ");
+				lbDesignator2.setText("<html><i>C</i><sub>2</sub>:</html> ");
 				lbUnit1.setText("F");
 				lbUnit2.setText("F");
 				break;

@@ -22,7 +22,7 @@ import com.alee.extended.button.WebSwitch;
 public class SettingsPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
-	String[] returnLossStrings = { "SWR", "R" };
+	String[] returnLossStrings = { "R", "SWR" };
 
 	public JComboBox<String> cbReturnLoss;
 	public WebSwitch btnMonteCarlo;
@@ -45,7 +45,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
 
 		cbReturnLoss.setFocusable(false);
 		cbReturnLoss.addActionListener(this);
-		
+				
 		btnMonteCarlo = new WebSwitch();
 		btnMonteCarlo.setSelected(true, false);
 		btnMonteCarlo.setFocusable(false);

@@ -71,17 +71,17 @@ public class GraphView extends JPanel {
 
 	public void update(ImpedanceProModel model) {
 		if(controller.getGraphType() == 0) {
-			if (model.getNetwork().getSwrData() != null) {
-				returnLossGraph.plot.setDataset(model.getNetwork()
-						.getSwrData());
-			}
-		} else {
 			if (model.getNetwork().getReturnLossData() != null) {
 				returnLossGraph.plot.setDataset(model.getNetwork()
 						.getReturnLossData());
 			}
+		} else {
+			if (model.getNetwork().getSwrData() != null) {
+				returnLossGraph.plot.setDataset(model.getNetwork()
+						.getSwrData());
+			}
 		}
-		if (controller.isMonteCarloDisplayed()) {
+		if (controller.isMonteCarloDisplayed() && controller.getGraphType() == 0) {
 			returnLossGraph.setYieldGoal(model.getLowerFrequency(),
 					model.getUpperFrequency(), model.getH());
 		} else {

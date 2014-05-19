@@ -63,40 +63,37 @@ public class SolutionView extends JPanel {
 				.getMatchingNetworks();
 		SolutionPanel[] solutionPanels = getSolutionPanels();
 
-		for (int i = 0; i < 4; i++) {
-			solutionPanels[i].setVisible(false);
-		}
-
 		for (int i = 0; i < matchingNetworks.length; i++) {
-			solutionPanels[i].setVisible(true);
-			
-			if(matchingNetworks[i]
-					.getElectricalComponents()[0].getValue() > 0) {
-				solutionPanels[i].lbValue1
-				.setText(EngineeringUtil.convert(matchingNetworks[i]
-						.getElectricalComponents()[0].getValue(), 3));
+			if (matchingNetworks[i].getElectricalComponents()[0].getValue() > 0) {
+				solutionPanels[i].lbValue1.setText(EngineeringUtil.convert(
+						matchingNetworks[i].getElectricalComponents()[0]
+								.getValue(), 3));
 			} else {
-				solutionPanels[i].lbValue1
-				.setText(" ");
+				solutionPanels[i].lbValue1.setText(" ");
 			}
-			
-			if(matchingNetworks[i]
-					.getElectricalComponents()[1].getValue() > 0) {
-				solutionPanels[i].lbValue2
-				.setText(EngineeringUtil.convert(matchingNetworks[i]
-						.getElectricalComponents()[1].getValue(), 3));
+
+			if (matchingNetworks[i].getElectricalComponents()[1].getValue() > 0) {
+				solutionPanels[i].lbValue2.setText(EngineeringUtil.convert(
+						matchingNetworks[i].getElectricalComponents()[1]
+								.getValue(), 3));
 			} else {
-				solutionPanels[i].lbValue2
-				.setText(" ");
+				solutionPanels[i].lbValue2.setText(" ");
 			}
-			
+
 			solutionPanels[i].setTopology(matchingNetworks[i].getTopology());
 
 			if (model.getNetwork().getMonteCarloResults() != null) {
 				solutionPanels[i].valuePanel.lbMonteCarlo.setText(String
 						.valueOf(Math.round(model.getNetwork()
-								.getMonteCarloResults()[i])) + "%");
+								.getMonteCarloResults()[i]))
+						+ "%");
 			}
+
+			solutionPanels[i].setVisible(true);
+		}
+		
+		for (int i = matchingNetworks.length; i < 4; i++) {
+			solutionPanels[i].setVisible(false);
 		}
 	}
 }

@@ -157,8 +157,8 @@ public class InputPanel extends JPanel implements ActionListener {
 		WebToggleButton btn = (WebToggleButton) topologyChooseButtons[topology];
 		btn.setSelected(true);
 
-		valuePanel.lbValue1.setText("R:");
-		valuePanel.lbValue1Unit.setText("Ohm");
+		valuePanel.lbValue1.setText("<html><i>R</i>:</html>");
+		valuePanel.lbValue1Unit.setText("\u2126");
 		valuePanel.lbTolerance1Unit.setText("%");
 		valuePanel.lbTolerance2Unit.setText("%");
 
@@ -185,12 +185,12 @@ public class InputPanel extends JPanel implements ActionListener {
 			break;
 		case SourceLoadNetwork.R_PAR_C:
 		case SourceLoadNetwork.R_SER_C:
-			valuePanel.lbValue2.setText("C:");
+			valuePanel.lbValue2.setText("<html><i>C</i></html>:");
 			valuePanel.lbValue2Unit.setText("F");
 			break;
 		case SourceLoadNetwork.R_PAR_L:
 		case SourceLoadNetwork.R_SER_L:
-			valuePanel.lbValue2.setText("L:");
+			valuePanel.lbValue2.setText("<html><i>L</i></html>:");
 			valuePanel.lbValue2Unit.setText("H");
 			break;
 		case SourceLoadNetwork.Z:
@@ -199,7 +199,7 @@ public class InputPanel extends JPanel implements ActionListener {
 			valuePanel.tfTolerance1.setVisible(false);
 			valuePanel.lbTolerance1Unit.setVisible(false);
 			valuePanel.lbValue2.setText("Im:");
-			valuePanel.lbValue2Unit.setText("Ohm");
+			valuePanel.lbValue2Unit.setText("\u2126");
 			valuePanel.tfTolerance2.setVisible(false);
 			valuePanel.lbTolerance2Unit.setVisible(false);
 			break;
