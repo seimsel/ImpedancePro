@@ -461,26 +461,38 @@ public class Network {
 			break;
 
 		case MatchingNetwork.SER_C_NONE:
-		case MatchingNetwork.NONE_SER_C:
 			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
+			ZR = Z1.add(ZL);
+			break;
+		case MatchingNetwork.NONE_SER_C:
+			Z1 = new ComplexNumber(0.0, -1 / (w * value2));
 			ZR = Z1.add(ZL);
 			break;
 
 		case MatchingNetwork.SER_L_NONE:
-		case MatchingNetwork.NONE_SER_L:
 			Z1 = new ComplexNumber(0.0, w * value1);
+			ZR = Z1.add(ZL);
+			break;
+		case MatchingNetwork.NONE_SER_L:
+			Z1 = new ComplexNumber(0.0, w * value2);
 			ZR = Z1.add(ZL);
 			break;
 
 		case MatchingNetwork.PAR_C_NONE:
-		case MatchingNetwork.NONE_PAR_C:
 			Z1 = new ComplexNumber(0.0, -1 / (w * value1));
+			ZR = ComplexNumber.parallel(new ComplexNumber[] { Z1, ZL });
+			break;
+		case MatchingNetwork.NONE_PAR_C:
+			Z1 = new ComplexNumber(0.0, -1 / (w * value2));
 			ZR = ComplexNumber.parallel(new ComplexNumber[] { Z1, ZL });
 			break;
 
 		case MatchingNetwork.PAR_L_NONE:
-		case MatchingNetwork.NONE_PAR_L:
 			Z1 = new ComplexNumber(0.0, w * value1);
+			ZR = ComplexNumber.parallel(new ComplexNumber[] { Z1, ZL });
+			break;
+		case MatchingNetwork.NONE_PAR_L:
+			Z1 = new ComplexNumber(0.0, w * value2);
 			ZR = ComplexNumber.parallel(new ComplexNumber[] { Z1, ZL });
 			break;
 		}
