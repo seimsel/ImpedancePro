@@ -62,10 +62,10 @@ public class ImpedanceProController {
 	/**
 	 * Is triggered by the view, as soon as an action occurs.
 	 */
-	public void viewAction() {		
+	public void viewAction() {
 		getNewValues();
 		checkViewHasChanged();
-		
+
 		if (getChanged()) {
 			ImpedanceProView view = getView();
 			InputPanel sourceInput = view.inputView.sourceInput;
@@ -83,9 +83,10 @@ public class ImpedanceProController {
 			if (vertifyAllTextFields()) {
 				double frequency = sourceInput.frequencyPanel.tfFrequency
 						.getValue();
-				
-				double yieldGoalSpan = view.graphView.returnLossGraph.btnSpan.getValue()/20.0;
-				
+
+				double yieldGoalSpan = view.propertiesView.settingsPanel.btnSpan
+						.getValue() / 20.0;
+
 				double lowerFrequency = monteCarloPanel.tfFu.getValue();
 				double upperFrequency = monteCarloPanel.tfFo.getValue();
 
@@ -164,10 +165,11 @@ public class ImpedanceProController {
 											.getValue());
 						}
 					}
-					
+
 					model.triggerCalculations(sourceNetwork,
 							monteCarloMatchingNetworks, loadNetwork, frequency,
-							lowerFrequency, upperFrequency, h, n, yieldGoalSpan, true);
+							lowerFrequency, upperFrequency, h, n,
+							yieldGoalSpan, true);
 				} else {
 					model.triggerCalculations(sourceNetwork, null, loadNetwork,
 							frequency, 0.0, 0.0, 0.0, 0, yieldGoalSpan, false);
@@ -177,30 +179,23 @@ public class ImpedanceProController {
 			if (sourceInput.frequencyPanel.tfFrequency.verify()) {
 				double frequency = sourceInput.frequencyPanel.tfFrequency
 						.getValue();
-				
-				double yieldGoalSpan = view.graphView.returnLossGraph.btnSpan.getValue()/20.0;
 
-				monteCarloPanel.tfFu.setRange(frequency
-						* (1 - yieldGoalSpan),
-						frequency
-								* (1 + yieldGoalSpan));
-				monteCarloPanel.tfFo.setRange(frequency
-						* (1 - yieldGoalSpan),
-						frequency
-								* (1 + yieldGoalSpan));
+				double yieldGoalSpan = view.propertiesView.settingsPanel.btnSpan
+						.getValue() / 20.0;
+
+				monteCarloPanel.tfFu.setRange(frequency * (1 - yieldGoalSpan),
+						frequency * (1 + yieldGoalSpan));
+				monteCarloPanel.tfFo.setRange(frequency * (1 - yieldGoalSpan),
+						frequency * (1 + yieldGoalSpan));
 
 				if (!(monteCarloPanel.tfFu.verify() && monteCarloPanel.tfFo
 						.verify())) {
-					monteCarloPanel.tfFu
-							.setValue(0.9
-									* frequency);
-					monteCarloPanel.tfFo
-							.setValue((1.1)
-									* frequency);
+					monteCarloPanel.tfFu.setValue(0.9 * frequency);
+					monteCarloPanel.tfFo.setValue((1.1) * frequency);
 				}
 			}
 		}
-		
+
 		setChanged(false);
 	}
 
@@ -281,7 +276,7 @@ public class ImpedanceProController {
 
 		newSourceTopology = sourceInput.getTopology();
 		newLoadTopology = loadInput.getTopology();
-		newYieldGoalSpan = view.graphView.returnLossGraph.btnSpan.getValue();
+		newYieldGoalSpan = view.propertiesView.settingsPanel.btnSpan.getValue();
 	}
 
 	/**
@@ -312,17 +307,17 @@ public class ImpedanceProController {
 			oldSourceTopology = newSourceTopology;
 			oldLoadTopology = newLoadTopology;
 			oldYieldGoalSpan = newYieldGoalSpan;
-			
+
 			setChanged(true);
 
 		}
 
 	}
-	
+
 	private void setChanged(boolean changed) {
 		this.changed = changed;
 	}
-	
+
 	private boolean getChanged() {
 		return this.changed;
 	}
@@ -374,7 +369,7 @@ public class ImpedanceProController {
 		} else {
 			displayMonteCarlo(false);
 		}
-		
+
 		setChanged(true);
 	}
 
@@ -384,12 +379,19 @@ public class ImpedanceProController {
 
 	public void setGraphType(int type) {
 		this.graphType = type;
-		
+
 		getView().graphView.update(model);
 	}
-	
+
 	public int getGraphType() {
 		return graphType;
+	}
+
+	public void setYieldGoalSpan(int yieldGoalSpan) {
+		view.propertiesView.settingsPanel.btnSpan
+				.setValue(view.propertiesView.settingsPanel.btnSpan.getValue()
+						+ yieldGoalSpan);
+		viewAction();
 	}
 
 	public void openInfoPDF() {

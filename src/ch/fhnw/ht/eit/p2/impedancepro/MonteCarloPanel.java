@@ -33,7 +33,7 @@ public class MonteCarloPanel extends JPanel implements ActionListener {
 		setLayout(new GridBagLayout());
 
 		this.controller = controller;
-
+		
 		lbN = new JLabel("n:");
 		lbFu = new JLabel("<html><i>f</i>g<sub>u</sub>: </html>");
 		lbFo = new JLabel("<html><i>f</i>g<sub>o</sub>: </html>");
@@ -51,7 +51,7 @@ public class MonteCarloPanel extends JPanel implements ActionListener {
 		
 		tfN.setRange(1, 10000);
 		tfH.setRange(1e-21, 1);
-
+		
 		add(lbFo, new GridBagConstraints(0, // gridx
 				1, // gridy
 				1, // gridwidth

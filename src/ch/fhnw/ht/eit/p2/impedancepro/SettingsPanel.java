@@ -24,6 +24,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
 
 	String[] returnLossStrings = { "R", "SWR" };
 
+	public WebIncDecButton btnSpan;
 	public JComboBox<String> cbReturnLoss;
 	public WebSwitch btnMonteCarlo;
 
@@ -39,6 +40,12 @@ public class SettingsPanel extends JPanel implements ActionListener {
 		this.controller = controller;
 		
 		setLayout(new GridBagLayout());
+		
+		btnSpan = new WebIncDecButton();
+		btnSpan.setValue(2);
+		btnSpan.setMaxValue(5);
+		btnSpan.setMinValue(1);
+		btnSpan.addActionListener(this);
 
 		lbReturnLoss = new JLabel("Reflexion:");
 		cbReturnLoss = new JComboBox<String>(returnLossStrings);
@@ -129,6 +136,32 @@ public class SettingsPanel extends JPanel implements ActionListener {
 				0 // ipady
 				));
 		
+		add(new JLabel("Span: "), new GridBagConstraints(0, // gridx
+				GridBagConstraints.RELATIVE, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));
+		
+		add(btnSpan, new GridBagConstraints(1, // gridx
+				GridBagConstraints.RELATIVE, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.CENTER, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				0, // ipadx
+				0 // ipady
+				));		
+		
 		add(btnInfo, new GridBagConstraints(0, // gridx
 				GridBagConstraints.RELATIVE, // gridy
 				1, // gridwidth
@@ -172,6 +205,8 @@ public class SettingsPanel extends JPanel implements ActionListener {
 		} else if(e.getSource() instanceof JComboBox) {
 			JComboBox<?> cb = (JComboBox<?>) e.getSource();
 			controller.setGraphType(cb.getSelectedIndex());
+			controller.viewAction();
+		} else if(e.getSource() instanceof WebIncDecButton) {
 			controller.viewAction();
 		}
 	}

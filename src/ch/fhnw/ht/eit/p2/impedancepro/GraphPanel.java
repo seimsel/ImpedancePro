@@ -2,12 +2,10 @@ package ch.fhnw.ht.eit.p2.impedancepro;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.text.DecimalFormat;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
@@ -31,14 +29,13 @@ import org.jfree.data.xy.XYSeriesCollection;
  * 
  * @author Simon Zumbrunnen
  */
-public class GraphPanel extends JPanel implements ActionListener {
+public class GraphPanel extends JPanel implements MouseWheelListener {
 	private static final long serialVersionUID = 1L;
 
-	public XYPlot plot;
-	public WebIncDecButton btnSpan;
-	
 	private ImpedanceProController controller;
-
+	
+	public XYPlot plot;
+	
 	/**
 	 * Creates a <code>JFreeChart</code> and configures it.
 	 * 
@@ -62,17 +59,6 @@ public class GraphPanel extends JPanel implements ActionListener {
 				false, // tooltips
 				false // urls
 				);
-		
-		JPanel pnSpan = new JPanel(new FlowLayout());
-		
-		btnSpan = new WebIncDecButton();
-		btnSpan.setValue(2);
-		btnSpan.setMaxValue(5);
-		btnSpan.setMinValue(1);
-		btnSpan.addActionListener(this);
-		
-		pnSpan.add(new JLabel("Span: "));
-		pnSpan.add(btnSpan);
 
 		plot = chart.getXYPlot();
 		plot.setBackgroundPaint(Color.WHITE);
@@ -91,6 +77,7 @@ public class GraphPanel extends JPanel implements ActionListener {
 		chartPanel.setRangeZoomable(false);
 		chartPanel.setMinimumDrawWidth(0);
 		chartPanel.setMinimumDrawHeight(0);
+		chartPanel.addMouseWheelListener(this);
 
 		XYItemRenderer renderer = chart.getXYPlot().getRenderer(0);
 		renderer.setSeriesPaint(0, ImpedanceProView.BLUE);
@@ -99,7 +86,6 @@ public class GraphPanel extends JPanel implements ActionListener {
 		renderer.setSeriesPaint(3, ImpedanceProView.YELLOW);
 
 		add(chartPanel);
-		add(pnSpan, BorderLayout.SOUTH);
 	}
 
 	/**
@@ -137,8 +123,8 @@ public class GraphPanel extends JPanel implements ActionListener {
 	public void removeYieldGoal() {
 		plot.setDataset(1, null);
 	}
-	
-	public void actionPerformed(ActionEvent e) {
-		controller.viewAction();
+
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		controller.setYieldGoalSpan(e.getWheelRotation());
 	}
 }

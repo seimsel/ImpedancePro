@@ -46,7 +46,7 @@ public class ImpedanceProView extends JFrame implements Observer {
 	public SolutionView solutionView;
 	public GraphView graphView;
 	public PropertiesView propertiesView;
-
+	
 	public ImpedanceProView(ImpedanceProController controller) {
 		super();
 		

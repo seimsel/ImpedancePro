@@ -59,6 +59,7 @@ public class WebIncDecButton extends JPanel implements ActionListener {
 		
 		if(getActionListeners() != null) {
 			for(ActionListener a: getActionListeners()) {
+				e.setSource(this);
 			    a.actionPerformed(e);
 			}
 		}
@@ -69,7 +70,13 @@ public class WebIncDecButton extends JPanel implements ActionListener {
 	}
 
 	public void setValue(int value) {
-		this.value = value;
+		if(value > getMaxValue()) {
+			this.value = getMaxValue();
+		} else if(value < getMinValue()) {
+			this.value = getMinValue();
+		} else {
+			this.value = value;
+		}
 	}
 
 	public int getMaxValue() {

@@ -270,7 +270,7 @@ public class SolutionPanel extends JPanel implements ActionListener {
 			lbUnit2 = new JLabel();
 			lbMonteCarlo = new JLabel();
 
-			add(new JLabel("Erfüllt: "), new GridBagConstraints(
+			add(new JLabel("Erf\u00fcllt: "), new GridBagConstraints(
 					GridBagConstraints.RELATIVE, // gridx
 					0, // gridy
 					2, // gridwidth
