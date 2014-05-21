@@ -48,9 +48,9 @@ public class ImpedanceProView extends JFrame implements Observer {
 		super();
 
 		try {
-			icon = ImageUtil.loadResourceImage("icon_512.png");
+			icon = ImageUtil.loadResourceImage("icon_35.png");
 		} catch (Exception e) {
-			System.out.println("Could not load icon_512.png");
+			System.out.println("Could not load icon_35.png");
 		}
 
 		setLookAndFeel(); // Has to be first
