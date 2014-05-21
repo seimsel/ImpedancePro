@@ -34,6 +34,9 @@ public class ImpedanceProView extends JFrame implements Observer {
 
 	public static final Dimension PREF_WINDOW_SIZE = new Dimension(800, 600);
 	public static final Dimension MIN_WINDOW_SIZE = new Dimension(800, 600);
+	
+	public static int TF_WIDTH_BIG;
+	public static int TF_WIDTH_SMALL;
 
 	private ImpedanceProController controller;
 
@@ -46,6 +49,21 @@ public class ImpedanceProView extends JFrame implements Observer {
 
 	public ImpedanceProView(ImpedanceProController controller) {
 		super();
+		
+		String OS = System.getProperty("os.name", "generic").toLowerCase();
+	      if ((OS.indexOf("mac") >= 0) || (OS.indexOf("darwin") >= 0)) {
+	    		TF_WIDTH_BIG = 5;
+	    		TF_WIDTH_SMALL = 3;
+	      } else if (OS.indexOf("win") >= 0) {
+	    		TF_WIDTH_BIG = 6;
+	    		TF_WIDTH_SMALL = 4;
+	      } else if (OS.indexOf("nux") >= 0) {
+	    		TF_WIDTH_BIG = 5;
+	    		TF_WIDTH_SMALL = 3;
+	      } else {
+	    		TF_WIDTH_BIG = 5;
+	    		TF_WIDTH_SMALL = 3;
+	      }
 
 		try {
 			icon = ImageUtil.loadResourceImage("icon_35.png");

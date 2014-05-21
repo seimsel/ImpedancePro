@@ -25,21 +25,12 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 	private double minValue = -Double.MAX_VALUE, maxValue = Double.MAX_VALUE,
 			value;
 	private boolean emptyAllowed = false;
-	private int digits = 1;
+	private int digits = 2;
 	private boolean edited = false;
 	private boolean errorDisplayed = false;
 
 	public JEngineeringTextField(int col) {
 		super(col);
-		init();
-	}
-
-	public JEngineeringTextField(int digits, int col) {
-		super(col);
-		if (digits < 3 || digits > 16) {
-			throw new IllegalArgumentException();
-		}
-		this.digits = digits;
 		init();
 	}
 
@@ -66,9 +57,9 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 				try {
 					if (character == '-' || character == '+'
 							|| character == 'e') {
-						EngineeringUtil.parse(tfText.trim() + "1");
+						EngineeringUtil.parse(tfText.trim() + "1", digits);
 					} else {
-						EngineeringUtil.parse(tfText.trim());
+						EngineeringUtil.parse(tfText.trim(), digits);
 					}
 				} catch (Exception ex) {
 					e.consume();
@@ -87,7 +78,7 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 			return false;
 		} else {
 			try {
-				v = EngineeringUtil.parse(txtField.getText());
+				v = EngineeringUtil.parse(txtField.getText(), digits);
 			} catch (NumberFormatException e) {
 				errorMsg();
 				return false;
@@ -121,23 +112,23 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 		this.maxValue = maxValue;
 		TooltipManager.setTooltip(
 				txtField,
-				"" + EngineeringUtil.convert(minValue, 2)
+				"" + EngineeringUtil.convert(minValue, digits)
 						+ " \u2264 Eingabe \u2264 "
-						+ EngineeringUtil.convert(maxValue, 2),
+						+ EngineeringUtil.convert(maxValue, digits),
 				TooltipWay.down, 0);
 	}
 
 	public void setMinValue(double minValue) {
 		this.minValue = minValue;
 		TooltipManager.setTooltip(txtField,
-				"" + EngineeringUtil.convert(minValue, 2) + " \u2264 Eingabe",
+				"" + EngineeringUtil.convert(minValue, digits) + " \u2264 Eingabe",
 				TooltipWay.down, 0);
 	}
 
 	public void setMaxValue(double maxValue) {
 		this.maxValue = maxValue;
 		TooltipManager.setTooltip(txtField,
-				"Eingabe \u2264 " + EngineeringUtil.convert(maxValue, 2),
+				"Eingabe \u2264 " + EngineeringUtil.convert(maxValue, digits),
 				TooltipWay.down, 0);
 	}
 

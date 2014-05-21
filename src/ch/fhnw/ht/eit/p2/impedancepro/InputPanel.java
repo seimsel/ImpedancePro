@@ -204,8 +204,8 @@ public class InputPanel extends JPanel implements ActionListener {
 			valuePanel.lbTolerance2Unit.setVisible(false);
 			break;
 		}
-		
-		if(topology == SourceLoadNetwork.Z) {
+
+		if (topology == SourceLoadNetwork.Z) {
 			valuePanel.tfValue2.setRange(-1e21, 1e21);
 		} else {
 			valuePanel.tfValue2.setRange(1e-21, 1e21);
@@ -231,7 +231,8 @@ public class InputPanel extends JPanel implements ActionListener {
 	public class ValuePanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
-		public JEngineeringTextField tfValue1, tfValue2, tfTolerance1, tfTolerance2;
+		public JEngineeringTextField tfValue1, tfValue2, tfTolerance1,
+				tfTolerance2;
 		public JLabel lbValue1, lbValue2, lbValue1Unit, lbValue2Unit;
 		public JLabel lbTolerance1Unit, lbTolerance2Unit;
 
@@ -245,16 +246,18 @@ public class InputPanel extends JPanel implements ActionListener {
 			lbTolerance1Unit = new JLabel();
 			lbTolerance2Unit = new JLabel();
 
-			tfValue1 = new JEngineeringTextField(5);
-			tfValue2 = new JEngineeringTextField(5);
-			tfTolerance1 = new JEngineeringTextField(3);
-			tfTolerance2 = new JEngineeringTextField(3);
-						
+			tfValue1 = new JEngineeringTextField(ImpedanceProView.TF_WIDTH_BIG);
+			tfValue2 = new JEngineeringTextField(ImpedanceProView.TF_WIDTH_BIG);
+			tfTolerance1 = new JEngineeringTextField(
+					ImpedanceProView.TF_WIDTH_SMALL);
+			tfTolerance2 = new JEngineeringTextField(
+					ImpedanceProView.TF_WIDTH_SMALL);
+
 			tfValue1.addActionListener(InputPanel.this);
 			tfValue2.addActionListener(InputPanel.this);
 			tfTolerance1.addActionListener(InputPanel.this);
 			tfTolerance2.addActionListener(InputPanel.this);
-			
+
 			tfValue1.setRange(1e-21, 1e21);
 			tfValue2.setRange(1e-21, 1e21);
 			tfTolerance1.setRange(0, 99);
@@ -289,13 +292,14 @@ public class InputPanel extends JPanel implements ActionListener {
 		private JLabel lbFrequency, lbFrequencyUnit;
 
 		public FrequencyPanel() {
-			tfFrequency = new JEngineeringTextField(4);
+			tfFrequency = new JEngineeringTextField(
+					ImpedanceProView.TF_WIDTH_BIG);
 			lbFrequency = new JLabel("<html><i>f</i>:</html>");
 			lbFrequencyUnit = new JLabel("Hz");
 
 			tfFrequency.addActionListener(InputPanel.this);
 			tfFrequency.setRange(1, 100e9);
-			
+
 			add(lbFrequency);
 			add(tfFrequency);
 			add(lbFrequencyUnit);

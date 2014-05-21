@@ -39,10 +39,10 @@ public class MonteCarloPanel extends JPanel implements ActionListener {
 		lbFo = new JLabel("<html><i>f</i>g<sub>o</sub>: </html>");
 		lbH = new JLabel("h:");
 
-		tfN = new JIntegerTextField(4);
-		tfFu = new JEngineeringTextField(4);
-		tfFo = new JEngineeringTextField(4);
-		tfH = new JEngineeringTextField(4);
+		tfN = new JIntegerTextField(ImpedanceProView.TF_WIDTH_SMALL);
+		tfFu = new JEngineeringTextField(ImpedanceProView.TF_WIDTH_SMALL);
+		tfFo = new JEngineeringTextField(ImpedanceProView.TF_WIDTH_SMALL);
+		tfH = new JEngineeringTextField(ImpedanceProView.TF_WIDTH_SMALL);
 
 		tfN.addActionListener(this);
 		tfFu.addActionListener(this);

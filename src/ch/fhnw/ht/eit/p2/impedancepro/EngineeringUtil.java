@@ -49,7 +49,8 @@ public class EngineeringUtil {
 
 		if (index >= 0 && index < PREFIX_ARRAY.length) {
 			// If a prefix exists use it to create the correct string
-			return String.format(Locale.US, "%." + dp + "f%s", val, PREFIX_ARRAY[index]);
+			return String.format(Locale.US, "%." + dp + "f%s", val,
+					PREFIX_ARRAY[index]);
 		} else {
 			// If no prefix exists just make a string of the form 000e000
 			return String.format(Locale.US, "%." + dp + "fe%d", val, count * 3);
@@ -64,11 +65,45 @@ public class EngineeringUtil {
 	 *            The String to be parsed
 	 */
 	public static double parse(String str) {
-		if (str.contains("e") || str.contains("E") ) {
+		if (str.contains("e") || str.contains("E")) {
 			return Double.parseDouble(str);
 		}
+
+		return parse(str.toCharArray());
+	}
+
+	/**
+	 * Parses an 'engineering notated' <code>String</code> for a
+	 * <code>double</code> value. Strings with more decimal places
+	 * than dp are not allowed and throw an exception.
+	 * 
+	 * @param str
+	 *            The String to be parsed
+	 * @param dp
+	 *            The number of decimal places
+	 */
+	public static double parse(String str, int dp) throws NumberFormatException {		
+		int dpIndex = str.indexOf('.');
+		char[] chars = str.toCharArray();
+		int numberOfDp = 0;
 		
+		if(dpIndex >= 0 && dpIndex < chars.length) {
+			for (int i = dpIndex; i < chars.length; i++) {
+				if(Character.isDigit(chars[i])) {
+					numberOfDp++;
+				}
+			}
+		}
 		
+		if(numberOfDp > dp) {
+			throw new NumberFormatException(
+					"To many decimal places");
+		}
+				
+		if (str.contains("e") || str.contains("E")) {
+			return Double.parseDouble(str);
+		}
+
 		return parse(str.toCharArray());
 	}
 
@@ -178,7 +213,7 @@ public class EngineeringUtil {
 
 		return value * Math.pow(10, exponent);
 	}
-	
+
 	public static char[] getPrefixTestArray() {
 		return PREFIX_TEST_ARRAY;
 	}

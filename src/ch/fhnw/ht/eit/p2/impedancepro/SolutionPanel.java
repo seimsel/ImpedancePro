@@ -249,10 +249,10 @@ public class SolutionPanel extends JPanel implements ActionListener {
 		public ValuePanel(int topology) {
 			setLayout(new GridBagLayout());
 
-			tfValue1 = new JEngineeringTextField(5);
-			tfValue2 = new JEngineeringTextField(5);
-			tfTolerance1 = new JEngineeringTextField(3);
-			tfTolerance2 = new JEngineeringTextField(3);
+			tfValue1 = new JEngineeringTextField(ImpedanceProView.TF_WIDTH_BIG);
+			tfValue2 = new JEngineeringTextField(ImpedanceProView.TF_WIDTH_BIG);
+			tfTolerance1 = new JEngineeringTextField(ImpedanceProView.TF_WIDTH_SMALL);
+			tfTolerance2 = new JEngineeringTextField(ImpedanceProView.TF_WIDTH_SMALL);
 
 			tfValue1.setRange(1e-21, 1e21);
 			tfValue2.setRange(1e-21, 1e21);
