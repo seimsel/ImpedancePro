@@ -73,8 +73,11 @@ public class Network {
 	 *  In this part we calculate the matched network
 	 *  There are max. 4 solutions
 	 *  First the impedance of load and source network are initialized
-	 *  Next, check if the real part of source network is the real part of load network -> no matching network needed!
-	 * 	
+	 *  Next, check if the real part of source network is the real part of load network -> Calculate matchingNetwork
+	 * 	If the real part of source network is not the real part of load network -> Calculate matchingNetwork
+	 *  Call method createNetwork with each solution
+	 *  Save all solutions in a MatchingNetwork Array
+	 * 
 	 * Solution 1&2
 	 * 
 	 * X11 = L or C parallel source
@@ -88,6 +91,10 @@ public class Network {
 	 * X32 = L or C parallel load
 	 * X41 = L or C in series of load
 	 * X42 = L or C parallel load
+	 * 
+	 * @param sourceNetwork
+	 * @param loadNetwork
+	 * @param frequency
 	 * </pre>
 	 */
 
@@ -96,8 +103,6 @@ public class Network {
 
 		this.sourceNetwork = sourceNetwork;
 		this.loadNetwork = loadNetwork;
-
-		// Initialize varbiable with zero
 
 		double w = 0;
 
@@ -175,11 +180,12 @@ public class Network {
 			b = XS;
 			c = (Math.pow(RS, 2)) + (Math.pow(XS, 2));
 
-			// Check, if there a imaginary part of solution 1
+			// Check, if there a imaginary part of solution 1 & 2
 			// If there a imaginary part, component is not applicable to the
 			// matched network
 
 			if ((Math.pow(b, 2)) - (a * c) >= 0) {
+				
 				if ((Math.pow(b, 2)) - (a * c) != 0) {
 					X21 = (-b - Math.sqrt((Math.pow(b, 2)) - a * c)) / (a);
 
@@ -210,11 +216,12 @@ public class Network {
 			b = XL;
 			c = Math.pow(RL, 2) + Math.pow(XL, 2);
 
-			// Check, if there a imaginary part of solution 3
+			// Check, if there a imaginary part of solution 3 & 4
 			// If there a imaginary part, component is not applicable to the
 			// matched network
 
 			if (Math.pow(b, 2) - (a * c) >= 0) {
+				
 				if ((Math.pow(b, 2)) - (a * c) != 0) {
 					X42 = (-b - Math.sqrt(Math.pow(b, 2) - a * c)) / (a);
 
@@ -240,9 +247,6 @@ public class Network {
 
 			}
 
-			// Check, if there a imaginary part of solution 4
-			// If there a imaginary part, component is not applicable to the
-			// matched network
 		}
 
 		solution1 = createNetwork(solution1, X11, MatchingNetwork.PAR, X12,
@@ -305,6 +309,26 @@ public class Network {
 			}
 		}
 	}
+	
+	/**
+	 * <pre>
+	 *  In this part we determine the matchingNetwork based on reactance 1&2
+	 *  Save the matchingNetwork in solution object
+	 *  
+	 * @param solution
+	 * @param reactance1
+	 * @param orientation1
+	 * Serial or parallel Source/Load
+	 * @param reactance2
+	 * @param orientation2
+	 * Serial or parallel Source/Load
+	 * @param w
+	 *  Omega
+	 * @param wire
+	 * True, if there a no components
+	 * @return
+	 * </pre>
+	 */
 
 	public MatchingNetwork createNetwork(MatchingNetwork solution,
 			double reactance1, byte orientation1, double reactance2,
@@ -392,7 +416,22 @@ public class Network {
 
 		return solution;
 	}
+	
+	/**
+	 * <pre>
+	 *  In this part we calculateReturnLossAtFrequency
+	 *  First the sourceNetwork, matchingNetwork, loadNetwork are initialized
+	 *  calculate return loss based on topology
+	 *  return value is a reflexion factor
+	 * @param sourceNetwork
+	 * @param matchingNetwork
+	 * @param loadNetwork
+	 * @param frequency
+	 * @return
+	 * </pre>
+	 */
 
+	
 	public double calculateReturnLossAtFrequency(
 			SourceLoadNetwork sourceNetwork, MatchingNetwork matchingNetwork,
 			SourceLoadNetwork loadNetwork, double frequency) {
@@ -501,6 +540,17 @@ public class Network {
 
 		return r.abs();
 	}
+	
+	/**
+	 * <pre>
+	 *  In this part we calculateReturnLossOfAllSolutions
+	 *  First arrays for JFreeChart are initialized
+	 *  calculate return loss based on lower and upper frequency
+	 *  set XYData for JFreeChart plot
+	 * @param lowerFrequency
+	 * @param upperFrequency
+	 * </pre>
+	 */
 
 	public void calculateReturnLossOfAllSolutions(double lowerFrequency,
 			double upperFrequency) {
@@ -536,6 +586,23 @@ public class Network {
 		setSwrData(swrDataCollection);
 	}
 
+	/**
+	 * <pre>
+	 *  In this part we calculateMonteCarlo
+	 *  First lower and upper frequency, matchingNetworks array are initialized
+	 *  generate new components based on component tolerance of loadNetwork,sourceNetwork,matchingNetwork with Java Random Class
+	 *  calculate returnLoss with new generated components
+	 *  result is a percent value
+	 * @param matchingNetworks
+	 * @param lowerFrequency
+	 * @param upperFrequency
+	 * @param h
+	 * setting of YieldGoal
+	 * @param n
+	 * setting of MonteCarlo, number of data points
+	 * </pre>
+	 */
+	
 	public void calculateMonteCarlo(MatchingNetwork[] matchingNetworks,
 			double lowerFrequency, double upperFrequency, double h, int n) {
 		double[] monteCarloResults = new double[matchingNetworks.length];
@@ -669,6 +736,15 @@ public class Network {
 		}
 		return res;
 	}
+
+	/**
+	 * <pre>
+	 * Check if there no ArithmeticException
+	 * @param check
+	 * @return
+	 * </pre>
+	 */
+	
 
 	public double exceptionhandler(double check) {
 		try {

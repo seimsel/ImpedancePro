@@ -26,6 +26,13 @@ public class SourceLoadNetwork {
 		this.topology = topology;
 	}
 	
+	/**
+	 * * <pre>
+	 * Create new Impedance of Source / Load Components
+	 * @param f
+	 * @return
+	 * * </pre>
+	 */
 	public ComplexNumber getImpedanceAtFrequency(double f) {
 		
 		double w = 2 * Math.PI * f;
