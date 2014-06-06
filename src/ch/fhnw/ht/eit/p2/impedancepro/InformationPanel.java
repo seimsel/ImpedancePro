@@ -11,6 +11,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * A simple panel with a help and an info button
+ * 
+ * @author Simon Zumbrunnen
+ */
 public class InformationPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	

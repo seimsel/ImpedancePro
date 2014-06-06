@@ -10,7 +10,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * The <code>GraphView</code> combines two <code>GraphPanel</code>s.
+ * <pre>
+ * The <code>GraphView</code> holds the <code>GraphPanel</code> for the return
+ * loss plot.
+ * </pre>
  * 
  * @author Simon Zumbrunnen
  */
@@ -22,6 +25,14 @@ public class GraphView extends JPanel {
 
 	private ImpedanceProController controller;
 
+	/**
+	 * <pre>
+	 * Creates a <code>GraphPanel</code> and configures it.
+	 * </pre>
+	 * 
+	 * @param controller
+	 *            The controller needs to be able to change graph settings.
+	 */
 	public GraphView(ImpedanceProController controller) {
 		super();
 		this.controller = controller;
@@ -69,19 +80,27 @@ public class GraphView extends JPanel {
 		add(returnLossGraphBorderPanel);
 	}
 
+	/**
+	 * <pre>
+	 * Updates the graph.
+	 * </pre>
+	 * 
+	 * @param model
+	 */
 	public void update(ImpedanceProModel model) {
-		if(controller.getGraphType() == 0) {
+		if (controller.getGraphType() == 0) {
 			if (model.getNetwork().getReturnLossData() != null) {
 				returnLossGraph.plot.setDataset(model.getNetwork()
 						.getReturnLossData());
 			}
 		} else {
 			if (model.getNetwork().getSwrData() != null) {
-				returnLossGraph.plot.setDataset(model.getNetwork()
-						.getSwrData());
+				returnLossGraph.plot
+						.setDataset(model.getNetwork().getSwrData());
 			}
 		}
-		if (controller.isMonteCarloDisplayed() && controller.getGraphType() == 0) {
+		if (controller.isMonteCarloDisplayed()
+				&& controller.getGraphType() == 0) {
 			returnLossGraph.setYieldGoal(model.getLowerFrequency(),
 					model.getUpperFrequency(), model.getH());
 		} else {
@@ -89,6 +108,11 @@ public class GraphView extends JPanel {
 		}
 	}
 
+	/**
+	 * <pre>
+	 * Enables or disables the <code>GraphView</code>
+	 * </pre>
+	 */
 	public void setEnabled(boolean enabled) {
 		returnLossGraph.setVisible(enabled);
 		lbInfo.setVisible(!enabled);

@@ -31,6 +31,27 @@ public class ImpedanceProModel extends Observable implements Runnable {
 		super.setChanged();
 	}
 
+	/**
+	 * <pre>
+	 * Starts the calculations in a new <code>Thread</code>
+	 * </pre>
+	 * 
+	 * @param sourceNetwork
+	 * @param monteCarloMatchingNetworks
+	 *            If the matching networks to be used in the monte-carlo
+	 *            simulation differ from the calculated networks they are saved
+	 *            in this array
+	 * @param loadNetwork
+	 * @param frequency
+	 * @param lowerFrequency
+	 * @param upperFrequency
+	 * @param h
+	 * @param n
+	 * @param yieldGoalSpan
+	 *            Is used to set the range in which the return loss is
+	 *            calculated
+	 * @param monteCarloEnabled
+	 */
 	public void triggerCalculations(SourceLoadNetwork sourceNetwork,
 			MatchingNetwork[] monteCarloMatchingNetworks,
 			SourceLoadNetwork loadNetwork, double frequency,
@@ -47,7 +68,7 @@ public class ImpedanceProModel extends Observable implements Runnable {
 		this.n = n;
 		this.yieldGoalSpan = yieldGoalSpan;
 		this.monteCarloEnabled = monteCarloEnabled;
-		
+
 		Thread calculationEngine = new Thread(this);
 		calculationEngine.start();
 	}
@@ -76,8 +97,12 @@ public class ImpedanceProModel extends Observable implements Runnable {
 		this.h = h;
 	}
 
+	/**
+	 * The whole <code>run()</code> method is a synchronized block, so it never
+	 * runs more than once at the same time.
+	 */
 	public void run() {
-		synchronized(this) {
+		synchronized (this) {
 			setUpperFrequency(upperFrequency);
 			setLowerFrequency(lowerFrequency);
 			setH(h);
@@ -97,14 +122,16 @@ public class ImpedanceProModel extends Observable implements Runnable {
 							.getValue() >= 0) {
 						matchingNetworks[i].getElectricalComponents()[0]
 								.setValue(monteCarloMatchingNetworks[i]
-										.getElectricalComponents()[0].getValue());
+										.getElectricalComponents()[0]
+										.getValue());
 					}
 
 					if (monteCarloMatchingNetworks[i].getElectricalComponents()[1]
 							.getValue() >= 0) {
 						matchingNetworks[i].getElectricalComponents()[1]
 								.setValue(monteCarloMatchingNetworks[i]
-										.getElectricalComponents()[1].getValue());
+										.getElectricalComponents()[1]
+										.getValue());
 					}
 
 					if (monteCarloMatchingNetworks[i].getElectricalComponents()[0]
@@ -124,8 +151,8 @@ public class ImpedanceProModel extends Observable implements Runnable {
 					}
 				}
 
-				getNetwork().calculateMonteCarlo(matchingNetworks, lowerFrequency,
-						upperFrequency, h, n);
+				getNetwork().calculateMonteCarlo(matchingNetworks,
+						lowerFrequency, upperFrequency, h, n);
 			} else {
 				getNetwork().setMonteCarloResults(null);
 			}

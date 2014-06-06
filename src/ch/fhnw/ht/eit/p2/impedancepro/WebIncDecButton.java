@@ -9,6 +9,12 @@ import javax.swing.JPanel;
 import com.alee.extended.panel.WebButtonGroup;
 import com.alee.laf.button.WebButton;
 
+/**
+ * A simple increment / decrement button based on a <code>WebButtonGroup</code>
+ * of the <code>WebLookAndFeel</code>
+ * 
+ * @author Simon Zumbrunnen
+ */
 public class WebIncDecButton extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 

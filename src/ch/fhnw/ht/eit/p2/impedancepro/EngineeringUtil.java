@@ -3,8 +3,10 @@ package ch.fhnw.ht.eit.p2.impedancepro;
 import java.util.Locale;
 
 /**
+ * <pre>
  * The <code>EngineeringUtil</code> class contains methods to handle engineering
  * notation.
+ * </pre>
  * 
  * @author Stephan Fahrni
  */
@@ -20,8 +22,10 @@ public class EngineeringUtil {
 			3, 3, 6, 9, 12 };
 
 	/**
+	 * <pre>
 	 * Converts a <code>double</code> into an 'engineering notated'
 	 * <code>String</code>.
+	 * </pre>
 	 * 
 	 * @param val
 	 *            The value to be converted
@@ -58,8 +62,10 @@ public class EngineeringUtil {
 	}
 
 	/**
+	 * <pre>
 	 * Parses an 'engineering notated' <code>String</code> for a
 	 * <code>double</code> value.
+	 * </pre>
 	 * 
 	 * @param str
 	 *            The String to be parsed
@@ -73,9 +79,11 @@ public class EngineeringUtil {
 	}
 
 	/**
+	 * <pre>
 	 * Parses an 'engineering notated' <code>String</code> for a
 	 * <code>double</code> value. Strings with more decimal places
 	 * than dp are not allowed and throw an exception.
+	 * </pre>
 	 * 
 	 * @param str
 	 *            The String to be parsed
@@ -110,8 +118,10 @@ public class EngineeringUtil {
 	}
 
 	/**
+	 * <pre>
 	 * Parses an 'engineering notated' <code>char[]</code> for a
 	 * <code>double</code> value.
+	 * </pre> 
 	 * 
 	 * @param chars
 	 *            The char[] to be parsed

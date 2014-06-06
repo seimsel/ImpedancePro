@@ -9,8 +9,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 /**
+ * <pre>
  * The <code>SolutionView</code> class combines up to 4
  * <code>SolutionPanel</code>s.
+ * </pre>
  * 
  * @author Simon Zumbrunnen
  */
@@ -58,6 +60,13 @@ public class SolutionView extends JPanel {
 		return solutionPanels;
 	}
 
+	/**
+	 * <pre>
+	 * Updates the solutions.
+	 * </pre>
+	 * 
+	 * @param model
+	 */
 	public void update(ImpedanceProModel model) {
 		MatchingNetwork[] matchingNetworks = model.getNetwork()
 				.getMatchingNetworks();

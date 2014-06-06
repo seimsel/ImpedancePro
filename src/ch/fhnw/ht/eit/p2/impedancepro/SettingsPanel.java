@@ -15,7 +15,9 @@ import javax.swing.JPanel;
 import com.alee.extended.button.WebSwitch;
 
 /**
+ * <pre>
  * The <code>ReturnLossPanel</code> class contains the settings for the graphs.
+ * </pre>
  * 
  * @author Simon Zumbrunnen
  */
@@ -190,7 +192,6 @@ public class SettingsPanel extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {		
-		
 		if(e.getSource() instanceof JButton) {
 			JButton btn = (JButton) e.getSource();		
 			if(btn.getName() == "info") {

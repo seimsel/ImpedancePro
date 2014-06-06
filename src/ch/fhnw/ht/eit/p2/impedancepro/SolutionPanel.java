@@ -16,8 +16,10 @@ import com.alee.extended.image.DisplayType;
 import com.alee.extended.image.WebImage;
 
 /**
+ * <pre>
  * The <code>SolutionPanel</code> displays the solution with an image and
  * numerical values.
+ * </pre>
  * 
  * @author Simon Zumbrunnen
  */

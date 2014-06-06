@@ -14,8 +14,10 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 /**
+ * <pre>
  * The <code>ImpedanceProView</code> class is the main view of ImpedancePro. It
  * displays all the relevant data.
+ * </pre>
  * 
  * @author Simon Zumbrunnen
  */
@@ -50,6 +52,7 @@ public class ImpedanceProView extends JFrame implements Observer {
 	public ImpedanceProView(ImpedanceProController controller) {
 		super();
 		
+		// Platform dependent settings
 		String OS = System.getProperty("os.name", "generic").toLowerCase();
 	      if ((OS.indexOf("mac") >= 0) || (OS.indexOf("darwin") >= 0)) {
 	    		TF_WIDTH_BIG = 5;

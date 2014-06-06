@@ -14,9 +14,12 @@ import com.alee.managers.tooltip.TooltipManager;
 import com.alee.managers.tooltip.TooltipWay;
 
 /**
- * @author Richard Gut
- * @author Simon Zumbrunnen
+ * <pre>
+ * The <code>JIntegerTextField</code> only allows correct formated integers.
+ * It is also able to check whether the entered value is in a specified range.
+ * </pre>
  * 
+ * @author Simon Zumbrunnen
  */
 
 public class JIntegerTextField extends JTextField implements FocusListener {

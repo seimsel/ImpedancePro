@@ -153,6 +153,12 @@ public class InputPanel extends JPanel implements ActionListener {
 		return topology;
 	}
 
+	/**
+	 * <pre>
+	 * Sets all the designators and unit according to the topology.
+	 * </pre>
+	 * @param topology
+	 */
 	public void setTopology(int topology) {
 		WebToggleButton btn = (WebToggleButton) topologyChooseButtons[topology];
 		btn.setSelected(true);

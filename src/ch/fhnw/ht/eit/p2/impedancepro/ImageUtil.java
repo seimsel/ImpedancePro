@@ -7,7 +7,9 @@ import java.awt.MediaTracker;
 import javax.swing.ImageIcon;
 
 /**
- * The <code>ImageUtil</code> class enables a simple way of loading images.
+ * <pre>
+ * The <code>ImageUtil</code> class provides a simple way of loading images.
+ * </pre>
  * 
  * @author Richard Gut
  */
@@ -15,7 +17,9 @@ public class ImageUtil {
 	private static Container p = new Container();
 
 	/**
+	 * <pre>
 	 * Loads an image from an absolute path.
+	 * </pre>
 	 * 
 	 * @param imagePath
 	 *            Absolute path to the image
@@ -34,7 +38,9 @@ public class ImageUtil {
 	}
 
 	/**
+	 * <pre>
 	 * Loads an image which is inside the "images" resource folder.
+	 * </pre>
 	 * 
 	 * @param imageName
 	 *            Relative path to the image (normally image name e.g.

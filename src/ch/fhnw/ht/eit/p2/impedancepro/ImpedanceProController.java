@@ -62,7 +62,9 @@ public class ImpedanceProController {
 	}
 
 	/**
+	 * <pre>
 	 * Is triggered by the view, as soon as an action occurs.
+	 * </pre>
 	 */
 	public void viewAction() {
 		getNewValues();
@@ -203,6 +205,10 @@ public class ImpedanceProController {
 		setChanged(false);
 	}
 
+	/**
+	 * @return returns true if all <code>JEngineeringTextField</code>s and all
+	 *         <code>JIntegerTextField</code> have valid values.
+	 */
 	private boolean vertifyAllTextFields() {
 		ImpedanceProView view = getView();
 		InputPanel sourceInput = view.inputView.sourceInput;
@@ -217,13 +223,13 @@ public class ImpedanceProController {
 		verify &= loadInput.valuePanel.tfValue1.verify();
 		verify &= sourceInput.valuePanel.tfTolerance1.verify();
 		verify &= loadInput.valuePanel.tfTolerance1.verify();
-		
-		if(sourceInput.getTopology() != SourceLoadNetwork.R) {
+
+		if (sourceInput.getTopology() != SourceLoadNetwork.R) {
 			verify &= sourceInput.valuePanel.tfValue2.verify();
 			verify &= sourceInput.valuePanel.tfTolerance2.verify();
 		}
-	
-		if(loadInput.getTopology() != SourceLoadNetwork.R) {
+
+		if (loadInput.getTopology() != SourceLoadNetwork.R) {
 			verify &= loadInput.valuePanel.tfValue2.verify();
 			verify &= loadInput.valuePanel.tfTolerance2.verify();
 		}
@@ -295,8 +301,6 @@ public class ImpedanceProController {
 
 	/**
 	 * Checks whether the values of the view have changed since the last action.
-	 * 
-	 * @return Returns true if values have changed and false if not
 	 */
 	private void checkViewHasChanged() {
 		if (Arrays.deepEquals(newInputValues, oldInputValues)
@@ -370,6 +374,11 @@ public class ImpedanceProController {
 		setChanged(true);
 	}
 
+	/**
+	 * @param enabled
+	 *            When set to true the components used by the monte-carlo
+	 *            simulation are shown
+	 */
 	public void setMonteCarloEnabled(boolean enabled) {
 		ImpedanceProView view = getView();
 		SettingsPanel settingsPanel = view.propertiesView.settingsPanel;
@@ -418,7 +427,7 @@ public class ImpedanceProController {
 
 	public void openHelpPDF() {
 		try {
-			Desktop.getDesktop().open(DocumentUtil.loadResourcePDF("info.pdf"));
+			Desktop.getDesktop().open(DocumentUtil.loadResourcePDF("help.pdf"));
 		} catch (IOException e) {
 			System.out.println("Couldn't load help.pdf");
 		}

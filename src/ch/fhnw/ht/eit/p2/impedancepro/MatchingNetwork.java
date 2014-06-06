@@ -2,6 +2,10 @@ package ch.fhnw.ht.eit.p2.impedancepro;
 
 
 /**
+ * <pre>
+ * Represents the matching network with all its electrical components.
+ * </pre>
+ * 
  * @author Stephan Fahrni
  */
 

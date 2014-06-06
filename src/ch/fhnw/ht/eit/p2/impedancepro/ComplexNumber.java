@@ -1,7 +1,13 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
 /**
+ * <pre>
+ * The <code>ComplexNumber</code> class provides a simple way to use complex
+ * basic operations (e.g. multiplication of to complex values).
+ * </pre>
+ * 
  * @author Richard Gut
+ * @author Simon Zumbrunnen
  */
 public class ComplexNumber {
 	private double re;
@@ -23,25 +29,26 @@ public class ComplexNumber {
 	public ComplexNumber(ComplexNumber z) {
 		this(z.re, z.im);
 	}
-	
+
 	public double getRe() {
 		return re;
 	}
-	
+
 	public void setRe(double re) {
 		this.re = re;
 	}
-	
+
 	public double getIm() {
 		return im;
 	}
-	
+
 	public void setIm(double im) {
 		this.im = im;
 	}
 
 	static public ComplexNumber pow(ComplexNumber a, double x) {
-		return new ComplexNumber(Math.pow(a.abs(), x) * Math.cos(x * angle(a)), Math.pow(a.abs(), x) * Math.sin(x * angle(a)));
+		return new ComplexNumber(Math.pow(a.abs(), x) * Math.cos(x * angle(a)),
+				Math.pow(a.abs(), x) * Math.sin(x * angle(a)));
 	}
 
 	public ComplexNumber add(ComplexNumber z) {
@@ -53,7 +60,8 @@ public class ComplexNumber {
 	}
 
 	public ComplexNumber mul(ComplexNumber z) {
-		return new ComplexNumber((re * z.re) - (im * z.im), (re * z.im) + (im * z.re));
+		return new ComplexNumber((re * z.re) - (im * z.im), (re * z.im)
+				+ (im * z.re));
 	}
 
 	public ComplexNumber mul(double z) {
@@ -61,7 +69,8 @@ public class ComplexNumber {
 	}
 
 	public ComplexNumber div(ComplexNumber b) {
-		return new ComplexNumber((this.abs() / b.abs()) * Math.cos(angle(this) - angle(b)), (this.abs() / b.abs())
+		return new ComplexNumber((this.abs() / b.abs())
+				* Math.cos(angle(this) - angle(b)), (this.abs() / b.abs())
 				* Math.sin(angle(this) - angle(b)));
 	}
 
@@ -72,7 +81,7 @@ public class ComplexNumber {
 	public double abs() {
 		return Math.sqrt(re * re + im * im);
 	}
-	
+
 	public ComplexNumber conj() {
 		return new ComplexNumber(getRe(), -getIm());
 	}
@@ -100,11 +109,27 @@ public class ComplexNumber {
 	public static String toString(ComplexNumber z) {
 		return "Realteil: " + z.re + " Imaginaerteil: " + z.im;
 	}
-	
+
+	/**
+	 * <pre>
+	 * Used in electrical applications. Uses the following formula:
+	 * 
+	 *                  1
+	 * Z = --------------------------
+	 *       1      1            1
+	 *      ---- + ---- + ... + ----
+	 *       Z1     Z2           Zn
+	 * 
+	 * </pre>
+	 * 
+	 * @param complexNumbers
+	 *            An array of <code>ComplexNumber</code>s (Z1, Z2, ..., Zn)
+	 * @return Returns the <code>ComplexNumber</code> Z
+	 */
 	public static ComplexNumber parallel(ComplexNumber[] complexNumbers) {
 		ComplexNumber res = new ComplexNumber(0, 0);
 		ComplexNumber one = new ComplexNumber(1, 0);
-		
+
 		for (int i = 0; i < complexNumbers.length; i++) {
 			res = res.add(one.div(complexNumbers[i]));
 		}

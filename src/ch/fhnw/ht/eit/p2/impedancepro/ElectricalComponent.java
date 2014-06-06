@@ -1,6 +1,11 @@
 package ch.fhnw.ht.eit.p2.impedancepro;
 
 /**
+ * <pre>
+ * An instance of the <code>ElectricalComponent</code> class represents an
+ * electrical component (e.g. a capacitor) with a value and a tolerance.
+ * </pre>
+ * 
  * @author Stephan Fahrni
  */
 public class ElectricalComponent {

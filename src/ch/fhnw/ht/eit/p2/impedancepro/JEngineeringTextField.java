@@ -14,9 +14,14 @@ import com.alee.managers.tooltip.TooltipManager;
 import com.alee.managers.tooltip.TooltipWay;
 
 /**
+ * <pre>
+ * The <code>JEngineeringTextField</code> can read 'engineering notated'
+ * strings and only allows correct formated numbers. It is also able to check
+ * whether the entered value is in a specified range.
+ * </pre>
+ * 
  * @author Richard Gut
  * @author Simon Zumbrunnen
- * 
  */
 
 public class JEngineeringTextField extends JTextField implements FocusListener {

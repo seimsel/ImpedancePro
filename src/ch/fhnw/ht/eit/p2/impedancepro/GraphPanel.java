@@ -23,9 +23,11 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 /**
+ * <pre>
  * The <code>GraphPanel</code> class is able to show a <code>JFreeChart</code>
  * by setting the dataset of the <code>public XYPlot plot</code>. It is also
  * possible to display a yield goal.
+ * </pre>
  * 
  * @author Simon Zumbrunnen
  */
@@ -38,7 +40,9 @@ public class GraphPanel extends JPanel implements MouseWheelListener {
 	public NumberAxis axis;
 	
 	/**
+	 * <pre>
 	 * Creates a <code>JFreeChart</code> and configures it.
+	 * </pre>
 	 * 
 	 * @param xName
 	 *            The name of the x-axis
@@ -90,7 +94,9 @@ public class GraphPanel extends JPanel implements MouseWheelListener {
 	}
 
 	/**
-	 * Adds a yield goal to the plot.
+	 * <pre>
+	 * Adds a yield goal to the plot using an <code>XYAreaRenderer</code>
+	 * </pre>
 	 * 
 	 * @param lowerLimit
 	 *            Lower limit of the yield goal

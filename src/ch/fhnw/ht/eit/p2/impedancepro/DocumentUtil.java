@@ -8,7 +8,10 @@ import java.io.InputStream;
 import org.jfree.io.IOUtils;
 
 /**
- * The <code>DocumentUtil</code> class enables a simple way of loading files.
+ * <pre>
+ * The <code>DocumentUtil</code> class enables a simple way of loading files
+ * like PDF or similar.
+ * </pre>
  * 
  * @author Simon Zumbrunnen
  */
@@ -26,7 +29,9 @@ public class DocumentUtil {
 	}
 
 	/**
+	 * <pre>
 	 * Loads a PDF which is inside the "documents" resource folder.
+	 * </pre>
 	 * 
 	 * @param pdfName
 	 *            Relative path to the pdf (normally image name e.g. "file.pdf")

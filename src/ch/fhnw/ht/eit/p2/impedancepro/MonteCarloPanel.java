@@ -13,7 +13,7 @@ import com.alee.extended.image.DisplayType;
 import com.alee.extended.image.WebImage;
 
 /**
- * The <code>MonteCarloPanel</code> class contains all the inputs for the monte
+ * The <code>MonteCarloPanel</code> class contains all the inputs for the monte-
  * carlo simulation.
  * 
  * @author Simon Zumbrunnen

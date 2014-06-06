@@ -9,8 +9,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 /**
+ * <pre>
  * The <code>PropertiesView</code> combines a <code>MonteCarloPanel</code> and a
  * <code>ReturnLossPanel</code>. All the configurations can be changed here.
+ * </pre>
  * 
  * @author Simon Zumbrunnen
  */
