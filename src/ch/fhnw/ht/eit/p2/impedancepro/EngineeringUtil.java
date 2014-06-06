@@ -88,9 +88,11 @@ public class EngineeringUtil {
 		int numberOfDp = 0;
 		
 		if(dpIndex >= 0 && dpIndex < chars.length) {
-			for (int i = dpIndex; i < chars.length; i++) {
+			for (int i = dpIndex + 1; i < chars.length; i++) {
 				if(Character.isDigit(chars[i])) {
 					numberOfDp++;
+				} else {
+					i = chars.length - 1;
 				}
 			}
 		}

@@ -185,12 +185,12 @@ public class InputPanel extends JPanel implements ActionListener {
 			break;
 		case SourceLoadNetwork.R_PAR_C:
 		case SourceLoadNetwork.R_SER_C:
-			valuePanel.lbValue2.setText("<html><i>C</i></html>:");
+			valuePanel.lbValue2.setText("<html><i>C</i>:</html>:");
 			valuePanel.lbValue2Unit.setText("F");
 			break;
 		case SourceLoadNetwork.R_PAR_L:
 		case SourceLoadNetwork.R_SER_L:
-			valuePanel.lbValue2.setText("<html><i>L</i></html>:");
+			valuePanel.lbValue2.setText("<html><i>L</i>:</html>:");
 			valuePanel.lbValue2Unit.setText("H");
 			break;
 		case SourceLoadNetwork.Z:

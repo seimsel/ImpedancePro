@@ -39,6 +39,8 @@ public class ImpedanceProController {
 	private int graphType = 0;
 	private boolean changed = false;
 
+	public static final double MAX_YIELD_GOAL_SPAN = 0.2;
+
 	public ImpedanceProController(ImpedanceProModel model) {
 		setModel(model);
 	}
@@ -174,19 +176,21 @@ public class ImpedanceProController {
 					model.triggerCalculations(sourceNetwork, null, loadNetwork,
 							frequency, 0.0, 0.0, 0.0, 0, yieldGoalSpan, false);
 				}
+
+				view.graphView.returnLossGraph.axis.setRange(frequency
+						* (1 - yieldGoalSpan), frequency * (1 + yieldGoalSpan));
 			}
 
 			if (sourceInput.frequencyPanel.tfFrequency.verify()) {
 				double frequency = sourceInput.frequencyPanel.tfFrequency
 						.getValue();
 
-				double yieldGoalSpan = view.propertiesView.settingsPanel.btnSpan
-						.getValue() / 20.0;
-
-				monteCarloPanel.tfFu.setRange(frequency * (1 - yieldGoalSpan),
-						frequency * (1 + yieldGoalSpan));
-				monteCarloPanel.tfFo.setRange(frequency * (1 - yieldGoalSpan),
-						frequency * (1 + yieldGoalSpan));
+				monteCarloPanel.tfFu.setRange(frequency
+						* (1 - MAX_YIELD_GOAL_SPAN), frequency
+						* (1 + MAX_YIELD_GOAL_SPAN));
+				monteCarloPanel.tfFo.setRange(frequency
+						* (1 - MAX_YIELD_GOAL_SPAN), frequency
+						* (1 + MAX_YIELD_GOAL_SPAN));
 
 				if (!(monteCarloPanel.tfFu.verify() && monteCarloPanel.tfFo
 						.verify())) {
@@ -210,9 +214,19 @@ public class ImpedanceProController {
 
 		verify &= sourceInput.frequencyPanel.tfFrequency.verify();
 		verify &= sourceInput.valuePanel.tfValue1.verify();
-		verify &= sourceInput.valuePanel.tfValue2.verify();
 		verify &= loadInput.valuePanel.tfValue1.verify();
-		verify &= loadInput.valuePanel.tfValue2.verify();
+		verify &= sourceInput.valuePanel.tfTolerance1.verify();
+		verify &= loadInput.valuePanel.tfTolerance1.verify();
+		
+		if(sourceInput.getTopology() != SourceLoadNetwork.R) {
+			verify &= sourceInput.valuePanel.tfValue2.verify();
+			verify &= sourceInput.valuePanel.tfTolerance2.verify();
+		}
+	
+		if(loadInput.getTopology() != SourceLoadNetwork.R) {
+			verify &= loadInput.valuePanel.tfValue2.verify();
+			verify &= loadInput.valuePanel.tfTolerance2.verify();
+		}
 
 		for (int i = 0; i < solutionPanels.length; i++) {
 			verify &= solutionPanels[i].valuePanel.tfValue1.verify();
@@ -388,9 +402,9 @@ public class ImpedanceProController {
 	}
 
 	public void setYieldGoalSpan(int yieldGoalSpan) {
-		view.propertiesView.settingsPanel.btnSpan
-				.setValue(view.propertiesView.settingsPanel.btnSpan.getValue()
-						+ yieldGoalSpan);
+		WebIncDecButton btnSpan = view.propertiesView.settingsPanel.btnSpan;
+		btnSpan.setValue(view.propertiesView.settingsPanel.btnSpan.getValue()
+				+ yieldGoalSpan);
 		viewAction();
 	}
 

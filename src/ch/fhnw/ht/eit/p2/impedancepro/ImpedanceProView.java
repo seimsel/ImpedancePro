@@ -123,7 +123,7 @@ public class ImpedanceProView extends JFrame implements Observer {
 				2, // gridwidth
 				1, // gridheigth
 				1.0, // weightx
-				0.1, // weighty
+				0.2, // weighty
 				GridBagConstraints.CENTER, // anchor
 				GridBagConstraints.BOTH, // fill
 				new Insets(0, 0, 0, 0), // insets
@@ -136,7 +136,7 @@ public class ImpedanceProView extends JFrame implements Observer {
 				1, // gridwidth
 				1, // gridheigth
 				1.0, // weightx
-				0.9, // weighty
+				0.8, // weighty
 				GridBagConstraints.CENTER, // anchor
 				GridBagConstraints.BOTH, // fill
 				new Insets(0, 0, 0, 0), // insets
@@ -149,7 +149,7 @@ public class ImpedanceProView extends JFrame implements Observer {
 				1, // gridwidth
 				1, // gridheigth
 				0.0, // weightx
-				0.9, // weighty
+				0.8, // weighty
 				GridBagConstraints.CENTER, // anchor
 				GridBagConstraints.VERTICAL, // fill
 				new Insets(0, 0, 0, 0), // insets

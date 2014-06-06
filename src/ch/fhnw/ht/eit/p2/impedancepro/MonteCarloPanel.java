@@ -51,35 +51,9 @@ public class MonteCarloPanel extends JPanel implements ActionListener {
 		
 		tfN.setRange(1, 10000);
 		tfH.setRange(1e-21, 1);
-		
-		add(lbFo, new GridBagConstraints(0, // gridx
-				1, // gridy
-				1, // gridwidth
-				1, // gridheigth
-				0.0, // weightx
-				0.0, // weighty
-				GridBagConstraints.EAST, // anchor
-				GridBagConstraints.NONE, // fill
-				new Insets(0, 0, 0, 0), // insets
-				10, // ipadx
-				0 // ipady
-				));
-
-		add(tfFo, new GridBagConstraints(1, // gridx
-				1, // gridy
-				1, // gridwidth
-				1, // gridheigth
-				0.0, // weightx
-				0.0, // weighty
-				GridBagConstraints.EAST, // anchor
-				GridBagConstraints.NONE, // fill
-				new Insets(0, 0, 0, 0), // insets
-				tfFo.getPreferredSize().width, // ipadx
-				0 // ipady
-				));
 
 		add(lbFu, new GridBagConstraints(0, // gridx
-				2, // gridy
+				1, // gridy
 				1, // gridwidth
 				1, // gridheigth
 				0.0, // weightx
@@ -92,7 +66,7 @@ public class MonteCarloPanel extends JPanel implements ActionListener {
 				));
 
 		add(tfFu, new GridBagConstraints(1, // gridx
-				2, // gridy
+				1, // gridy
 				1, // gridwidth
 				1, // gridheigth
 				0.0, // weightx
@@ -101,6 +75,32 @@ public class MonteCarloPanel extends JPanel implements ActionListener {
 				GridBagConstraints.NONE, // fill
 				new Insets(0, 0, 0, 0), // insets
 				tfFu.getPreferredSize().width, // ipadx
+				0 // ipady
+				));
+		
+		add(lbFo, new GridBagConstraints(0, // gridx
+				2, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.EAST, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				10, // ipadx
+				0 // ipady
+				));
+
+		add(tfFo, new GridBagConstraints(1, // gridx
+				2, // gridy
+				1, // gridwidth
+				1, // gridheigth
+				0.0, // weightx
+				0.0, // weighty
+				GridBagConstraints.EAST, // anchor
+				GridBagConstraints.NONE, // fill
+				new Insets(0, 0, 0, 0), // insets
+				tfFo.getPreferredSize().width, // ipadx
 				0 // ipady
 				));
 		

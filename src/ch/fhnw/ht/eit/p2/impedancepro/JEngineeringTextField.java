@@ -45,18 +45,22 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 				int offs = txtField.getCaretPosition();
 
 				String tfText;
-								
+
 				if (txtField.getSelectedText() != null) {
-					tfText = txtField.getText().substring(0, getSelectionStart()) + character
-							+ txtField.getText().substring(txtField.getSelectionEnd());
+					tfText = txtField.getText().substring(0,
+							getSelectionStart())
+							+ character
+							+ txtField.getText().substring(
+									txtField.getSelectionEnd());
 				} else {
 					tfText = txtField.getText().substring(0, offs) + character
 							+ txtField.getText().substring(offs);
 				}
-				
+
 				try {
-					if (character == '-' || character == '+'
-							|| character == 'e') {
+					if (character == 'e'
+							|| (tfText.indexOf('e') >= 0 && character == '-')
+							|| (tfText.length() == 1 && character == '-')) {
 						EngineeringUtil.parse(tfText.trim() + "1", digits);
 					} else {
 						EngineeringUtil.parse(tfText.trim(), digits);
@@ -121,8 +125,8 @@ public class JEngineeringTextField extends JTextField implements FocusListener {
 	public void setMinValue(double minValue) {
 		this.minValue = minValue;
 		TooltipManager.setTooltip(txtField,
-				"" + EngineeringUtil.convert(minValue, digits) + " \u2264 Eingabe",
-				TooltipWay.down, 0);
+				"" + EngineeringUtil.convert(minValue, digits)
+						+ " \u2264 Eingabe", TooltipWay.down, 0);
 	}
 
 	public void setMaxValue(double maxValue) {

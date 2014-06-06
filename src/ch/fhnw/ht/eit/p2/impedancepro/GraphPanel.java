@@ -35,6 +35,7 @@ public class GraphPanel extends JPanel implements MouseWheelListener {
 	private ImpedanceProController controller;
 	
 	public XYPlot plot;
+	public NumberAxis axis;
 	
 	/**
 	 * Creates a <code>JFreeChart</code> and configures it.
@@ -65,8 +66,8 @@ public class GraphPanel extends JPanel implements MouseWheelListener {
 		plot.setRangeGridlinePaint(Color.BLACK);
 		plot.setDomainGridlinePaint(Color.BLACK);
 		plot.setOutlinePaint(null);
-
-		NumberAxis axis = (NumberAxis) plot.getDomainAxis();
+		
+		axis = (NumberAxis) plot.getDomainAxis();
 		axis.setNumberFormatOverride(new DecimalFormat("###E0"));
 		axis.setLabelFont(getFont());
 		plot.setDomainAxis(axis);
