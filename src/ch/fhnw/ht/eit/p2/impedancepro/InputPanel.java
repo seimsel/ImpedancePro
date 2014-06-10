@@ -210,12 +210,37 @@ public class InputPanel extends JPanel implements ActionListener {
 			valuePanel.lbTolerance2Unit.setVisible(false);
 			break;
 		}
-
-		if (topology == SourceLoadNetwork.Z) {
-			valuePanel.tfValue2.setRange(-1e21, 1e21);
-		} else {
-			valuePanel.tfValue2.setRange(1e-21, 1e21);
+		
+		switch (topology) {
+		default:
+		case SourceLoadNetwork.R:
+			valuePanel.tfValue1.setRange(1e-6, 1e3);
+			valuePanel.tfValue2.setRange(0, 0);
+			break;
+		case SourceLoadNetwork.R_PAR_C:
+			valuePanel.tfValue1.setRange(1e-3, 1e6);
+			valuePanel.tfValue2.setRange(1e-15, 1e-6);
+			break;
+		case SourceLoadNetwork.R_SER_C:
+			valuePanel.tfValue1.setRange(1e-6, 1e3);
+			valuePanel.tfValue2.setRange(1e-15, 1e-6);
+			break;
+		case SourceLoadNetwork.R_PAR_L:
+			valuePanel.tfValue1.setRange(1e-3, 1e6);
+			valuePanel.tfValue2.setRange(1e-15, 1e-3);
+			break;
+		case SourceLoadNetwork.R_SER_L:
+			valuePanel.tfValue1.setRange(1e-6, 1e3);
+			valuePanel.tfValue2.setRange(1e-15, 1e-4);
+			break;
+		case SourceLoadNetwork.Z:
+			valuePanel.tfValue1.setRange(1e-6, 1e3);
+			valuePanel.tfValue2.setRange(-1e3, 1e3);
+			break;
 		}
+		
+		valuePanel.tfTolerance1.setRange(0, 99);
+		valuePanel.tfTolerance2.setRange(0, 99);
 
 		this.topology = topology;
 	}
@@ -263,11 +288,6 @@ public class InputPanel extends JPanel implements ActionListener {
 			tfValue2.addActionListener(InputPanel.this);
 			tfTolerance1.addActionListener(InputPanel.this);
 			tfTolerance2.addActionListener(InputPanel.this);
-
-			tfValue1.setRange(1e-21, 1e21);
-			tfValue2.setRange(1e-21, 1e21);
-			tfTolerance1.setRange(0, 99);
-			tfTolerance2.setRange(0, 99);
 
 			add(lbValue1);
 			add(tfValue1);
